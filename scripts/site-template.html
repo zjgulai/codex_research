@@ -853,7 +853,19 @@
   <footer>单文件、离线可用、无外部运行资源。最后生成：<span id="footer-date"></span></footer>
 
   <script>
-    const APP_DATA = __APP_DATA__;
+    const DATA_GZIP_BASE64 = "__APP_DATA_GZIP_BASE64__";
+
+    async function loadAppData() {
+      if (!("DecompressionStream" in window)) throw new Error("当前浏览器不支持 DecompressionStream，请升级到现代浏览器后重试。");
+      const binary = atob(DATA_GZIP_BASE64);
+      const compressed = new Uint8Array(binary.length);
+      for (let index = 0; index < binary.length; index += 1) compressed[index] = binary.charCodeAt(index);
+      const stream = new Response(compressed).body.pipeThrough(new DecompressionStream("gzip"));
+      return JSON.parse(await new Response(stream).text());
+    }
+
+    async function boot() {
+    const APP_DATA = await loadAppData();
     const entityMap = new Map();
     const state = { view: "overview", node: "M00", kind: "plugin", module: "all", install: "all", shape: "all", confidence: "all", effect: "all", sort: "priority", query: "", page: 1, pageSize: 36 };
     const byId = (id) => document.getElementById(id);
@@ -1102,6 +1114,13 @@
     renderNode();
     renderCatalog();
     if (location.hash.startsWith("#item=")) openDetail(decodeURIComponent(location.hash.slice(6)), false);
+    }
+
+    boot().catch((error) => {
+      const main = document.querySelector("main");
+      if (main) main.innerHTML = '<section class="view active"><div class="empty"><b>数据载入失败</b><br>' + String(error && error.message ? error.message : error) + '</div></section>';
+      console.error("Embedded atlas data failed to load", error);
+    });
   </script>
 </body>
 </html>

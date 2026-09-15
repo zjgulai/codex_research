@@ -3,6 +3,7 @@
 import { createHash } from "node:crypto";
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { basename, dirname, join } from "node:path";
+import { gzipSync } from "node:zlib";
 
 const args = Object.fromEntries(process.argv.slice(2).map((arg) => {
   const parts = arg.replace(/^--/, "").split("=");
@@ -449,9 +450,11 @@ function validateData() {
 }
 validateData();
 const serialized = JSON.stringify(data).replace(/</g, "\\u003c").replace(/\u2028/g, "\\u2028").replace(/\u2029/g, "\\u2029");
+const compressedData = gzipSync(Buffer.from(serialized), { level: 9 });
+const encodedData = compressedData.toString("base64");
 const template = readFileSync(templatePath, "utf8");
-if (!template.includes("__APP_DATA__")) throw new Error("Template is missing __APP_DATA__ placeholder");
-const html = template.replace("__APP_DATA__", serialized);
+if (!template.includes("__APP_DATA_GZIP_BASE64__")) throw new Error("Template is missing __APP_DATA_GZIP_BASE64__ placeholder");
+const html = template.replace("__APP_DATA_GZIP_BASE64__", encodedData);
 const csp = "default-src 'none'; base-uri 'none'; form-action 'none'; img-src data:; font-src data:; media-src data:; style-src 'unsafe-inline'; script-src 'unsafe-inline'";
 const cspIndex = html.indexOf(csp);
 const styleIndex = html.indexOf("<style>");
@@ -469,6 +472,10 @@ writeFileSync(outputPath, html);
 const manifest = {
   schemaVersion: 1, generatedAt: BUILD_AT, artifact: outputPath, artifactBytes: Buffer.byteLength(html),
   artifactSha256: sha256(html), pluginCount: plugins.length, moduleCount: MODULES.length,
+  embeddedData: {
+    encoding: "gzip-base64", jsonBytes: Buffer.byteLength(serialized), gzipBytes: compressedData.length,
+    encodedBytes: Buffer.byteLength(encodedData), sha256: sha256(serialized),
+  },
   skillCoverage, moduleCounts, sourceCommits: data.meta.sourceCommits, sourceHashes: data.meta.sourceHashes,
   checks: {
     canonicalPluginIdsUnique: true, exactlyOnePrimaryModule: true, skillParentsResolved: true,

@@ -67,6 +67,6 @@ Skill 记录以 `canonicalPluginId + releaseVersion + skillName` 为键。父插
 
 ## 7. 公开发布边界
 
-单页只内嵌派生后的必要字段，不发布本地配置、认证信息、原始缓存路径或研究临时文件。第三方网站不会被自动加载；外链只在用户点击时导航。
+单页只内嵌派生后的必要字段，不发布本地配置、认证信息、原始缓存路径或研究临时文件。派生数据以 `gzip + Base64` 内嵌，页面使用浏览器原生 `DecompressionStream` 解压；不依赖 CDN、外部脚本或数据请求。第三方网站不会被自动加载；外链只在用户点击时导航。
 
 发布验证分开记录：本地 HTML 检查、Git commit、远端 push、Actions workflow、Pages deployment 与公开页面字节验证，任何一项都不能替代下一项。

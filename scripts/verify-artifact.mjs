@@ -2,21 +2,24 @@
 
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
+import { gunzipSync } from "node:zlib";
 
 const htmlPath = process.argv[2] || "public/index.html";
 const manifestPath = process.argv[3] || "data/build-manifest.json";
 const html = readFileSync(htmlPath, "utf8");
 const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
 const errors = [];
-const startToken = "const APP_DATA = ";
-const endToken = ";\n    const entityMap";
+const startToken = "const DATA_GZIP_BASE64 = \"";
+const endToken = "\";\n\n    async function loadAppData";
 const start = html.indexOf(startToken);
 const end = html.indexOf(endToken, start);
 
 if (start === -1 || end === -1) {
   errors.push("Embedded data boundary not found");
 } else {
-  const data = JSON.parse(html.slice(start + startToken.length, end));
+  const encoded = html.slice(start + startToken.length, end);
+  const serialized = gunzipSync(Buffer.from(encoded, "base64")).toString("utf8");
+  const data = JSON.parse(serialized);
   if (data.meta.pluginCount !== 4184 || data.plugins.length !== 4184) errors.push("Plugin count is not 4,184");
   if (data.modules.length !== 14) errors.push("Module count is not 14");
   if (data.skills.length !== data.meta.skillCoverage.evidenceRows) errors.push("Skill evidence count mismatch");
@@ -29,6 +32,11 @@ if (start === -1 || end === -1) {
     if (!item.description) errors.push("Missing source description: " + item.id);
     if (item.kind === "skill" && !pluginIds.has(item.parentId)) errors.push("Missing Skill parent: " + item.id);
   }
+  if (manifest.embeddedData?.encoding !== "gzip-base64") errors.push("Manifest embedded data encoding mismatch");
+  if (manifest.embeddedData?.jsonBytes !== Buffer.byteLength(serialized)) errors.push("Manifest embedded JSON size mismatch");
+  if (manifest.embeddedData?.gzipBytes !== Buffer.from(encoded, "base64").length) errors.push("Manifest embedded gzip size mismatch");
+  if (manifest.embeddedData?.encodedBytes !== Buffer.byteLength(encoded)) errors.push("Manifest embedded encoded size mismatch");
+  if (manifest.embeddedData?.sha256 !== createHash("sha256").update(serialized).digest("hex")) errors.push("Manifest embedded JSON hash mismatch");
 }
 
 const scripts = [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)];
@@ -47,6 +55,7 @@ for (const id of ["overview-metrics", "node-list", "node-panel", "search", "resu
   if (!html.includes('id="' + id + '"')) errors.push("Required UI target missing: " + id);
 }
 if (!html.includes("function coreTexts(item)")) errors.push("Runtime core-three generator missing");
+if (!html.includes('new DecompressionStream("gzip")')) errors.push("Runtime gzip decoder missing");
 
 const artifactHash = createHash("sha256").update(html).digest("hex");
 if (manifest.artifactSha256 !== artifactHash) errors.push("Manifest SHA-256 does not match artifact");

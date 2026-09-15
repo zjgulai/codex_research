@@ -4,6 +4,8 @@
 
 网站为 [public/index.html](public/index.html)。它不加载外部脚本、字体、图片或数据；搜索、筛选、节点地图和详情抽屉都在单个 HTML 内运行。
 
+全量派生数据以 `gzip + Base64` 内嵌，并由现代浏览器原生 `DecompressionStream` 解压。这样保留单文件与离线能力，同时避免把约 14.5 MB 的明文 JSON 直接塞进首包；不支持该 Web API 的旧浏览器会显示明确错误。
+
 ## 它回答什么
 
 每个插件或 Skill 固定回答三件事：
@@ -37,7 +39,7 @@ node scripts/build-site.mjs \
   --manifest=data/build-manifest.json
 ```
 
-生成器会验证 canonical ID 唯一性、总数、单一主节点、技能父子关系、HTML CSP、内嵌数据一致性和敏感路径泄漏。
+生成器会验证 canonical ID 唯一性、总数、单一主节点、技能父子关系、HTML CSP、压缩数据的大小与 SHA-256、内嵌数据一致性和敏感路径泄漏。
 
 生成后再运行独立 artifact 检查：
 
