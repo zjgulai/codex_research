@@ -867,8 +867,40 @@
     const confidenceLabel = (value) => value === "high" ? "high" : value === "medium" ? "medium" : "需复核";
     const versionLabel = (value) => ({ "frozen-exact": "冻结版本精确", "local-bundle-exact": "本地 bundle 精确", "current-version-drift": "当前版本漂移" })[value] || value;
 
+    function coreTexts(item) {
+      const module = APP_DATA.modules.find((entry) => entry.id === item.primaryModule);
+      const isSkill = item.kind === "skill";
+      const does = isSkill
+        ? "【Skill 说明 + 研究映射】它给 Agent 一套操作规则，主要帮助 " + item.primaryModule + " 完成“" + module.help + "”。原始说明：" + item.description
+        : "【目录声明 + 研究映射】在 " + item.primaryModule + "，它主要帮助“" + module.help + "”。目录原文：" + item.description;
+      const conditions = [];
+      if (item.inventoryState === "不可用") conditions.push("冻结快照标记为不可用，不能按普通安装路径使用");
+      else if (item.installed) conditions.push("冻结快照显示" + item.runtimeState + "，但这不等于认证成功");
+      else conditions.push("需要先安装或启用" + (isSkill ? "父插件" : "该插件"));
+      if (item.authPolicy && item.authPolicy !== "NONE" && item.authPolicy !== "未说明") conditions.push("目录认证策略为 " + item.authPolicy + "，实际账号、scope 与凭据状态未实测");
+      else if (item.authPolicy === "NONE") conditions.push("目录认证策略为 NONE；实际运行环境和下游资源权限仍需确认");
+      else conditions.push("当前来源未完整说明认证和权限条件，不能据此判断为无需配置");
+      if (isSkill) conditions.push("Agent 还要实际加载该 Skill；加载规则本身不等于已连接外部系统");
+      else conditions.push("能力形态为 " + item.shape + "；真实输入、依赖和工具 schema 仍要在使用时确认");
+      const checkByEffect = {
+        "read-only": "用固定查询或已知 fixture 做一次代表性读取，并与源记录逐项核对",
+        "local-artifact": "用固定输入生成最小产物，检查 before / after diff 并重新打开验收",
+        workspace: "在隔离范围内运行相关测试、检查 diff，并确认没有越界文件",
+        git: "先检查分支、staged file list 与 diff；外部 push 前另取明确授权并核对远端",
+        external: "先用 preview / sandbox 与最小权限测试；明确授权后执行一次并 read-back",
+        secrets: "先核对最小 scope、凭据暴露面与审计日志，不把 secret 写入输出",
+        production: "先完成 dry-run、回滚、观测和 G5 readiness；对象级 R3 授权后再执行并验证线上",
+      };
+      const prefix = isSkill ? "先验证该 Skill 的触发、步骤和依赖是否按说明生效" : checkByEffect[item.effectClass];
+      const proof = prefix + "，再确认它确实改善 " + module.artifact + " 的“" + module.done + "”条件。当前证据只到静态元数据，尚未确认代表性调用、权限范围与生产稳定性。";
+      const unverified = isSkill
+        ? ["Skill 正文逐条执行效果", "父插件认证", "真实工具依赖", "生产稳定性"]
+        : ["认证状态", "真实权限范围", "代表性调用", "生产稳定性"];
+      return { does, conditions: conditions.join("；") + "。", proof, unverified };
+    }
+
     APP_DATA.plugins.concat(APP_DATA.skills).forEach((item) => {
-      item._search = [item.name, item.id, item.parentName, item.developer, item.description, (item.capabilities || []).join(" "), item.solutionPrimary, item.primaryModule].join(" ").toLowerCase();
+      item._search = [item.name, item.id, item.parentName, item.developer, item.description, item.searchHints, item.solutionPrimary, item.primaryModule].join(" ").toLowerCase();
       entityMap.set(item.id, item);
     });
 
@@ -952,11 +984,12 @@
     function cardHtml(item) {
       const review = item.matchConfidence === "review";
       const versionBadge = item.kind === "skill" ? '<span class="badge ' + (item.versionState === "current-version-drift" ? "warn" : "") + '">' + esc(versionLabel(item.versionState)) + "</span>" : "";
+      const core = coreTexts(item);
       return '<article class="entity-card">' +
         '<div class="card-badges"><span class="badge primary">' + item.primaryModule + '</span><span class="badge">' + esc(item.kind === "plugin" ? item.shape : "Skill") + '</span><span class="badge ' + (review ? "warn" : "") + '">' + confidenceLabel(item.matchConfidence) + '</span><span class="badge ' + (["production","secrets","external"].includes(item.effectClass) ? "danger" : "") + '">' + esc(item.effectClass) + "</span>" + versionBadge + "</div>" +
         '<h2>' + esc(item.name) + '</h2><div class="entity-id">' + esc(item.kind === "skill" ? item.parentName + " / " + item.skillName : item.id) + "</div>" +
         '<div class="card-scores"><div class="score"><strong>' + score(item.fitScore) + '</strong><span>节点适配</span></div><div class="score"><strong>' + score(item.functionalScore) + '</strong><span>功能潜力</span></div><div class="score"><strong>' + score(item.publicProxyScore) + '</strong><span>声量代理</span></div></div>' +
-        '<dl class="core-three"><div><dt>它替你处理什么</dt><dd>' + esc(short(item.does, 150)) + '</dd></div><div><dt>怎么才能用</dt><dd>' + esc(short(item.conditions, 125)) + '</dd></div><div><dt>用完怎样才算数</dt><dd>' + esc(short(item.proof, 140)) + "</dd></div></dl>" +
+        '<dl class="core-three"><div><dt>它替你处理什么</dt><dd>' + esc(short(core.does, 150)) + '</dd></div><div><dt>怎么才能用</dt><dd>' + esc(short(core.conditions, 125)) + '</dd></div><div><dt>用完怎样才算数</dt><dd>' + esc(short(core.proof, 140)) + "</dd></div></dl>" +
         '<button class="open-detail" type="button" data-open-id="' + esc(item.id) + '">打开完整证据 →</button></article>';
     }
 
@@ -984,6 +1017,7 @@
       byId("detail-eyebrow").textContent = (item.kind === "plugin" ? "PLUGIN" : "SKILL") + " · " + item.primaryModule + " · #" + (item.moduleRank || "—");
       byId("detail-title").textContent = item.name;
       const reasons = item.matchReasons.length ? item.matchReasons.map((value) => '<span class="badge">' + esc(value) + "</span>").join("") : '<span class="badge warn">只有弱先验，需复核</span>';
+      const core = coreTexts(item);
       const external = [item.website, item.githubUrl].filter(safeUrl);
       const sourceLinks = external.length ? external.map((url, index) => '<a href="' + esc(url) + '" target="_blank" rel="noreferrer">' + (index ? "关联 GitHub" : "作者网站") + "</a>").join(" · ") : "无可用外链";
       const parent = item.kind === "skill" ? '<button class="button" type="button" data-open-id="' + esc(item.parentId) + '">打开父插件：' + esc(item.parentName) + "</button>" : "";
@@ -991,7 +1025,7 @@
       byId("dialog-body").innerHTML =
         '<div class="card-badges"><span class="badge primary">' + item.primaryModule + " · " + esc(module.title) + '</span><span class="badge">' + esc(item.runtimeState) + '</span><span class="badge ' + (item.matchNeedsReview ? "warn" : "") + '">' + confidenceLabel(item.matchConfidence) + '</span><span class="badge ' + (["production","secrets","external"].includes(item.effectClass) ? "danger" : "") + '">' + esc(item.effectClass) + "</span></div>" +
         '<div class="card-scores"><div class="score"><strong>' + score(item.fitScore) + '</strong><span>节点适配</span></div><div class="score"><strong>' + score(item.functionalScore) + '</strong><span>功能潜力</span></div><div class="score"><strong>' + score(item.publicProxyScore) + '</strong><span>公开声量代理</span></div></div>' +
-        '<div class="dialog-three"><section><h3>1 · 它替你处理什么</h3><p>' + esc(item.does) + '</p></section><section><h3>2 · 怎么才能用</h3><p>' + esc(item.conditions) + '</p></section><section><h3>3 · 用完怎样才算数</h3><p>' + esc(item.proof) + "</p></section></div>" +
+        '<div class="dialog-three"><section><h3>1 · 它替你处理什么</h3><p>' + esc(core.does) + '</p></section><section><h3>2 · 怎么才能用</h3><p>' + esc(core.conditions) + '</p></section><section><h3>3 · 用完怎样才算数</h3><p>' + esc(core.proof) + "</p></section></div>" +
         '<div class="detail-grid">' + detailBlock("Canonical ID", item.kind === "plugin" ? item.id : item.parentId + " / " + item.skillName) +
         detailBlock("版本", item.kind === "plugin" ? "冻结 v" + item.versions.join(", ") + (item.versionAmbiguous ? " · 版本歧义" : "") : "证据 v" + item.version) +
         detailBlock("主 / 次节点", item.primaryModule + (item.secondaryModules.length ? " / " + item.secondaryModules.join(", ") : " / 无")) +
@@ -1001,7 +1035,9 @@
         detailBlock("认证策略", item.authPolicy) +
         detailBlock("证据层级", item.evidenceLevel) +
         skillEvidence +
-        detailBlock("未验证", (item.unverified || []).join("；")) +
+        detailBlock("分类上下文", (item.solutionPrimary || "未说明") + " / " + (item.officialCategory || "继承父插件")) +
+        detailBlock("运行阻断", (item.executionBlockers || []).join(", ") || "静态来源未列出") +
+        detailBlock("未验证", core.unverified.join("；")) +
         detailBlock("外部来源", sourceLinks.replace(/<[^>]+>/g, "")) + "</div>" +
         '<div class="node-meta">' + reasons + "</div>" +
         '<div class="cta-row">' + parent + (external.length ? '<a class="button" href="' + esc(external[0]) + '" target="_blank" rel="noreferrer">打开作者来源</a>' : "") + '<a class="button" href="' + esc(module.sourceUrl) + '" target="_blank" rel="noreferrer">查看节点原文</a></div>' +

@@ -203,38 +203,6 @@ function runtimeState(row) {
   if (row.inventoryState === "不可用") return "目录标记不可用";
   return "可用未安装";
 }
-function conditionsFor(row, isSkill) {
-  const parts = [];
-  if (row.inventoryState === "不可用") parts.push("冻结快照标记为不可用，不能按普通安装路径使用");
-  else if (row.installed) parts.push("冻结快照显示" + runtimeState(row) + "，但这不等于认证成功");
-  else parts.push("需要先安装或启用" + (isSkill ? "父插件" : "该插件"));
-  if (row.authPolicy && row.authPolicy !== "NONE") parts.push("目录认证策略为 " + row.authPolicy + "，实际账号、scope 与凭据状态未实测");
-  else if (row.authPolicy === "NONE") parts.push("目录认证策略为 NONE；实际运行环境和下游资源权限仍需确认");
-  else parts.push("当前来源未完整说明认证和权限条件，不能据此判断为无需配置");
-  if (isSkill) parts.push("Agent 还要实际加载该 Skill；加载规则本身不等于已连接外部系统");
-  else parts.push("能力形态为 " + shapeLabel(row.interfaceTags, false) + "；真实输入、依赖和工具 schema 仍要在使用时确认");
-  return parts.join("；") + "。";
-}
-function proofFor(entity, classification, effect, isSkill) {
-  const module = MODULE_BY_ID.get(classification.primaryModule);
-  const checkByEffect = {
-    "read-only": "用固定查询或已知 fixture 做一次代表性读取，并与源记录逐项核对",
-    "local-artifact": "用固定输入生成最小产物，检查 before / after diff 并重新打开验收",
-    workspace: "在隔离范围内运行相关测试、检查 diff，并确认没有越界文件",
-    git: "先检查分支、staged file list 与 diff；外部 push 前另取明确授权并核对远端",
-    external: "先用 preview / sandbox 与最小权限测试；明确授权后执行一次并 read-back",
-    secrets: "先核对最小 scope、凭据暴露面与审计日志，不把 secret 写入输出",
-    production: "先完成 dry-run、回滚、观测和 G5 readiness；对象级 R3 授权后再执行并验证线上",
-  };
-  const prefix = isSkill ? "先验证该 Skill 的触发、步骤和依赖是否按说明生效" : checkByEffect[effect];
-  return prefix + "，再确认它确实改善 " + module.artifact + " 的“" + module.done + "”条件。当前证据只到静态元数据，尚未确认代表性调用、权限范围与生产稳定性。";
-}
-function doesFor(entity, classification, isSkill) {
-  const module = MODULE_BY_ID.get(classification.primaryModule);
-  const source = trimText(entity.description || "当前目录没有提供可解释的能力说明", isSkill ? 260 : 220);
-  if (isSkill) return "【Skill 说明 + 研究映射】它给 Agent 一套操作规则，主要帮助 " + classification.primaryModule + " 完成“" + module.help + "”。原始说明：" + source;
-  return "【目录声明 + 研究映射】在 " + classification.primaryModule + "，它主要帮助“" + module.help + "”。目录原文：" + source;
-}
 function gatesFor(primaryModule) {
   return MODULE_BY_ID.get(primaryModule).gate.filter((item) => item.startsWith("G"));
 }
@@ -318,35 +286,30 @@ for (const values of catalogByName.values()) values.sort((a, b) => compareVersio
 
 const pluginMap = new Map();
 const plugins = sourceRows.map((row) => {
-  const claim = trimText(unique([row.shortDescription, row.description, row.longDescription]).join(" · "), 440);
+  const claim = trimText(unique([row.shortDescription, row.description, row.longDescription]).join(" · "), 440) || "当前目录没有提供可解释的能力说明。";
   const classification = classifyEntity({ ...row, kind: "plugin", description: claim });
   const roles = inferRoles(claim + " " + (row.capabilities || []).join(" "), row.actionTags);
   const effectClass = inferEffect({ ...row, description: claim }, roles);
   const priorityScore = weightedPriority(classification.fitScore, row.functionalScore, row.publicProxyScore, { fit: 0.55, functional: 0.35, publicProxy: 0.1 });
-  const [packageName, marketplace] = splitCanonicalId(row.canonicalPluginId);
   const item = {
-    id: row.canonicalPluginId, kind: "plugin", name: row.displayName || row.name, packageName, marketplace,
-    developer: row.developer || "未说明", description: claim, capabilities: (row.capabilities || []).slice(0, 8),
-    keywords: (row.keywords || []).slice(0, 12), solutionCode: row.solutionCode, solutionPrimary: row.solutionPrimary,
-    officialCategory: row.officialCategory, stageTags: row.stageTags || [], actionTags: row.actionTags || [],
-    riskTags: row.riskTags || [], interfaceTags: row.interfaceTags || [], shape: shapeLabel(row.interfaceTags, false),
-    installed: Boolean(row.installed), enabled: Boolean(row.enabled), inventoryState: row.inventoryState,
+    id: row.canonicalPluginId, kind: "plugin", name: row.displayName || row.name,
+    developer: row.developer || "未说明", description: claim,
+    searchHints: trimText([...(row.capabilities || []), ...(row.keywords || [])].join(" "), 260),
+    solutionPrimary: row.solutionPrimary, officialCategory: row.officialCategory,
+    shape: shapeLabel(row.interfaceTags, false), installed: Boolean(row.installed), inventoryState: row.inventoryState,
     runtimeState: runtimeState(row), authPolicy: row.authPolicy || "未说明",
     versions: (row.releaseRecords || []).map((release) => release.version), versionAmbiguous: Boolean(row.versionAmbiguous),
-    classNeedsReview: Boolean(row.classNeedsReview), skillCountClaimed: Number(row.skillCount || 0),
-    appCount: Number(row.appCount || 0), hasUi: Boolean(row.hasUi), functionalScore: row.functionalScore,
+    skillCountClaimed: Number(row.skillCount || 0), functionalScore: row.functionalScore,
     functionalGlobalRank: row.functionalGlobalRank, publicProxyScore: row.publicProxyScore,
-    publicProxyConfidence: row.publicProxyConfidence, brandProxyScore: row.brandProxyScore,
-    explorationScore: row.explorationScore, explorationGlobalRank: row.explorationGlobalRank,
-    proxyStatus: row.proxyStatus, readiness: row.readiness, readyNow: false, topEligible: Boolean(row.topEligible),
+    publicProxyConfidence: row.publicProxyConfidence, explorationGlobalRank: row.explorationGlobalRank,
     executionBlockers: row.executionBlockers || [], pageVetoCodes: row.pageVetoCodes || [],
     website: row.website || "", githubUrl: row.github && row.github.url ? row.github.url : "",
-    trancoRank: row.tranco && row.tranco.rank ? row.tranco.rank : null, evidenceClasses: row.evidenceClasses || {},
+    trancoRank: row.tranco && row.tranco.rank ? row.tranco.rank : null,
     evidenceLevel: "static-metadata", claimSource: "publisher-directory-metadata", artifactRoles: roles, effectClass,
     gateEvidence: gatesFor(classification.primaryModule), ...classification, priorityScore,
-    does: doesFor({ name: row.displayName, description: claim }, classification, false),
-    conditions: conditionsFor(row, false), proof: proofFor(row, classification, effectClass, false),
-    unverified: ["认证状态", "真实权限范围", "代表性调用", "生产稳定性"],
+    _solutionCode: row.solutionCode, _stageTags: row.stageTags || [],
+    _capabilities: row.capabilities || [], _interfaceTags: row.interfaceTags || [],
+    _classNeedsReview: Boolean(row.classNeedsReview), _versionAmbiguous: Boolean(row.versionAmbiguous),
   };
   pluginMap.set(item.id, item);
   return item;
@@ -360,30 +323,28 @@ function addSkill(parent, skill, version, versionState) {
   let suffix = 2;
   while (skillIds.has(id)) { id = baseId + "::" + suffix; suffix += 1; }
   skillIds.add(id);
-  const description = trimText(skill.description || (skill.interface && skill.interface.short_description) || "当前 Skill 元数据没有说明具体能力。", 720);
+  const fullDescription = skill.description || (skill.interface && skill.interface.short_description) || "当前 Skill 元数据没有说明具体能力。";
+  const description = trimText(fullDescription, 560);
   const classification = classifyEntity({
-    kind: "skill", name: skill.name, displayName: skill.interface && skill.interface.display_name, description,
-    solutionCode: parent.solutionCode, stageTags: parent.stageTags, classNeedsReview: parent.classNeedsReview,
-    versionAmbiguous: parent.versionAmbiguous,
+    kind: "skill", name: skill.name, displayName: skill.interface && skill.interface.display_name, description: fullDescription,
+    solutionCode: parent._solutionCode, stageTags: parent._stageTags, classNeedsReview: parent._classNeedsReview,
+    versionAmbiguous: parent._versionAmbiguous,
   }, parent);
-  const roles = inferRoles(description, []);
-  const effectClass = inferEffect({ name: skill.name, description, interfaceTags: parent.interfaceTags, capabilities: parent.capabilities, riskTags: parent.riskTags }, roles);
+  const roles = inferRoles(fullDescription, []);
+  const effectClass = inferEffect({ name: skill.name, description: fullDescription, interfaceTags: parent._interfaceTags, capabilities: parent._capabilities }, roles);
   const priorityScore = weightedPriority(classification.fitScore, parent.functionalScore, parent.publicProxyScore, { fit: 0.65, functional: 0.28, publicProxy: 0.07 });
   skills.push({
     id, kind: "skill", name: (skill.interface && skill.interface.display_name) || skill.name, skillName: skill.name,
     parentId: parent.id, parentName: parent.name, developer: parent.developer, description, shape: "Skill",
-    installed: parent.installed, enabled: parent.enabled, inventoryState: parent.inventoryState,
-    runtimeState: parent.runtimeState, authPolicy: parent.authPolicy, interfaceTags: parent.interfaceTags,
+    installed: parent.installed, inventoryState: parent.inventoryState,
+    runtimeState: parent.runtimeState, authPolicy: parent.authPolicy,
     version, frozenVersions: parent.versions, versionState,
     evidenceLevel: versionState === "local-bundle-exact" ? "static-local-manifest" : "static-catalog-metadata",
     claimSource: versionState === "current-version-drift" ? "current-catalog-version-drift" : versionState,
     artifactRoles: roles, effectClass, gateEvidence: gatesFor(classification.primaryModule),
     functionalScore: parent.functionalScore, publicProxyScore: parent.publicProxyScore,
-    publicProxyConfidence: parent.publicProxyConfidence, brandProxyScore: parent.brandProxyScore,
-    website: parent.website, solutionCode: parent.solutionCode, solutionPrimary: parent.solutionPrimary,
-    ...classification, priorityScore, does: doesFor({ name: skill.name, description }, classification, true),
-    conditions: conditionsFor(parent, true), proof: proofFor(parent, classification, effectClass, true),
-    unverified: ["Skill 正文逐条执行效果", "父插件认证", "真实工具依赖", "生产稳定性"],
+    publicProxyConfidence: parent.publicProxyConfidence, website: parent.website,
+    solutionPrimary: parent.solutionPrimary, ...classification, priorityScore,
   });
 }
 
@@ -418,6 +379,15 @@ for (const row of sourceRows) {
     frozenVersions: (row.releaseRecords || []).map((release) => release.version),
     gap: evidenceState === "current-version-drift" || (evidenceState === "historical-payload-missing" && Number(row.skillCount || 0) > 0),
   };
+}
+
+for (const plugin of plugins) {
+  delete plugin._solutionCode;
+  delete plugin._stageTags;
+  delete plugin._capabilities;
+  delete plugin._interfaceTags;
+  delete plugin._classNeedsReview;
+  delete plugin._versionAmbiguous;
 }
 
 function addModuleRanks(rows) {
@@ -471,7 +441,7 @@ function validateData() {
   if (new Set(skills.map((item) => item.id)).size !== skills.length) errors.push("Skill IDs are not unique");
   for (const item of [...plugins, ...skills]) {
     if (!MODULE_BY_ID.has(item.primaryModule)) errors.push("Invalid primary module for " + item.id);
-    if (!item.does || !item.conditions || !item.proof) errors.push("Missing core-three text for " + item.id);
+    if (!item.description) errors.push("Missing source description for " + item.id);
     if (item.kind === "skill" && !pluginMap.has(item.parentId)) errors.push("Missing parent for " + item.id);
     if (item.readyNow) errors.push("Unexpected Ready Now claim for " + item.id);
   }
@@ -492,6 +462,7 @@ if (/<script[^>]+src=/i.test(html)) htmlErrors.push("External script detected");
 if (/<link[^>]+stylesheet/i.test(html)) htmlErrors.push("External stylesheet detected");
 if (/<(?:img|source)[^>]+src=["']https?:/i.test(html)) htmlErrors.push("Remote media detected");
 if (/\/Users\/|file:\/\/\/Users\/|\.codex\/plugins\/cache/i.test(html)) htmlErrors.push("Local absolute path leaked into public HTML");
+if (!html.includes("function coreTexts(item)")) htmlErrors.push("Runtime core-three generator is missing");
 if (htmlErrors.length) throw new Error("HTML validation failed:\n" + htmlErrors.join("\n"));
 mkdirSync(dirname(outputPath), { recursive: true });
 writeFileSync(outputPath, html);

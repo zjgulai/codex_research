@@ -26,7 +26,7 @@ if (start === -1 || end === -1) {
   const moduleIds = new Set(data.modules.map((item) => item.id));
   for (const item of data.plugins.concat(data.skills)) {
     if (!moduleIds.has(item.primaryModule)) errors.push("Unknown primary module: " + item.id);
-    if (!item.does || !item.conditions || !item.proof) errors.push("Missing core-three text: " + item.id);
+    if (!item.description) errors.push("Missing source description: " + item.id);
     if (item.kind === "skill" && !pluginIds.has(item.parentId)) errors.push("Missing Skill parent: " + item.id);
   }
 }
@@ -46,6 +46,7 @@ if (/gh[opusr]_[A-Za-z0-9_]{20,}|github_pat_[A-Za-z0-9_]{20,}|AKIA[0-9A-Z]{16}|-
 for (const id of ["overview-metrics", "node-list", "node-panel", "search", "result-grid", "detail-dialog"]) {
   if (!html.includes('id="' + id + '"')) errors.push("Required UI target missing: " + id);
 }
+if (!html.includes("function coreTexts(item)")) errors.push("Runtime core-three generator missing");
 
 const artifactHash = createHash("sha256").update(html).digest("hex");
 if (manifest.artifactSha256 !== artifactHash) errors.push("Manifest SHA-256 does not match artifact");
