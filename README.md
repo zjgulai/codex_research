@@ -2,7 +2,9 @@
 
 一个可离线打开的单页网站，把 4,184 个 Codex 插件及可取得证据的 Skill 映射到 `vibecoding_config` 的 M00–M13 全栈开发节点。
 
-网站为 [public/index.html](public/index.html)。它不加载外部脚本、字体、图片或数据；搜索、筛选、节点地图和详情抽屉都在单个 HTML 内运行。
+网站为 [public/index.html](public/index.html)。默认入口是“全栈工作台地图”：先选开发阶段和具体节点，再看三项任务、交付结果和 3 个优先候选。完整目录、原始分数与审计证据保留在第二层。
+
+它不加载外部脚本、字体、图片或数据；阶段切换、搜索、筛选和详情弹窗都在单个 HTML 内运行。
 
 全量派生数据以 `gzip + Base64` 内嵌，并由现代浏览器原生 `DecompressionStream` 解压。这样保留单文件与离线能力，同时避免把约 14.5 MB 的明文 JSON 直接塞进首包；不支持该 Web API 的旧浏览器会显示明确错误。
 
@@ -10,9 +12,11 @@
 
 每个插件或 Skill 固定回答三件事：
 
-1. 它替你处理什么；
-2. 怎么才能用；
-3. 用完怎样才算数。
+1. 能帮你做什么；
+2. 使用前要准备什么；
+3. 怎样确认真能用。
+
+工作台的 42 个首选候选另做了一层人工精炼：结合原始研究排名、全栈通用性与当前安装状态，每个节点只显示 3 个。它不改写完整目录排名；候选行仍显示原始节点名次，详情中保留匹配理由和未验证项。
 
 节点映射是研究模型的推断，不是插件作者的官方定位。插件只能为 Gate 提供证据，不能替人通过 Gate。`已安装`、`已认证`、`调用通过`和`生产可用`也是四种不同状态。
 
@@ -20,11 +24,11 @@
 
 - 插件身份与状态：4,184 个 canonical plugin IDs，冻结于 2026-09-16 01:29:11 +08:00。
 - 插件丰富元数据与公共声量代理：研究快照生成于 2026-09-15T18:01:19.457Z。
-- 当前 remote catalog Skill 证据：抓取于 2026-09-15T20:05:45.943690Z。
+- 当前 remote catalog Skill 证据：5,420 条，目录时间标记为 2026-09-15T20:05:45.943690Z；本次构建另固定其 SHA-256。
 - 全栈节点：[vibecoding_config@d0a611e](https://github.com/zjgulai/vibecoding_config/commit/d0a611e7d86939ba873af2bd5e686e64b07f85ea)。
 - 保真改写方法：[shuorenhua@5a9eafe](https://github.com/MrGeDiao/shuorenhua/commit/5a9eafefe03807404135f4d2ee4f42fe61d58759)。
 
-完整方法、已知缺口与排序边界见 [METHODOLOGY.md](METHODOLOGY.md)，执行状态见 [PLAN.md](PLAN.md)。
+完整方法、已知缺口与排序边界见 [METHODOLOGY.md](METHODOLOGY.md)，执行状态见 [PLAN.md](PLAN.md)，当前视觉验收见 [design-qa.md](design-qa.md)。
 
 ## 本地再生成
 

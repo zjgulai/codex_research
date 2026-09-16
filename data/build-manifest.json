@@ -1,29 +1,29 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-15T21:12:29.734Z",
+  "generatedAt": "2026-09-16T03:28:14.060Z",
   "artifact": "public/index.html",
-  "artifactBytes": 2997191,
-  "artifactSha256": "e7f8e9a2afcaee98bbc79ef0eb52cbebb9ff0496c9d5498746d05eda93ccdc40",
+  "artifactBytes": 3023235,
+  "artifactSha256": "3b78a17efcabae413eafc971c3d737a31c1a6498b3bf51d5944a8a27a109a34f",
   "pluginCount": 4184,
   "moduleCount": 14,
   "embeddedData": {
     "encoding": "gzip-base64",
-    "jsonBytes": 14486186,
-    "gzipBytes": 2205050,
-    "encodedBytes": 2940068,
-    "sha256": "9430297d4f22174a684db9f5a9d4f14c387a5f7adca17870ab8e68794c8ff62b"
+    "jsonBytes": 14489666,
+    "gzipBytes": 2205916,
+    "encodedBytes": 2941224,
+    "sha256": "526575825fd4947e5d79fa5bdbddfa76ca31e0ef0aea2d10fee9718a7cc36ebe"
   },
   "skillCoverage": {
     "frozenSkillCountClaims": 5405,
-    "evidenceRows": 5418,
-    "frozenExact": 5329,
+    "evidenceRows": 5420,
+    "frozenExact": 5326,
     "localBundleExact": 13,
-    "currentVersionDrift": 76,
-    "pluginExact": 4159,
+    "currentVersionDrift": 81,
+    "pluginExact": 4154,
     "pluginLocalExact": 10,
-    "pluginDrift": 9,
+    "pluginDrift": 14,
     "pluginHistoricalMissing": 4,
-    "pluginsWithGap": 11
+    "pluginsWithGap": 16
   },
   "moduleCounts": [
     {
@@ -41,7 +41,7 @@
     {
       "id": "M02",
       "plugins": 1272,
-      "skills": 986,
+      "skills": 988,
       "review": 1081
     },
     {
@@ -117,7 +117,7 @@
   },
   "sourceHashes": {
     "snapshot": "6493698e13c32a6cd37569740c1447e4317dda623c215cdbe7ca16d443c6823b",
-    "catalog": "db2e632f028762f1bc7ac1176bf74586b9c20b3f4fb082b9167327cd41b1fcf5"
+    "catalog": "e60bfa676b684ae28a9fe9cd6b2a6e4e4855fce26d38f6f9257b1f280f308ac6"
   },
   "checks": {
     "canonicalPluginIdsUnique": true,

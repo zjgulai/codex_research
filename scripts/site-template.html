@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; base-uri 'none'; form-action 'none'; img-src data:; font-src data:; media-src data:; style-src 'unsafe-inline'; script-src 'unsafe-inline'">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="把 4,184 个 Codex 插件和可取得证据的 Skill 映射到 M00–M13 全栈开发节点。">
-  <title>Codex Plugin Full-stack Atlas</title>
+  <meta name="description" content="先选全栈开发阶段，再看最值得先试的 3 个 Codex 插件。">
+  <title>Plugin Atlas · 全栈开发插件地图</title>
   <style>
     :root {
       color-scheme: light dark;
@@ -653,17 +653,271 @@
       .catalog-shell, .journey, .node-panel { box-shadow: none; }
       .result-grid { grid-template-columns: 1fr; }
     }
+
+    /* 2026-09 workbench redesign: the decision comes first; the database comes second. */
+    :root {
+      color-scheme: light;
+      --bg: #F6F8FB;
+      --surface: #FFFFFF;
+      --surface-2: #F1F4F8;
+      --ink: #19202C;
+      --muted: #687386;
+      --line: #DDE3EC;
+      --blue: #2563EB;
+      --violet: #7C3AED;
+      --orange: #EA580C;
+      --green: #15803D;
+      --gold: #A16207;
+      --red: #B91C1C;
+      --shadow: 0 14px 42px rgba(30, 46, 78, .08);
+      --radius: 14px;
+      --sans: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", sans-serif;
+    }
+    body { line-height: 1.5; background: var(--bg); }
+    .topbar {
+      min-height: 68px;
+      padding: 10px max(24px, calc((100vw - 1340px) / 2));
+      border-color: #E6EAF0;
+      background: rgba(255, 255, 255, .94);
+    }
+    .brand { min-width: 230px; gap: 11px; }
+    .brand-mark {
+      width: 36px;
+      height: 36px;
+      border-radius: 9px;
+      background: var(--blue);
+      font-family: var(--sans);
+      font-size: 15px;
+      letter-spacing: -.04em;
+    }
+    .brand-copy { display: grid; line-height: 1.1; }
+    .brand-copy strong { font-size: 15px; }
+    .brand-copy small { margin-top: 4px; color: var(--muted); font-size: 10px; font-weight: 500; letter-spacing: .03em; }
+    .header-search { position: relative; flex: 1 1 380px; max-width: 520px; }
+    .header-search input {
+      width: 100%;
+      height: 40px;
+      padding: 0 14px 0 38px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #F8FAFC;
+      color: var(--ink);
+    }
+    .header-search::before {
+      content: "";
+      position: absolute;
+      top: 12px;
+      left: 14px;
+      width: 12px;
+      height: 12px;
+      border: 1.7px solid #8590A3;
+      border-radius: 50%;
+    }
+    .header-search::after {
+      content: "";
+      position: absolute;
+      top: 24px;
+      left: 25px;
+      width: 6px;
+      height: 1.7px;
+      background: #8590A3;
+      transform: rotate(45deg);
+      transform-origin: left center;
+    }
+    .nav { border: 0; border-radius: 0; background: transparent; }
+    .nav button { padding: 8px 10px; border-radius: 8px; font-size: 13px; font-weight: 650; }
+    .nav button[aria-selected="true"] { background: #EAF1FF; color: #174EBA; }
+    .top-status { display: none; }
+    main { min-height: calc(100vh - 68px); }
+    .view { width: min(1340px, calc(100% - 48px)); padding: 34px 0 70px; }
+
+    #view-overview { width: 100%; padding: 0; }
+    .framework-toggle { display: inline-flex; align-items: center; gap: 9px; min-width: max-content; color: var(--muted); font-size: 13px; }
+    .framework-toggle input { width: 16px; height: 16px; accent-color: var(--blue); }
+    .workbench {
+      display: grid;
+      grid-template-columns: 196px minmax(0, 1fr);
+      min-height: calc(100vh - 68px);
+      background: #F6F8FB;
+    }
+    .phase-rail { padding: 22px 14px; border-right: 1px solid var(--line); background: #FFFFFF; }
+    .rail-intro { margin: 0 8px 28px; }
+    .rail-intro h1 { margin: 0; font-size: 15px; line-height: 1.25; letter-spacing: -.015em; }
+    .rail-intro p { margin: 7px 0 0; color: var(--muted); font-size: 10px; line-height: 1.5; }
+    .phase-rail-label { margin: 0 10px 12px; color: #8A94A6; font-size: 10px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+    .node-list { position: static; display: grid; gap: 5px; max-height: none; padding: 0; }
+    .phase-button {
+      display: grid;
+      grid-template-columns: 29px 1fr;
+      gap: 10px;
+      align-items: center;
+      width: 100%;
+      padding: 11px 10px;
+      border: 0;
+      border-radius: 10px;
+      background: transparent;
+      color: var(--muted);
+      text-align: left;
+    }
+    .phase-button:hover { background: #EFF3F8; color: var(--ink); }
+    .phase-button[aria-pressed="true"] { background: #E8F0FF; color: #174EBA; }
+    .phase-index {
+      display: grid;
+      width: 27px;
+      height: 27px;
+      place-items: center;
+      border-radius: 8px;
+      background: #E9EDF3;
+      color: #6B7586;
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 800;
+    }
+    .phase-button[aria-pressed="true"] .phase-index { background: var(--blue); color: white; }
+    .phase-name { display: block; font-weight: 760; }
+    .phase-desc { display: block; margin-top: 2px; font-size: 11px; opacity: .82; }
+    .rail-foot { margin: 22px 10px 0; padding-top: 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: 10px; }
+    .rail-foot strong { display: block; color: var(--ink); font-size: 20px; font-weight: 780; }
+
+    .node-panel { min-height: 0; padding: 0; border: 0; border-radius: 0; background: #F6F8FB; box-shadow: none; }
+    .stage-tabs { display: flex; align-items: center; min-height: 58px; padding: 0 28px; gap: 3px; border-bottom: 1px solid var(--line); background: #FFFFFF; }
+    .stage-path { margin-right: 6px; color: var(--muted); font-size: 12px; font-weight: 700; }
+    .stage-tabs .framework-toggle { margin-left: auto; }
+    .stage-tab {
+      position: relative;
+      min-height: 58px;
+      padding: 0 16px;
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .stage-tab[aria-pressed="true"] { color: #174EBA; }
+    .stage-tab[aria-pressed="true"]::after { content: ""; position: absolute; right: 14px; bottom: -1px; left: 14px; height: 2px; background: var(--blue); }
+    .workspace-body {
+      width: min(1080px, calc(100% - 40px));
+      margin: 20px auto 28px;
+      padding: 24px 28px 20px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #FFFFFF;
+      box-shadow: 0 7px 24px rgba(31, 48, 78, .05);
+    }
+    .node-heading { display: flex; justify-content: space-between; gap: 18px; margin-bottom: 22px; }
+    .node-heading h2 { margin: 0; font-size: clamp(26px, 3vw, 36px); line-height: 1.15; letter-spacing: -.035em; }
+    .node-heading p { margin: 6px 0 0; color: var(--muted); }
+    .quiet-link { align-self: start; border: 0; background: transparent; color: var(--blue); font-size: 12px; font-weight: 700; text-decoration: none; }
+    .work-section { padding: 21px 0; border-top: 1px solid #E8ECF2; }
+    .work-section:first-of-type { border-top: 0; padding-top: 0; }
+    .section-title { display: flex; align-items: center; gap: 9px; margin: 0 0 12px; font-size: 13px; }
+    .section-number { color: var(--blue); font-family: var(--mono); font-size: 11px; }
+    .task-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+    .task-check {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      padding: 11px 12px;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      background: #FBFCFE;
+      font-size: 13px;
+    }
+    .task-check input { flex: 0 0 auto; margin: 2px 0 0; accent-color: var(--blue); }
+    .deliverable {
+      display: grid;
+      grid-template-columns: minmax(170px, .34fr) 1fr;
+      gap: 16px;
+      padding: 14px 16px;
+      border: 1px solid #CFE0FF;
+      border-radius: 10px;
+      background: #F5F9FF;
+      font-size: 12px;
+    }
+    .deliverable strong { color: #174EBA; }
+    .candidate-head, .candidate-row {
+      display: grid;
+      grid-template-columns: minmax(160px, 1.05fr) minmax(190px, 1.45fr) 105px 92px;
+      gap: 16px;
+      align-items: center;
+    }
+    .candidate-head { padding: 0 12px 8px; color: #8A94A6; font-size: 11px; font-weight: 750; text-transform: uppercase; letter-spacing: .05em; }
+    .candidate-row { padding: 13px 12px; border-top: 1px solid #E8ECF2; }
+    .candidate-main { min-width: 0; }
+    .candidate-main button { max-width: 100%; padding: 0; overflow: hidden; border: 0; background: transparent; color: var(--ink); font-weight: 760; text-align: left; text-overflow: ellipsis; white-space: nowrap; }
+    .candidate-main small { display: block; margin-top: 3px; color: var(--muted); font-size: 10px; }
+    .candidate-capability { color: #4B5565; font-size: 12px; line-height: 1.45; }
+    .readiness { justify-self: start; padding: 4px 8px; border-radius: 999px; background: #EEF2F7; color: #5F6B7D; font-size: 11px; font-weight: 700; }
+    .readiness.installed { background: #E9F7EF; color: #19733C; }
+    .candidate-row details { position: relative; }
+    .candidate-row summary { color: var(--blue); cursor: pointer; font-size: 11px; font-weight: 750; list-style: none; }
+    .candidate-row summary::-webkit-details-marker { display: none; }
+    .candidate-row details[open] { grid-column: 1 / -1; }
+    .candidate-row details[open] summary { margin-bottom: 10px; }
+    .candidate-evidence { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; padding: 12px; border-radius: 9px; background: #F7F9FC; }
+    .candidate-evidence div { color: var(--muted); font-size: 11px; }
+    .candidate-evidence b { display: block; margin-bottom: 4px; color: var(--ink); }
+    .candidate-footer { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 12px; color: var(--muted); font-size: 11px; }
+    .candidate-footer button { padding: 0; border: 0; background: transparent; color: var(--blue); font-weight: 750; }
+    .workspace-scope { margin-top: 8px; color: #8993A4; font-size: 9px; line-height: 1.45; text-align: left; }
+
+    .page-head { align-items: start; }
+    .page-head h1 { font-size: clamp(32px, 4vw, 50px); }
+    .catalog-shell, .audit-card { box-shadow: none; }
+    .catalog-shell { overflow: hidden; border-radius: 14px; }
+    .entity-card { border-radius: 12px; background: white; }
+    .entity-card:hover { box-shadow: 0 8px 26px rgba(30, 46, 78, .08); }
+    .entity-card .badge { font-family: var(--sans); }
+    footer { background: white; }
+
+    @media (max-width: 1040px) {
+      .header-search { max-width: 360px; }
+      .candidate-head, .candidate-row { grid-template-columns: minmax(140px, 1fr) minmax(160px, 1.2fr) 100px 80px; gap: 10px; }
+    }
+    @media (max-width: 820px) {
+      .topbar { align-items: center; flex-direction: row; flex-wrap: wrap; }
+      .brand { display: flex; min-width: 190px; }
+      .header-search { order: 3; flex-basis: 100%; max-width: none; }
+      .nav { margin-left: auto; }
+      .view { width: min(100% - 24px, 1340px); padding-top: 24px; }
+      .workbench { grid-template-columns: 1fr; }
+      .phase-rail { border-right: 0; border-bottom: 1px solid var(--line); }
+      .rail-intro { margin-bottom: 14px; }
+      .node-list { display: flex; overflow-x: auto; }
+      .phase-button { min-width: 168px; }
+      .rail-foot { display: none; }
+      .stage-tabs { padding: 0 14px; overflow-x: auto; }
+      .stage-tab { min-width: max-content; }
+      .workspace-body { width: min(100% - 24px, 1080px); padding: 22px 18px; }
+      .task-list, .candidate-evidence { grid-template-columns: 1fr; }
+      .candidate-head { display: none; }
+      .candidate-row { grid-template-columns: 1fr auto; }
+      .candidate-capability { grid-column: 1 / -1; }
+      .readiness { grid-column: 1; }
+      .candidate-row details { grid-column: 2; grid-row: 3; }
+    }
+    @media (max-width: 560px) {
+      .brand-copy small { display: none; }
+      .nav button { padding-inline: 7px; font-size: 12px; }
+      .framework-toggle { min-width: 0; }
+      .node-heading { flex-direction: column; }
+      .deliverable { grid-template-columns: 1fr; gap: 5px; }
+      .controls, .controls.secondary { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
   <a class="skip-link" href="#main">跳到主要内容</a>
   <header class="topbar">
-    <div class="brand"><span class="brand-mark">A→</span><span>Plugin Atlas</span></div>
+    <div class="brand"><span class="brand-mark">A+</span><span class="brand-copy"><strong>Plugin Atlas</strong><small>全栈开发插件地图</small></span></div>
+    <form class="header-search" id="header-search" role="search">
+      <label class="skip-link" for="global-search">搜索插件或 Skill</label>
+      <input id="global-search" type="search" autocomplete="off" placeholder="搜索插件、Skill 或开发场景…">
+    </form>
     <nav class="nav" aria-label="主要页面">
-      <button type="button" data-view="overview" aria-selected="true">一张图</button>
-      <button type="button" data-view="nodes" aria-selected="false">14 节点</button>
-      <button type="button" data-view="catalog" aria-selected="false">插件 / Skill</button>
-      <button type="button" data-view="audit" aria-selected="false">审计方法</button>
+      <button type="button" data-view="overview" aria-selected="true">工作台</button>
+      <button type="button" data-view="catalog" aria-selected="false">完整目录</button>
+      <button type="button" data-view="audit" aria-selected="false">研究方法</button>
     </nav>
     <div class="top-status" id="top-status">冻结快照 · 未做 runtime 实测</div>
   </header>
@@ -672,102 +926,34 @@
 
   <main id="main">
     <section class="view active" id="view-overview" aria-labelledby="overview-title">
-      <div class="hero">
-        <p class="eyebrow">Codex Plugin Full-stack Atlas</p>
-        <h1 id="overview-title">插件不是答案。它只帮你把<span>证据包</span>送到下一站。</h1>
-        <figure class="journey">
-          <svg viewBox="0 0 1160 300" role="img" aria-labelledby="journey-title journey-desc">
-            <title id="journey-title">从发现问题到运行进化的五段全栈开发地图</title>
-            <desc id="journey-desc">同一个蓝色证据包依次经过找问题、定承诺、看见并做、证明再发布、运行再进化五站。每站包含对应的 M00 到 M13 模块。</desc>
-            <path d="M90 150 H1070" fill="none" stroke="#777B72" stroke-width="4" stroke-dasharray="8 10"/>
-            <path d="M1054 136 L1074 150 L1054 164" fill="none" stroke="#777B72" stroke-width="4"/>
-            <g>
-              <rect x="18" y="64" width="202" height="172" rx="24" fill="#E8EEFF" stroke="#356AE6" stroke-width="3"/>
-              <rect x="40" y="88" width="42" height="42" rx="11" fill="#356AE6"/>
-              <text x="61" y="114" text-anchor="middle" fill="#FFFFFF" font-size="12" font-weight="800">A→</text>
-              <text x="40" y="165" fill="#18203A" font-size="22" font-weight="800">找问题</text>
-              <text x="40" y="193" fill="#46506D" font-size="14">M00–M03</text>
-            </g>
-            <g>
-              <rect x="248" y="64" width="202" height="172" rx="24" fill="#EEE8FF" stroke="#7B4AE2" stroke-width="3"/>
-              <rect x="270" y="88" width="42" height="42" rx="11" fill="#356AE6"/>
-              <text x="291" y="114" text-anchor="middle" fill="#FFFFFF" font-size="12" font-weight="800">A→</text>
-              <text x="270" y="165" fill="#251B3E" font-size="22" font-weight="800">定承诺</text>
-              <text x="270" y="193" fill="#5B4B73" font-size="14">M04–M05</text>
-            </g>
-            <g>
-              <rect x="478" y="64" width="202" height="172" rx="24" fill="#FFF0E8" stroke="#D85D24" stroke-width="3"/>
-              <rect x="500" y="88" width="42" height="42" rx="11" fill="#356AE6"/>
-              <text x="521" y="114" text-anchor="middle" fill="#FFFFFF" font-size="12" font-weight="800">A→</text>
-              <text x="500" y="165" fill="#3F2216" font-size="22" font-weight="800">看见并做</text>
-              <text x="500" y="193" fill="#765040" font-size="14">M06–M08</text>
-            </g>
-            <g>
-              <rect x="708" y="64" width="202" height="172" rx="24" fill="#E7F7F0" stroke="#16966A" stroke-width="3"/>
-              <rect x="730" y="88" width="42" height="42" rx="11" fill="#356AE6"/>
-              <text x="751" y="114" text-anchor="middle" fill="#FFFFFF" font-size="12" font-weight="800">A→</text>
-              <text x="730" y="165" fill="#17382C" font-size="22" font-weight="800">证明再发布</text>
-              <text x="730" y="193" fill="#426A59" font-size="14">M09–M10</text>
-            </g>
-            <g>
-              <rect x="938" y="64" width="202" height="172" rx="24" fill="#FFF7D8" stroke="#9A7400" stroke-width="3"/>
-              <rect x="960" y="88" width="42" height="42" rx="11" fill="#356AE6"/>
-              <text x="981" y="114" text-anchor="middle" fill="#FFFFFF" font-size="12" font-weight="800">A→</text>
-              <text x="960" y="165" fill="#382F13" font-size="22" font-weight="800">运行再进化</text>
-              <text x="960" y="193" fill="#6D613B" font-size="14">M11–M13</text>
-            </g>
-          </svg>
-          <div class="journey-mobile" aria-hidden="true">
-            <div class="mobile-stage"><span class="packet">A→</span><b>找问题 · M00–M03</b></div>
-            <div class="mobile-stage"><span class="packet">A→</span><b>定承诺 · M04–M05</b></div>
-            <div class="mobile-stage"><span class="packet">A→</span><b>看见并做 · M06–M08</b></div>
-            <div class="mobile-stage"><span class="packet">A→</span><b>证明再发布 · M09–M10</b></div>
-            <div class="mobile-stage"><span class="packet">A→</span><b>运行再进化 · M11–M13</b></div>
-          </div>
-          <figcaption>蓝色 A→ 是交接证据。插件帮忙搬运和加工；Gate 仍由人决定。</figcaption>
-        </figure>
-        <p class="deck">先选你正在做的节点，再看插件替你处理什么、需要什么条件、怎样验证。热度只能帮你发现候选，不能替代适配度和实测。</p>
-        <div class="metrics" id="overview-metrics" aria-label="研究范围"></div>
-        <div class="three-principles">
-          <article class="principle"><span class="number">1</span><h2>它替你处理什么</h2><p>说清动作、对象、节点和产物。</p></article>
-          <article class="principle"><span class="number">2</span><h2>怎么才能用</h2><p>拆开安装、认证、权限和依赖。</p></article>
-          <article class="principle"><span class="number">3</span><h2>用完怎样才算数</h2><p>给出验证、证据层级和未测缺口。</p></article>
-        </div>
-        <div class="cta-row">
-          <button class="button primary" type="button" data-go="nodes">从 14 个节点开始</button>
-          <button class="button" type="button" data-go="catalog">直接搜索插件 / Skill</button>
-        </div>
-      </div>
-    </section>
-
-    <section class="view" id="view-nodes" aria-labelledby="nodes-title">
-      <div class="page-head">
-        <div><p class="eyebrow">M00–M13</p><h1 id="nodes-title">每一站，到底做什么</h1></div>
-        <p>M 是工作模块，A 是交接产物，G 是人类决策门。新证据出现时，应回到最小正确模块，不是一路硬推到底。</p>
-      </div>
-      <div class="node-layout">
-        <div class="node-list" id="node-list" aria-label="全栈开发节点"></div>
-        <article class="node-panel" id="node-panel" style="--node-color:#356AE6"></article>
+      <div class="workbench">
+        <aside class="phase-rail">
+          <div class="rail-intro"><h1 id="overview-title">全栈工作台地图</h1><p>做到哪一步，就看哪几个插件。</p></div>
+          <p class="phase-rail-label">开发阶段</p>
+          <div class="node-list" id="node-list" aria-label="全栈开发阶段"></div>
+          <div class="rail-foot"><strong>4,184</strong>个插件已归入 14 个节点<div class="workspace-scope" id="overview-metrics" aria-label="研究范围"></div></div>
+        </aside>
+        <article class="node-panel" id="node-panel"></article>
       </div>
     </section>
 
     <section class="view" id="view-catalog" aria-labelledby="catalog-title">
       <div class="page-head">
-        <div><p class="eyebrow">Solution lookup</p><h1 id="catalog-title">先按节点找，再谈最好</h1></div>
-        <p>每条能力只有一个主节点；次节点保留跨阶段价值。所有匹配都是可复核的研究推断。</p>
+        <div><p class="eyebrow">完整目录</p><h1 id="catalog-title">需要更多，再来这里筛</h1></div>
+        <p>工作台只给 3 个优先候选；这里保留全部插件、Skill、分数与证据，方便做第二轮比较。</p>
       </div>
       <div class="catalog-shell">
         <div class="controls">
           <div class="control"><label for="search">搜索名称、ID、说明、能力</label><input id="search" type="search" autocomplete="off" placeholder="例如 GitHub、deploy、research…"></div>
-          <div class="control"><label for="kind-filter">对象</label><select id="kind-filter"><option value="plugin">Plugin</option><option value="skill">Skill</option></select></div>
-          <div class="control"><label for="module-filter">主节点</label><select id="module-filter"><option value="all">全部 M00–M13</option></select></div>
+          <div class="control"><label for="kind-filter">查看</label><select id="kind-filter"><option value="plugin">Plugin</option><option value="skill">Skill</option></select></div>
+          <div class="control"><label for="module-filter">开发阶段</label><select id="module-filter"><option value="all">全部 14 个节点</option></select></div>
           <div class="control"><label for="state-filter">安装状态</label><select id="state-filter"><option value="all">全部状态</option><option value="installed">已安装</option><option value="uninstalled">未安装</option><option value="unavailable">不可用 / 默认关闭</option></select></div>
         </div>
         <div class="controls secondary">
-          <div class="control"><label for="shape-filter">能力形态</label><select id="shape-filter"><option value="all">全部形态</option><option value="Skill">含 Skill</option><option value="MCP">含 MCP</option><option value="App">含 App</option><option value="CLI">含 CLI</option></select></div>
-          <div class="control"><label for="confidence-filter">匹配把握</label><select id="confidence-filter"><option value="all">全部</option><option value="high">High</option><option value="medium">Medium</option><option value="review">需复核</option></select></div>
-          <div class="control"><label for="effect-filter">动作影响</label><select id="effect-filter"><option value="all">全部</option><option value="read-only">read-only</option><option value="local-artifact">local-artifact</option><option value="workspace">workspace</option><option value="git">git</option><option value="external">external</option><option value="secrets">secrets</option><option value="production">production</option></select></div>
-          <div class="control"><label for="sort-filter">排序</label><select id="sort-filter"><option value="priority">研究优先级</option><option value="fit">节点适配</option><option value="functional">功能潜力</option><option value="buzz">公开声量代理</option><option value="name">名称 A–Z</option></select></div>
+          <div class="control"><label for="shape-filter">提供方式</label><select id="shape-filter"><option value="all">全部方式</option><option value="Skill">含 Skill</option><option value="MCP">含 MCP</option><option value="App">含 App</option><option value="CLI">含 CLI</option></select></div>
+          <div class="control"><label for="confidence-filter">匹配可信度</label><select id="confidence-filter"><option value="all">全部</option><option value="high">把握高</option><option value="medium">把握中</option><option value="review">需复核</option></select></div>
+          <div class="control"><label for="effect-filter">会动到哪里</label><select id="effect-filter"><option value="all">全部</option><option value="read-only">只读取</option><option value="local-artifact">生成本地文件</option><option value="workspace">修改项目文件</option><option value="git">修改 Git</option><option value="external">操作外部服务</option><option value="secrets">接触密钥</option><option value="production">影响生产环境</option></select></div>
+          <div class="control"><label for="sort-filter">排序</label><select id="sort-filter"><option value="priority">优先查看</option><option value="fit">阶段匹配度</option><option value="functional">功能覆盖</option><option value="buzz">公开信号</option><option value="name">名称 A–Z</option></select></div>
         </div>
         <div class="result-summary"><span id="result-summary" role="status" aria-live="polite"></span><span>每页 36 条 · 点击看完整证据</span></div>
         <div class="result-grid" id="result-grid"></div>
@@ -781,8 +967,8 @@
 
     <section class="view" id="view-audit" aria-labelledby="audit-title">
       <div class="page-head">
-        <div><p class="eyebrow">Evidence, not vibes</p><h1 id="audit-title">这份地图知道自己不知道什么</h1></div>
-        <p>目录元数据、当前安装、认证、一次调用和生产可用是五层证据。页面不跨层升级结论。</p>
+        <div><p class="eyebrow">研究方法</p><h1 id="audit-title">排名有依据，也有边界</h1></div>
+        <p>目录说明、安装状态、认证、一次调用和生产可用是五回事。这里不会把“看起来能用”写成“已经可用”。</p>
       </div>
       <div class="audit-grid">
         <article class="audit-card full">
@@ -867,7 +1053,7 @@
     async function boot() {
     const APP_DATA = await loadAppData();
     const entityMap = new Map();
-    const state = { view: "overview", node: "M00", kind: "plugin", module: "all", install: "all", shape: "all", confidence: "all", effect: "all", sort: "priority", query: "", page: 1, pageSize: 36 };
+    const state = { view: "overview", node: "M06", showFramework: false, doneTasks: new Set(), kind: "plugin", module: "all", install: "all", shape: "all", confidence: "all", effect: "all", sort: "priority", query: "", page: 1, pageSize: 36 };
     const byId = (id) => document.getElementById(id);
     const esc = (value) => String(value == null ? "" : value).replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[char]);
     const short = (value, limit) => {
@@ -879,35 +1065,198 @@
     const confidenceLabel = (value) => value === "high" ? "high" : value === "medium" ? "medium" : "需复核";
     const versionLabel = (value) => ({ "frozen-exact": "冻结版本精确", "local-bundle-exact": "本地 bundle 精确", "current-version-drift": "当前版本漂移" })[value] || value;
 
+    const PHASES = [
+      { id: "discover", label: "发现", description: "想清楚要解决什么", modules: ["M00", "M01", "M02", "M03"] },
+      { id: "define", label: "定义", description: "定范围，写清需求", modules: ["M04", "M05"] },
+      { id: "build", label: "构建", description: "做原型、定架构、写代码", modules: ["M06", "M07", "M08"] },
+      { id: "launch", label: "上线", description: "测清楚，准备发布", modules: ["M09", "M10"] },
+      { id: "learn", label: "迭代", description: "看运行、做实验、留方法", modules: ["M11", "M12", "M13"] },
+    ];
+    const PLAIN_TITLES = {
+      M00: "理清任务", M01: "搭好项目", M02: "判断值不值得做", M03: "看清用户问题",
+      M04: "定范围和成败标准", M05: "把需求写清楚", M06: "做原型验证", M07: "选架构、拆任务",
+      M08: "写代码、跑测试", M09: "查质量和风险", M10: "准备上线", M11: "看运行结果",
+      M12: "做增长实验", M13: "复盘并留下有效做法",
+    };
+    const PLAIN_SUBTITLES = {
+      M00: "确认目标、边界、权限和资料是否最新",
+      M01: "跑通环境、测试、CI 和项目规则",
+      M02: "验证需求、替代方案和反面证据",
+      M03: "还原用户真实工作方式和痛点",
+      M04: "说清做什么、不做什么、怎样判断成败",
+      M05: "让产品、数据、接口和验收说同一种话",
+      M06: "用最小原型回答一个明确问题",
+      M07: "比较方案，再拆成能独立交付的小任务",
+      M08: "一次完成一个小任务，让代码和测试一起通过",
+      M09: "检查功能、安全、性能、体验和未测风险",
+      M10: "核对版本、迁移、回滚、监控和上线授权",
+      M11: "从指标、日志、事故和反馈里找真实问题",
+      M12: "提前写清假设、指标、护栏和停止条件",
+      M13: "验证哪些做法有效，再决定是否长期保留",
+    };
+    const PLAIN_TASKS = {
+      M00: ["确认真正要解决的问题", "划清能做、不能做和需要授权的范围", "确认资料是否最新，并写明下一步"],
+      M01: ["找到代码入口和技术栈", "跑通环境、测试和 CI", "写清权限、数据和恢复规则"],
+      M02: ["确认需求是否真实", "比较替代方案和现实约束", "主动找反例，避免只看支持证据"],
+      M03: ["还原用户现在怎么完成任务", "区分事实、转述和假设", "写出可以被验证的问题"],
+      M04: ["比较做与不做的选择", "划清 MVP 和明确不做的内容", "定指标、风险护栏和停止条件"],
+      M05: ["统一关键对象和状态", "写清接口、权限和失败处理", "让需求、验收和测试一一对应"],
+      M06: ["只提出一个可被证伪的问题", "做一个最小、可丢弃的原型", "用测试决定保留、修改还是放弃"],
+      M07: ["比较方案、成本和影响范围", "写清系统边界和失败处理", "拆成可独立测试和交付的小任务"],
+      M08: ["一次只完成一个批准的小任务", "先写失败测试，再写最少代码让它通过", "删掉无关改动，并跑回归测试"],
+      M09: ["锁定这次要检查的版本和范围", "分开检查功能、安全、性能和体验", "列出拦截问题、已知风险和未测部分"],
+      M10: ["核对发布物来自哪次构建", "准备迁移、回滚和监控", "确认负责人后再决定是否上线"],
+      M11: ["汇总日志、指标、事故和反馈", "按时间线找基线和异常", "提出可验证原因，并送回对应开发节点"],
+      M12: ["写清实验为什么可能有效", "提前定样本、指标和停止条件", "按数据决定保留、调整或停止"],
+      M13: ["用证据复盘什么有效", "整理成有边界、可试用的方法", "用新案例测试，失效时能撤回"],
+    };
+    const PLAIN_OUTPUTS = {
+      M00: "一份任务说明：目标、边界、授权和下一步都明确。",
+      M01: "一个能启动、能测试、规则清楚的项目底座。",
+      M02: "一份机会判断：需求、替代方案、反证和缺口都可追溯。",
+      M03: "一份问题证据：用户怎么做、哪里卡、问题多严重。",
+      M04: "一份范围决定：做什么、不做什么、怎样判断成败。",
+      M05: "一份能直接验收的规格：对象、状态、接口、权限和失败情况写清楚。",
+      M06: "一个最小原型和一份结论：什么有效、什么应删、哪里还没验证。",
+      M07: "一张架构图和一组能独立交付的小任务，迁移、回滚和失败边界齐全。",
+      M08: "一份实现记录：改了什么、测试怎么跑、还有什么没验证。",
+      M09: "一份独立检查结果：哪些通过、哪些拦截上线、哪些风险仍要承担。",
+      M10: "一份上线准备单：版本、迁移、回滚、监控和负责人都确认。",
+      M11: "一份运行事实：发生了什么、影响谁、下一步该回到哪个节点。",
+      M12: "一份可归因的实验记录：假设、样本、指标、护栏和结论齐全。",
+      M13: "一套经过复盘和测试、可撤回的做法，不把偶然经验当永久规则。",
+    };
+    const FEATURED_BY_MODULE = {
+      M00: ["Context Handoff", "Conductor Max Core Router", "Plugin Management"],
+      M01: ["Atbash Safety", "Dependency Upgrade Plan", "SetupMatt"],
+      M02: ["Sider Scholar", "SciSpace", "Consensus"],
+      M03: ["Yaps Meeting Transcription", "Sleekplan", "Unwrap"],
+      M04: ["Aha!", "Miro", "Perdoo"],
+      M05: ["SourcePRD", "Linchpin", "Acceptance Criteria Extractor"],
+      M06: ["Product Design", "Figma", "Browser"],
+      M07: ["Codex Advisor", "IcePanel", "AI Software Architect"],
+      M08: ["Supabase", "Build Web Apps", "OpenAI Developers"],
+      M09: ["Skarn", "Fallow Code Analysis", "Qodo"],
+      M10: ["Vercel", "Firebase", "Cloudflare"],
+      M11: ["Datadog (Preview)", "Honeycomb", "Incident Investigator"],
+      M12: ["Data", "Mixpanel", "Lazyweb"],
+      M13: ["Plugin Creator Plus", "Template Creator", "Yaps Memory"],
+    };
+    const FEATURED_COPY = {
+      "Context Handoff": "上下文快满时，把目标、验收条件和证据完整交给一个新任务。",
+      "Conductor Max Core Router": "按任务只启用足够的工程插件，减少工具冲突和上下文噪声。",
+      "Plugin Management": "查看已安装和可安装插件，核对权限，并给出安装建议。",
+      "Atbash Safety": "在 Codex 调用工具前做安全判断，并提供本地安全配置指导。",
+      "Dependency Upgrade Plan": "检查依赖升级影响，整理迁移顺序、风险和验证办法。",
+      "SetupMatt": "为项目准备可重复的本地开发环境和基础工程配置。",
+      "Sider Scholar": "搜索论文、理解研究结论，并追踪引用来源。",
+      "SciSpace": "检索和阅读论文，解释方法、结果与术语。",
+      "Consensus": "从同行评审研究中查找对具体问题的支持或反证。",
+      "Yaps Meeting Transcription": "把访谈、会议或通话转成带说话人和时间点的文字记录。",
+      "Sleekplan": "汇总反馈板、调查和路线图，找出用户反复提到的问题。",
+      "Unwrap": "按主题、样本和趋势分析客户反馈，并保留可回看的原话。",
+      "Aha!": "管理产品战略、路线图和优先级，让范围决定可追溯。",
+      "Miro": "用协作白板梳理方案、范围、依赖和取舍。",
+      "Perdoo": "把目标、关键结果和执行进度放在同一套规划里。",
+      "SourcePRD": "读取代码库并整理现有产品能力，帮助补齐或重写 PRD。",
+      "Linchpin": "把多份 PRD 拆成可审查的交付通道，并保留需求合同。",
+      "Acceptance Criteria Extractor": "从需求文本中提取可检查的验收条件。",
+      "Product Design": "把想法变成可评审的原型，并用视觉对照检查实现。",
+      "Figma": "连接设计稿与代码，读取组件上下文并支持设计到实现的交接。",
+      "Browser": "打开、检查并操作网页；适合验证本地页面和真实交互。",
+      "Codex Advisor": "对关键技术选择做一次新的只读咨询，不直接改项目。",
+      "IcePanel": "画出软件架构、系统边界和依赖关系，并在团队内协作评审。",
+      "AI Software Architect": "结合项目现状比较设计模式，并整理架构决策记录。",
+      "Supabase": "管理 Postgres、认证、存储和项目配置，适合快速搭后端。",
+      "Build Web Apps": "完成前端为主的 Web 应用，并串起浏览器测试、支付和数据库。",
+      "OpenAI Developers": "按 OpenAI 官方实践开发 API、Agent 和 ChatGPT Apps。",
+      "Skarn": "扫描 AI 编码会话和助手配置里的泄露凭据与高风险连接。",
+      "Fallow Code Analysis": "在本地分析 JavaScript 和 TypeScript 代码、依赖与改动影响。",
+      "Qodo": "在提交前审查本地代码改动，并协助处理 PR 审查意见。",
+      "Vercel": "构建、预览和发布 Web 应用或 Agent，并检查部署配置。",
+      "Firebase": "为应用接入数据库、认证、托管和 AI 服务，并完成部署。",
+      "Cloudflare": "构建和发布 Workers、Pages 等 Cloudflare 服务。",
+      "Datadog (Preview)": "查询日志、指标和追踪数据，定位运行问题；当前只支持部分 Datadog 区域。",
+      "Honeycomb": "用分布式追踪和查询分析线上请求，缩小故障范围。",
+      "Incident Investigator": "按证据还原事故时间线、原因、影响和修正动作。",
+      "Data": "分析产品或业务数据，把问题变成可复查的结论和图表。",
+      "Mixpanel": "查询产品行为、漏斗和留存，用真实事件数据验证增长假设。",
+      "Lazyweb": "查看真实产品界面和 A/B 测试结果，为实验设计找参考。",
+      "Plugin Creator Plus": "创建、测试、打包并发布 ChatGPT 或 Codex 插件。",
+      "Template Creator": "把反复使用的交付格式做成可复用、可验证的模板。",
+      "Yaps Memory": "用本地 Markdown 在不同 Codex 对话之间保存和检索项目事实。",
+    };
+    const FEATURED_CHECKS = {
+      "Context Handoff": "做一次真实交接，确认新任务能复述目标、未决项和证据，并从正确断点继续。",
+      "Conductor Max Core Router": "给一个边界明确的任务跑一次路由，检查它只启用必要插件，也没有漏掉关键能力。",
+      "Plugin Management": "查一个已知插件，逐项核对安装状态、权限和来源；未经确认不要执行安装。",
+      "Atbash Safety": "分别提交一个安全调用和一个越界调用，确认前者放行、后者拦截，且理由能追溯。",
+      "Dependency Upgrade Plan": "用真实 lockfile 生成升级计划，按计划升级一个依赖，并跑直接相关测试。",
+      "SetupMatt": "在干净环境按说明完成设置，确认项目能启动、测试能跑、没有依赖个人机器状态。",
+      "Sider Scholar": "问一个已有结论的研究问题，核对论文、作者、年份和引用是否能回到原文。",
+      "SciSpace": "让它解释一篇已知论文的方法和结果，逐项和论文正文核对。",
+      "Consensus": "查一个存在争议的问题，确认支持与反对证据都能追到同行评审来源。",
+      "Yaps Meeting Transcription": "转写一段有两位说话人的样例，核对说话人、时间点和关键句是否准确。",
+      "Sleekplan": "读取一组已知反馈，确认数量、主题和原始反馈链接一致。",
+      "Unwrap": "让它归纳一组已知反馈，检查每个主题都能回到具体样本，并保留反例。",
+      "Aha!": "读取一个已知路线图，再试改一项低风险字段；执行后回读，确认范围和负责人正确。",
+      "Miro": "在测试白板生成一个最小方案图，重开白板检查结构、权限和链接。",
+      "Perdoo": "读取一个已知 OKR，并核对目标、负责人、进度和截止日期。",
+      "SourcePRD": "对一个小型代码库生成能力说明，逐项和真实入口、界面与行为核对。",
+      "Linchpin": "用两份小 PRD 做一次拆分，确认每条任务都有来源、验收条件和清楚边界。",
+      "Acceptance Criteria Extractor": "输入一段带边界条件的需求，检查正常、失败和权限场景是否都被提取。",
+      "Product Design": "从一份明确 brief 生成候选视觉，选定一个后实现，再把页面与参考图并排检查。",
+      "Figma": "读取一个已知组件，核对尺寸、文字、变量和组件关系是否与设计文件一致。",
+      "Browser": "打开本地页面，完成一次真实点击或输入，检查可见结果并保存截图。",
+      "Codex Advisor": "给它一个已有结论的技术选择，检查建议是否引用当前项目事实，并保持只读。",
+      "IcePanel": "读取一张已知架构图，核对系统、连接和边界；测试写入时先用副本。",
+      "AI Software Architect": "让它比较两个方案，确认约束、失败边界、迁移和回滚都进入决策记录。",
+      "Supabase": "在测试项目建一张最小表并查询一条记录，核对 RLS、迁移和回读结果。",
+      "Build Web Apps": "做一个最小页面，跑一条关键交互和浏览器测试，再检查构建产物。",
+      "OpenAI Developers": "实现一个最小 API 或 Agent 调用，用官方示例输入核对返回、错误处理和日志。",
+      "Skarn": "对含一个测试凭据和一个危险配置的 fixture 扫描，确认两项都被发现且没有泄露原文。",
+      "Fallow Code Analysis": "在已知依赖的小型 TS 项目运行分析，核对调用关系和改动影响是否准确。",
+      "Qodo": "对一段故意带缺陷的本地 diff 运行审查，确认问题定位准确且没有改动代码。",
+      "Vercel": "先发 preview，核对构建日志、环境变量和页面；正式发布后再检查线上版本。",
+      "Firebase": "在测试项目部署最小功能，确认认证、数据写入、日志和回滚路径都能用。",
+      "Cloudflare": "在测试环境发布一个最小 Worker 或 Pages 项目，核对路由、日志和回滚。",
+      "Datadog (Preview)": "查询一段已知时间窗的日志和指标，确认时区、过滤条件和事件数量一致。",
+      "Honeycomb": "用一个已知 trace 查请求链路，核对服务、耗时、错误点和时间范围。",
+      "Incident Investigator": "用一份已知事故记录重建时间线，确认事实、推断和待查项被分开。",
+      "Data": "用一份有已知答案的数据集重跑分析，核对口径、计算、图表和结论。",
+      "Mixpanel": "查询一个已知漏斗，核对事件定义、时间窗、去重方式和样本数量。",
+      "Lazyweb": "查一个已知产品流程，确认界面来源、日期和实验结果能回到原始记录。",
+      "Plugin Creator Plus": "创建一个最小插件，跑清单校验和本地测试，再检查打包内容不含敏感文件。",
+      "Template Creator": "用同一份输入生成两次产物，确认格式稳定、字段完整、错误输入会明确失败。",
+      "Yaps Memory": "保存一条非敏感项目事实，在新对话检索并核对引用；再测试删除或过期是否生效。",
+    };
+    const effectChecks = {
+      "read-only": "用一条已知答案的查询试读，再和原始记录逐项对照",
+      "local-artifact": "用固定输入生成最小产物，重开检查结果，并核对前后差异",
+      workspace: "只在隔离范围内运行，检查改动清单，并跑直接相关的测试",
+      git: "先核对分支和提交文件；推送后再读远端结果",
+      external: "先用预览或沙盒做最小操作，再回读外部系统确认结果",
+      secrets: "先核对最小权限和审计记录，确认输出里没有凭据",
+      production: "先做 dry-run、回滚和监控；获得明确上线授权后再验证线上",
+    };
+    const AUTH_LABELS = { ON_INSTALL: "安装时授权", ON_USE: "首次使用时授权", OAUTH: "OAuth 授权", API_KEY: "API Key", NONE: "无需目录认证" };
+
     function coreTexts(item) {
       const module = APP_DATA.modules.find((entry) => entry.id === item.primaryModule);
       const isSkill = item.kind === "skill";
-      const does = isSkill
-        ? "【Skill 说明 + 研究映射】它给 Agent 一套操作规则，主要帮助 " + item.primaryModule + " 完成“" + module.help + "”。原始说明：" + item.description
-        : "【目录声明 + 研究映射】在 " + item.primaryModule + "，它主要帮助“" + module.help + "”。目录原文：" + item.description;
+      const description = String(item.description || "").replace(/\s+/g, " ").trim();
+      const does = FEATURED_COPY[item.name] || short(description, 280) || (isSkill ? "给 Agent 一套可重复执行的操作步骤。" : "帮助完成“" + PLAIN_TITLES[item.primaryModule] + "”这一步。");
       const conditions = [];
-      if (item.inventoryState === "不可用") conditions.push("冻结快照标记为不可用，不能按普通安装路径使用");
-      else if (item.installed) conditions.push("冻结快照显示" + item.runtimeState + "，但这不等于认证成功");
+      if (item.inventoryState === "不可用") conditions.push("当前目录把它标为不可用，普通安装路径走不通");
+      else if (item.installed) conditions.push("本机快照显示已安装；是否登录、权限是否够，仍要现场确认");
       else conditions.push("需要先安装或启用" + (isSkill ? "父插件" : "该插件"));
-      if (item.authPolicy && item.authPolicy !== "NONE" && item.authPolicy !== "未说明") conditions.push("目录认证策略为 " + item.authPolicy + "，实际账号、scope 与凭据状态未实测");
-      else if (item.authPolicy === "NONE") conditions.push("目录认证策略为 NONE；实际运行环境和下游资源权限仍需确认");
-      else conditions.push("当前来源未完整说明认证和权限条件，不能据此判断为无需配置");
-      if (isSkill) conditions.push("Agent 还要实际加载该 Skill；加载规则本身不等于已连接外部系统");
-      else conditions.push("能力形态为 " + item.shape + "；真实输入、依赖和工具 schema 仍要在使用时确认");
-      const checkByEffect = {
-        "read-only": "用固定查询或已知 fixture 做一次代表性读取，并与源记录逐项核对",
-        "local-artifact": "用固定输入生成最小产物，检查 before / after diff 并重新打开验收",
-        workspace: "在隔离范围内运行相关测试、检查 diff，并确认没有越界文件",
-        git: "先检查分支、staged file list 与 diff；外部 push 前另取明确授权并核对远端",
-        external: "先用 preview / sandbox 与最小权限测试；明确授权后执行一次并 read-back",
-        secrets: "先核对最小 scope、凭据暴露面与审计日志，不把 secret 写入输出",
-        production: "先完成 dry-run、回滚、观测和 G5 readiness；对象级 R3 授权后再执行并验证线上",
-      };
-      const prefix = isSkill ? "先验证该 Skill 的触发、步骤和依赖是否按说明生效" : checkByEffect[item.effectClass];
-      const proof = prefix + "，再确认它确实改善 " + module.artifact + " 的“" + module.done + "”条件。当前证据只到静态元数据，尚未确认代表性调用、权限范围与生产稳定性。";
+      if (item.authPolicy && !["NONE", "未说明"].includes(item.authPolicy)) conditions.push("还需要" + (AUTH_LABELS[item.authPolicy] || item.authPolicy) + "；账号和授权范围尚未实测");
+      else if (item.authPolicy === "未说明") conditions.push("目录没把认证条件说完整，使用前要补查");
+      if (isSkill) conditions.push("Agent 需要实际触发这条 Skill；看得到说明不等于已经接通工具");
+      const proof = FEATURED_CHECKS[item.name] || ((isSkill ? "先用一个最小任务确认触发、步骤和依赖都按说明工作" : (effectChecks[item.effectClass] || "用固定输入做一次最小测试并核对结果")) + "。这一步的成功标准是：" + module.done);
       const unverified = isSkill
-        ? ["Skill 正文逐条执行效果", "父插件认证", "真实工具依赖", "生产稳定性"]
-        : ["认证状态", "真实权限范围", "代表性调用", "生产稳定性"];
+        ? ["Skill 实际触发", "父插件认证", "工具依赖", "生产稳定性"]
+        : ["认证状态", "权限范围", "代表性调用", "生产稳定性"];
       return { does, conditions: conditions.join("；") + "。", proof, unverified };
     }
 
@@ -920,7 +1269,7 @@
       state.view = name;
       document.querySelectorAll(".view").forEach((view) => view.classList.toggle("active", view.id === "view-" + name));
       document.querySelectorAll("[data-view]").forEach((button) => button.setAttribute("aria-selected", button.dataset.view === name ? "true" : "false"));
-      if (name === "nodes") renderNode();
+      if (name === "overview") renderNode();
       if (name === "catalog") renderCatalog();
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
@@ -928,13 +1277,7 @@
     function renderMetrics() {
       const meta = APP_DATA.meta;
       const coverage = meta.skillCoverage;
-      const items = [
-        [meta.pluginCount.toLocaleString("en-US"), "冻结 canonical plugins"],
-        [coverage.evidenceRows.toLocaleString("en-US"), "有说明的 Skill 证据行"],
-        ["14", "M00–M13 全栈节点"],
-        [meta.readyNowCount, "Ready Now（未实测，所以为 0）"],
-      ];
-      byId("overview-metrics").innerHTML = items.map((item) => '<div class="metric"><strong>' + esc(item[0]) + '</strong><span>' + esc(item[1]) + "</span></div>").join("");
+      byId("overview-metrics").textContent = coverage.evidenceRows.toLocaleString("en-US") + " 条 Skill 证据。排名来自静态资料，真实调用尚未验证。";
       byId("footer-date").textContent = new Date(meta.generatedAt).toLocaleString("zh-CN", { hour12: false });
       byId("source-dates").textContent = "插件状态冻结：" + meta.frozenAt + "；研究快照：" + meta.researchAt + "；Skill catalog：" + meta.catalogFetchedAt + "。";
       byId("audit-plugin-copy").textContent = meta.pluginCount.toLocaleString("en-US") + " 个 canonical IDs；" + meta.installedCount + " 个在冻结快照中已安装；" + meta.reviewCount.toLocaleString("en-US") + " 个节点匹配需要人工复核。";
@@ -942,33 +1285,51 @@
     }
 
     function renderNodeList() {
-      const countMap = new Map(APP_DATA.moduleCounts.map((item) => [item.id, item]));
-      byId("node-list").innerHTML = APP_DATA.modules.map((module) => {
-        const counts = countMap.get(module.id);
-        return '<button class="node-chip" type="button" style="--node-color:' + esc(module.color) + '" data-node="' + module.id + '" aria-pressed="' + (state.node === module.id) + '"><span class="node-code">' + module.id + '</span><span><span class="node-name">' + esc(module.title) + '</span><span class="subtle">' + esc(module.short) + '</span></span><span class="node-count">' + counts.plugins + " P<br>" + counts.skills + " S</span></button>";
+      const activePhase = PHASES.find((phase) => phase.modules.includes(state.node)) || PHASES[0];
+      byId("node-list").innerHTML = PHASES.map((phase, index) => {
+        return '<button class="phase-button" type="button" data-phase="' + phase.id + '" aria-pressed="' + (activePhase.id === phase.id) + '"><span class="phase-index">0' + (index + 1) + '</span><span><span class="phase-name">' + esc(phase.label) + '</span><span class="phase-desc">' + esc(phase.description) + "</span></span></button>";
       }).join("");
+    }
+
+    function candidateHtml(item) {
+      const core = coreTexts(item);
+      const stateLabel = item.inventoryState === "不可用" ? "当前不可用" : item.installed ? "已安装 · 未实测" : "未安装";
+      const installedClass = item.installed ? " installed" : "";
+      const evidence = "依据：插件目录说明 + 本站节点归类。未验证：" + core.unverified.join("、") + "。";
+      const reason = "本站本节点第 #" + item.moduleRank + "；节点适配 " + score(item.fitScore) + "，功能潜力 " + score(item.functionalScore) + "，声量代理 " + score(item.publicProxyScore) + "。排名只用于缩小候选范围。";
+      return '<div class="candidate-row">' +
+        '<div class="candidate-main"><button type="button" data-open-id="' + esc(item.id) + '">' + esc(item.name) + '</button><small>' + esc(item.shape) + ' · #' + item.moduleRank + '</small></div>' +
+        '<div class="candidate-capability">' + esc(short(core.does, 105)) + '</div>' +
+        '<span class="readiness' + installedClass + '">' + esc(stateLabel) + '</span>' +
+        '<details><summary>为什么先看</summary><div class="candidate-evidence"><div><b>能帮什么</b>' + esc(core.does) + '</div><div><b>使用前要准备什么</b>' + esc(core.conditions) + '</div><div><b>怎样确认真能用</b>' + esc(core.proof) + '</div></div><p class="fineprint">' + esc(reason + " " + evidence) + '</p></details>' +
+        '</div>';
     }
 
     function renderNode() {
       renderNodeList();
-      const module = APP_DATA.modules.find((item) => item.id === state.node) || APP_DATA.modules[0];
+      const module = APP_DATA.modules.find((item) => item.id === state.node) || APP_DATA.modules[8];
+      const phase = PHASES.find((item) => item.modules.includes(module.id)) || PHASES[2];
       const counts = APP_DATA.moduleCounts.find((item) => item.id === module.id);
-      const top = APP_DATA.plugins.filter((item) => item.primaryModule === module.id).sort((a, b) => a.moduleRank - b.moduleRank).slice(0, 8);
-      const gateBadges = module.gate.map((item) => '<span class="badge ' + (item === "R3" ? "danger" : "primary") + '">' + esc(item) + "</span>").join("");
-      byId("node-panel").style.setProperty("--node-color", module.color);
+      const modulePlugins = APP_DATA.plugins.filter((item) => item.primaryModule === module.id).sort((a, b) => a.moduleRank - b.moduleRank);
+      const featuredNames = FEATURED_BY_MODULE[module.id] || [];
+      const featured = featuredNames.map((name) => modulePlugins.find((item) => item.name === name)).filter(Boolean);
+      const top = featured.concat(modulePlugins.filter((item) => !featuredNames.includes(item.name))).slice(0, 3);
+      const code = state.showFramework ? '<span class="eyebrow">' + module.id + ' · ' + esc(module.title) + '</span>' : "";
+      const tabs = phase.modules.map((moduleId) => '<button class="stage-tab" type="button" data-node="' + moduleId + '" aria-pressed="' + (module.id === moduleId) + '">' + (state.showFramework ? moduleId + ' · ' : '') + esc(PLAIN_TITLES[moduleId]) + '</button>').join("");
+      const tasks = PLAIN_TASKS[module.id].map((task, index) => {
+        const taskId = module.id + "-" + index;
+        return '<label class="task-check"><input type="checkbox" data-task="' + taskId + '"' + (state.doneTasks.has(taskId) ? " checked" : "") + '><span>' + esc(task) + "</span></label>";
+      }).join("");
       byId("node-panel").innerHTML =
-        '<p class="eyebrow">' + module.id + " · " + esc(module.artifact) + '</p><h2>' + esc(module.title) + '</h2><p class="node-kicker">' + esc(module.short) + '</p>' +
-        '<div class="node-meta">' + gateBadges + '<span class="badge">' + counts.plugins + ' plugins</span><span class="badge">' + counts.skills + ' skills</span><span class="badge warn">' + counts.review + ' 待复核</span></div>' +
-        '<div class="core-steps">' + module.core.map((item) => '<div class="core-step"><b>' + esc(item) + "</b></div>").join("") + "</div>" +
-        '<div class="done-box"><b>做到什么才算完成</b><br>' + esc(module.done) + '</div>' +
-        '<div class="cta-row"><button class="button primary" type="button" data-node-catalog="' + module.id + '">看本节点插件</button><a class="button" href="' + esc(module.sourceUrl) + '" target="_blank" rel="noreferrer">查看节点原文</a></div>' +
-        '<div class="top-candidates"><h3>研究优先候选</h3><p class="subtle">只用于发现：节点适配 55% + 功能潜力 35% + 有证据的公开代理最多 10%。</p><div class="mini-list">' +
-        top.map((item) => '<button class="mini-item" type="button" data-open-id="' + esc(item.id) + '"><span class="mini-rank">#' + item.moduleRank + '</span><span class="mini-title">' + esc(item.name) + '</span><span class="mini-score">fit ' + score(item.fitScore) + "</span></button>").join("") +
-        "</div></div>";
+        '<div class="stage-tabs" aria-label="' + esc(phase.label) + '阶段节点"><span class="stage-path">' + esc(phase.label) + ' /</span>' + tabs + '<label class="framework-toggle"><input type="checkbox" data-framework-toggle' + (state.showFramework ? ' checked' : '') + '>显示框架编号</label></div>' +
+        '<div class="workspace-body"><div class="node-heading"><div>' + code + '<h2>' + esc(PLAIN_TITLES[module.id]) + '</h2><p>' + esc(PLAIN_SUBTITLES[module.id]) + '</p></div><a class="quiet-link" href="' + esc(module.sourceUrl) + '" target="_blank" rel="noreferrer">查看框架原文</a></div>' +
+        '<section class="work-section"><h3 class="section-title"><span class="section-number">01</span>这一步要完成什么</h3><div class="task-list">' + tasks + '</div></section>' +
+        '<section class="work-section"><h3 class="section-title"><span class="section-number">02</span>完成后留下什么</h3><div class="deliverable"><strong>' + esc(state.showFramework ? module.artifact : "交付结果") + '</strong><span>' + esc(PLAIN_OUTPUTS[module.id]) + '</span></div></section>' +
+        '<section class="work-section"><h3 class="section-title"><span class="section-number">03</span>先看这 3 个工具</h3><div class="candidate-head"><span>工具</span><span>主要能力</span><span>当前状态</span><span>依据</span></div>' + top.map(candidateHtml).join("") + '<div class="candidate-footer"><span>结合站内排名、通用性和当前安装状态选出 3 个；原始排名仍在完整目录。</span><button type="button" data-node-catalog="' + module.id + '">查看本节点全部 ' + counts.plugins + ' 个插件 →</button></div></section></div>';
     }
 
     function populateModuleFilter() {
-      byId("module-filter").insertAdjacentHTML("beforeend", APP_DATA.modules.map((module) => '<option value="' + module.id + '">' + module.id + " · " + esc(module.title) + "</option>").join(""));
+      byId("module-filter").insertAdjacentHTML("beforeend", APP_DATA.modules.map((module) => '<option value="' + module.id + '">' + module.id + " · " + esc(PLAIN_TITLES[module.id]) + "</option>").join(""));
     }
 
     function filteredEntities() {
@@ -1000,9 +1361,9 @@
       return '<article class="entity-card">' +
         '<div class="card-badges"><span class="badge primary">' + item.primaryModule + '</span><span class="badge">' + esc(item.kind === "plugin" ? item.shape : "Skill") + '</span><span class="badge ' + (review ? "warn" : "") + '">' + confidenceLabel(item.matchConfidence) + '</span><span class="badge ' + (["production","secrets","external"].includes(item.effectClass) ? "danger" : "") + '">' + esc(item.effectClass) + "</span>" + versionBadge + "</div>" +
         '<h2>' + esc(item.name) + '</h2><div class="entity-id">' + esc(item.kind === "skill" ? item.parentName + " / " + item.skillName : item.id) + "</div>" +
-        '<div class="card-scores"><div class="score"><strong>' + score(item.fitScore) + '</strong><span>节点适配</span></div><div class="score"><strong>' + score(item.functionalScore) + '</strong><span>功能潜力</span></div><div class="score"><strong>' + score(item.publicProxyScore) + '</strong><span>声量代理</span></div></div>' +
-        '<dl class="core-three"><div><dt>它替你处理什么</dt><dd>' + esc(short(core.does, 150)) + '</dd></div><div><dt>怎么才能用</dt><dd>' + esc(short(core.conditions, 125)) + '</dd></div><div><dt>用完怎样才算数</dt><dd>' + esc(short(core.proof, 140)) + "</dd></div></dl>" +
-        '<button class="open-detail" type="button" data-open-id="' + esc(item.id) + '">打开完整证据 →</button></article>';
+        '<div class="card-scores"><div class="score"><strong>' + score(item.fitScore) + '</strong><span>阶段匹配度</span></div><div class="score"><strong>' + score(item.functionalScore) + '</strong><span>功能覆盖</span></div><div class="score"><strong>' + score(item.publicProxyScore) + '</strong><span>公开信号</span></div></div>' +
+        '<dl class="core-three"><div><dt>能帮你做什么</dt><dd>' + esc(short(core.does, 150)) + '</dd></div><div><dt>使用前要准备什么</dt><dd>' + esc(short(core.conditions, 125)) + '</dd></div><div><dt>怎样确认真能用</dt><dd>' + esc(short(core.proof, 140)) + "</dd></div></dl>" +
+        '<button class="open-detail" type="button" data-open-id="' + esc(item.id) + '">查看详情和证据 →</button></article>';
     }
 
     function renderCatalog() {
@@ -1036,8 +1397,8 @@
       const skillEvidence = item.kind === "plugin" ? detailBlock("Skill 证据", item.skillEvidence.state + " · " + item.skillEvidence.evidenceCount + " observed / " + item.skillEvidence.claimedCount + " frozen claim") : detailBlock("版本证据", versionLabel(item.versionState) + " · v" + item.version + "；冻结 v" + item.frozenVersions.join(", "));
       byId("dialog-body").innerHTML =
         '<div class="card-badges"><span class="badge primary">' + item.primaryModule + " · " + esc(module.title) + '</span><span class="badge">' + esc(item.runtimeState) + '</span><span class="badge ' + (item.matchNeedsReview ? "warn" : "") + '">' + confidenceLabel(item.matchConfidence) + '</span><span class="badge ' + (["production","secrets","external"].includes(item.effectClass) ? "danger" : "") + '">' + esc(item.effectClass) + "</span></div>" +
-        '<div class="card-scores"><div class="score"><strong>' + score(item.fitScore) + '</strong><span>节点适配</span></div><div class="score"><strong>' + score(item.functionalScore) + '</strong><span>功能潜力</span></div><div class="score"><strong>' + score(item.publicProxyScore) + '</strong><span>公开声量代理</span></div></div>' +
-        '<div class="dialog-three"><section><h3>1 · 它替你处理什么</h3><p>' + esc(core.does) + '</p></section><section><h3>2 · 怎么才能用</h3><p>' + esc(core.conditions) + '</p></section><section><h3>3 · 用完怎样才算数</h3><p>' + esc(core.proof) + "</p></section></div>" +
+        '<div class="card-scores"><div class="score"><strong>' + score(item.fitScore) + '</strong><span>阶段匹配度</span></div><div class="score"><strong>' + score(item.functionalScore) + '</strong><span>功能覆盖</span></div><div class="score"><strong>' + score(item.publicProxyScore) + '</strong><span>公开信号</span></div></div>' +
+        '<div class="dialog-three"><section><h3>1 · 能帮你做什么</h3><p>' + esc(core.does) + '</p></section><section><h3>2 · 使用前要准备什么</h3><p>' + esc(core.conditions) + '</p></section><section><h3>3 · 怎样确认真能用</h3><p>' + esc(core.proof) + "</p></section></div>" +
         '<div class="detail-grid">' + detailBlock("Canonical ID", item.kind === "plugin" ? item.id : item.parentId + " / " + item.skillName) +
         detailBlock("版本", item.kind === "plugin" ? "冻结 v" + item.versions.join(", ") + (item.versionAmbiguous ? " · 版本歧义" : "") : "证据 v" + item.version) +
         detailBlock("主 / 次节点", item.primaryModule + (item.secondaryModules.length ? " / " + item.secondaryModules.join(", ") : " / 无")) +
@@ -1053,7 +1414,7 @@
         detailBlock("外部来源", sourceLinks.replace(/<[^>]+>/g, "")) + "</div>" +
         '<div class="node-meta">' + reasons + "</div>" +
         '<div class="cta-row">' + parent + (external.length ? '<a class="button" href="' + esc(external[0]) + '" target="_blank" rel="noreferrer">打开作者来源</a>' : "") + '<a class="button" href="' + esc(module.sourceUrl) + '" target="_blank" rel="noreferrer">查看节点原文</a></div>' +
-        '<p class="fineprint">节点映射、effectClass 与研究优先级均为本项目推断。publisher claim、安装、认证、调用成功与生产可用不得互相升级。父插件的功能分和声量仅作为 Skill 上下文。</p>';
+        '<p class="fineprint">节点归类和排序是本站推断。插件作者的说明不等于实际测试结果；已安装、已登录、调用成功和生产可用也不是一回事。Skill 会继承父插件的一部分背景分数。</p>';
       const dialog = byId("detail-dialog");
       if (!dialog.open) dialog.showModal();
       if (updateHash !== false) history.replaceState(null, "", "#item=" + encodeURIComponent(item.id));
@@ -1068,12 +1429,20 @@
     document.querySelectorAll("[data-view]").forEach((button) => button.addEventListener("click", () => activateView(button.dataset.view)));
     document.querySelectorAll("[data-go]").forEach((button) => button.addEventListener("click", () => activateView(button.dataset.go)));
     byId("node-list").addEventListener("click", (event) => {
-      const button = event.target.closest("[data-node]");
+      const button = event.target.closest("[data-phase]");
       if (!button) return;
-      state.node = button.dataset.node;
+      const phase = PHASES.find((item) => item.id === button.dataset.phase);
+      if (!phase) return;
+      state.node = phase.modules[0];
       renderNode();
     });
     byId("node-panel").addEventListener("click", (event) => {
+      const stageButton = event.target.closest("[data-node]");
+      if (stageButton) {
+        state.node = stageButton.dataset.node;
+        renderNode();
+        return;
+      }
       const catalogButton = event.target.closest("[data-node-catalog]");
       if (catalogButton) {
         state.module = catalogButton.dataset.nodeCatalog;
@@ -1084,6 +1453,18 @@
       }
       const itemButton = event.target.closest("[data-open-id]");
       if (itemButton) openDetail(itemButton.dataset.openId);
+    });
+    byId("node-panel").addEventListener("change", (event) => {
+      const framework = event.target.closest("[data-framework-toggle]");
+      if (framework) {
+        state.showFramework = framework.checked;
+        renderNode();
+        return;
+      }
+      const checkbox = event.target.closest("[data-task]");
+      if (!checkbox) return;
+      if (checkbox.checked) state.doneTasks.add(checkbox.dataset.task);
+      else state.doneTasks.delete(checkbox.dataset.task);
     });
     byId("result-grid").addEventListener("click", (event) => {
       const button = event.target.closest("[data-open-id]");
@@ -1100,7 +1481,14 @@
     byId("detail-dialog").addEventListener("close", () => {
       if (location.hash.startsWith("#item=")) history.replaceState(null, "", location.pathname + location.search);
     });
-    byId("search").addEventListener("input", (event) => { state.query = event.target.value; state.page = 1; renderCatalog(); });
+    byId("header-search").addEventListener("submit", (event) => {
+      event.preventDefault();
+      state.query = byId("global-search").value;
+      state.page = 1;
+      byId("search").value = state.query;
+      activateView("catalog");
+    });
+    byId("search").addEventListener("input", (event) => { state.query = event.target.value; byId("global-search").value = state.query; state.page = 1; renderCatalog(); });
     const controlMap = [
       ["kind-filter", "kind"], ["module-filter", "module"], ["state-filter", "install"],
       ["shape-filter", "shape"], ["confidence-filter", "confidence"], ["effect-filter", "effect"], ["sort-filter", "sort"],

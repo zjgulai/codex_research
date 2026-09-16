@@ -1,6 +1,6 @@
 # Repository guidance
 
-修改前先读 `README.md`、`METHODOLOGY.md` 与 `PLAN.md`。
+修改前先读 `README.md`、`METHODOLOGY.md` 与 `PLAN.md`；涉及界面与视觉时还要读 `design-qa.md`。
 
 - 公开站点必须保持为 `public/index.html` 单文件；不得加入外部运行依赖、追踪器或远程资源。
 - 重新生成必须使用 `scripts/build-site.mjs`，并保留输入时间点、版本漂移和证据缺口。
