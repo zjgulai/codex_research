@@ -44,7 +44,15 @@
 - [x] 为 42 个首选候选补齐人工精炼的中文能力与最小验证；完整目录排名保持不变。
 - [x] 将 M/A/G、分数与完整证据移到可选框架层、目录和详情。
 - [x] 完成桌面、390px 窄屏和关键交互的设计 QA。
-- [ ] 提交、推送并验证新的 Pages workflow、deployment 与公网字节。
+- [x] 提交、推送并验证新的 Pages workflow、deployment 与公网字节。
+
+### 工作台重构发布收据
+
+- 内容提交：`7464fec6da77b978422d22df9beadc1e5e0ba301`。
+- Pages workflow：`35052578651`，结论 `success`。
+- Pages deployment：`6473256119`，状态 `success`。
+- 公网文件：3,023,235 bytes；SHA-256 `3b78a17efcabae413eafc971c3d737a31c1a6498b3bf51d5944a8a27a109a34f`，与本地一致。
+- 公网页面完成解压并显示“全栈工作台地图”，默认候选为 Product Design、Figma 与 Browser；搜索、详情和响应式布局已在同一字节文件上复核。
 
 ## 发布收据
 
