@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "evaluatedAt": "2026-09-16T08:45:54.117Z",
+  "evaluatedAt": "2026-09-16T18:38:04.285Z",
   "source": {
     "listUrl": "https://github.com/stars/zjgulai/lists/agentic-tools",
     "capturedAt": "2026-09-16T05:19:10.149Z",
@@ -8,7 +8,7 @@
     "repositoryCount": 81,
     "sourceSha256": "0ad9a5508ba63223366392829140bc2c471b549e2c91aa20b089e197768a3c27",
     "curationSha256": "fefe1e7994c46c072c1cdd6bdff22ebfd72445ad51422ad96b2f11476ac19ef8",
-    "roleCurationSha256": "8d675213ec81abaace9e9bfb2c84c27dd6955a7af65af86ec30b6abe345f0d3b"
+    "roleCurationSha256": "2157940dd14b15ae32eb01f0f07d60625650a1b397ed5fa6e4c4bd7a843594e1"
   },
   "policy": {
     "unit": "Repository audit plus selected Skill or workflow recommendation",
@@ -115,6 +115,322 @@
       ]
     }
   ],
+  "workflowGraph": {
+    "schemaVersion": "agentic-workflow-graph.v1",
+    "moduleEdges": [
+      {
+        "id": "WR01",
+        "kind": "feeds",
+        "fromModule": "M00",
+        "fromRole": "summarize",
+        "toModule": "M01",
+        "toRole": "core",
+        "inputArtifact": "A00 Context Pack",
+        "outputArtifact": "A01 Project Charter",
+        "handoff": "把目标、边界、授权和未决项交给初始化，不把口头目标当规格。",
+        "validation": "owner、权限、来源新鲜度和恢复规则可以从 charter 回查。",
+        "relationEvidence": "curated-inference",
+        "candidateSlugs": [
+          "brain-ingest-gate",
+          "data-loss-gate",
+          "engineering-charter",
+          "gbrain-context-audit"
+        ]
+      },
+      {
+        "id": "WR02",
+        "kind": "feeds",
+        "fromModule": "M01",
+        "fromRole": "summarize",
+        "toModule": "M02",
+        "toRole": "core",
+        "inputArtifact": "A01 Project Charter",
+        "outputArtifact": "A02 Opportunity Brief",
+        "handoff": "把技术、许可、权限和时间边界交给研究，避免在错误约束下找机会。",
+        "validation": "研究范围、数据权限、时效和成本在 brief 中可见。",
+        "relationEvidence": "curated-inference",
+        "candidateSlugs": [
+          "engineering-charter",
+          "portless",
+          "market-research-reports",
+          "mcp-builder"
+        ]
+      },
+      {
+        "id": "WR03",
+        "kind": "feeds",
+        "fromModule": "M02",
+        "fromRole": "summarize",
+        "toModule": "M03",
+        "toRole": "core",
+        "inputArtifact": "A02 Opportunity Brief",
+        "outputArtifact": "A03 Problem Evidence",
+        "handoff": "把带日期的来源、替代、反证和缺口交给用户问题核验。",
+        "validation": "每个关键 claim 都能回到来源，并标出未知而非填空。",
+        "relationEvidence": "curated-inference",
+        "candidateSlugs": [
+          "peer-review",
+          "market-research-reports",
+          "analyze-feature-requests",
+          "stakeholder-communication"
+        ]
+      },
+      {
+        "id": "WR04",
+        "kind": "feeds",
+        "fromModule": "M03",
+        "fromRole": "summarize",
+        "toModule": "M04",
+        "toRole": "core",
+        "inputArtifact": "A03 Problem Evidence",
+        "outputArtifact": "A04 Product Strategy",
+        "handoff": "把用户频率、严重度、反例和真实工作流交给范围取舍。",
+        "validation": "策略中的目标、非目标和优先级可以逐项回到问题证据。",
+        "relationEvidence": "curated-inference",
+        "candidateSlugs": [
+          "analyze-feature-requests",
+          "opportunity-solution-tree",
+          "decision-matrix",
+          "user-stories"
+        ]
+      },
+      {
+        "id": "WR05",
+        "kind": "feeds",
+        "fromModule": "M04",
+        "fromRole": "summarize",
+        "toModule": "M05",
+        "toRole": "core",
+        "inputArtifact": "A04 Product Strategy",
+        "outputArtifact": "A05 Product Spec",
+        "handoff": "把目标、取舍、指标和停止条件写成对象、状态、接口和验收合同。",
+        "validation": "spec 的 schema、权限、失败和验收不超出策略范围。",
+        "relationEvidence": "curated-inference",
+        "candidateSlugs": [
+          "decision-matrix",
+          "shared-schemas",
+          "mcp-builder",
+          "create-prd",
+          "user-stories"
+        ]
+      },
+      {
+        "id": "WR06",
+        "kind": "feeds",
+        "fromModule": "M05",
+        "fromRole": "summarize",
+        "toModule": "M06",
+        "toRole": "core",
+        "inputArtifact": "A05 Product Spec",
+        "outputArtifact": "A06 Prototype Evidence",
+        "handoff": "把必须验证的行为、约束和不做什么交给最小原型。",
+        "validation": "原型观察能回答一个可证伪问题，且不接生产数据和凭据。",
+        "relationEvidence": "curated-inference",
+        "candidateSlugs": [
+          "web-artifacts-builder",
+          "insforge-ui",
+          "eli5",
+          "doc-coauthoring"
+        ]
+      },
+      {
+        "id": "WR07",
+        "kind": "feeds",
+        "fromModule": "M06",
+        "fromRole": "summarize",
+        "toModule": "M07",
+        "toRole": "core",
+        "inputArtifact": "A06 Prototype Evidence",
+        "outputArtifact": "A07 Architecture & Tickets",
+        "handoff": "把观察、删减决定和限制交给架构切片，不把 prototype 当生产实现。",
+        "validation": "架构和 tickets 能说明 seam、依赖、迁移、回滚和验收。",
+        "relationEvidence": "curated-inference",
+        "candidateSlugs": [
+          "composition-patterns",
+          "implement-spec",
+          "outcome-roadmap",
+          "sprint-plan"
+        ]
+      },
+      {
+        "id": "WR08",
+        "kind": "feeds",
+        "fromModule": "M07",
+        "fromRole": "summarize",
+        "toModule": "M08",
+        "toRole": "core",
+        "inputArtifact": "A07 Architecture & Tickets",
+        "outputArtifact": "A08 Implementation Report",
+        "handoff": "把一个批准的垂直切片、合同和失败边界交给实现。",
+        "validation": "代码、测试和新鲜命令证据逐项映射到 slice，未授权选择会停下。",
+        "relationEvidence": "curated-inference",
+        "candidateSlugs": [
+          "implement-spec",
+          "insforge-ui",
+          "insforge-dashboard",
+          "shared-schemas",
+          "frame-flowchart-sticky"
+        ]
+      },
+      {
+        "id": "WR09",
+        "kind": "feeds",
+        "fromModule": "M08",
+        "fromRole": "summarize",
+        "toModule": "M09",
+        "toRole": "core",
+        "inputArtifact": "A08 Implementation Report",
+        "outputArtifact": "A09 Quality Evidence",
+        "handoff": "把 diff、测试、失败样例和未测范围交给独立质量审查。",
+        "validation": "review、E2E、性能、a11y 和安全结论都有范围与证据。",
+        "relationEvidence": "curated-inference",
+        "candidateSlugs": [
+          "diagnosing-bugs",
+          "e2e-testing",
+          "react-best-practices",
+          "web-design-guidelines",
+          "engineering-review",
+          "meeting-note-summarizer-v2"
+        ]
+      },
+      {
+        "id": "WR10",
+        "kind": "feeds",
+        "fromModule": "M09",
+        "fromRole": "summarize",
+        "toModule": "M10",
+        "toRole": "core",
+        "inputArtifact": "A09 Quality Evidence",
+        "outputArtifact": "A10 Release Readiness",
+        "handoff": "把 blocker、残余风险和兼容证据交给 preview、迁移、回滚和 owner 检查。",
+        "validation": "CI、artifact 来源、部署范围和回滚路径齐全，生产仍需授权。",
+        "relationEvidence": "curated-inference",
+        "candidateSlugs": [
+          "deploy-to-vercel",
+          "e2e-testing",
+          "decision-matrix",
+          "frame-flowchart-sticky",
+          "engineering-review"
+        ]
+      },
+      {
+        "id": "WR11",
+        "kind": "feeds",
+        "fromModule": "M10",
+        "fromRole": "summarize",
+        "toModule": "M11",
+        "toRole": "core",
+        "inputArtifact": "A10 Release Readiness",
+        "outputArtifact": "A11 Operations Learning",
+        "handoff": "把实际版本、发布时间、观测入口和已知限制交给运行学习。",
+        "validation": "query、时间窗、样本、PII、影响和置信度都能回到线上证据。",
+        "relationEvidence": "curated-inference",
+        "candidateSlugs": [
+          "vercel-optimize",
+          "measure-before-you-fix",
+          "audit-performance",
+          "diagnosing-bugs",
+          "idea-lineage"
+        ]
+      },
+      {
+        "id": "WR12",
+        "kind": "feeds",
+        "fromModule": "M11",
+        "fromRole": "summarize",
+        "toModule": "M12",
+        "toRole": "core",
+        "inputArtifact": "A11 Operations Learning",
+        "outputArtifact": "A12 Experiment Record",
+        "handoff": "把基线、运行信号和可证伪假设交给实验，而不是直接改策略。",
+        "validation": "实验人群、分配、主指标、护栏和停止条件明确。",
+        "relationEvidence": "curated-inference",
+        "candidateSlugs": [
+          "vercel-optimize",
+          "metrics-dashboard",
+          "experiment-brief",
+          "ab-test-analysis"
+        ]
+      },
+      {
+        "id": "WR13",
+        "kind": "feeds",
+        "fromModule": "M12",
+        "fromRole": "summarize",
+        "toModule": "M13",
+        "toRole": "core",
+        "inputArtifact": "A12 Experiment Record",
+        "outputArtifact": "A13 Evolution Record",
+        "handoff": "把 keep、iterate、stop 的证据交给复盘和候选能力治理。",
+        "validation": "候选 Skill 有边界、版本、证据、过期和撤回条件。",
+        "relationEvidence": "curated-inference",
+        "candidateSlugs": [
+          "correction-pipeline",
+          "idea-lineage",
+          "eli5",
+          "close-the-loop",
+          "eval-skills"
+        ]
+      },
+      {
+        "id": "WR14",
+        "kind": "feedback",
+        "fromModule": "M13",
+        "fromRole": "summarize",
+        "toModule": "M00",
+        "toRole": "core",
+        "inputArtifact": "A13 Evolution Record",
+        "outputArtifact": "A00 Context Pack",
+        "handoff": "只把已审阅的经验、撤回条件和新缺口带回上下文，不把模型猜测写成规则。",
+        "validation": "回流内容有来源、负责人、版本和可撤回路径，并经过写入门。",
+        "relationEvidence": "curated-inference",
+        "candidateSlugs": [
+          "brain-ingest-gate",
+          "correction-pipeline",
+          "idea-lineage",
+          "eli5"
+        ]
+      }
+    ],
+    "capabilityEdges": [
+      {
+        "from": "shared-schemas",
+        "to": "insforge-ui",
+        "kind": "composes",
+        "relationEvidence": "curated-inference"
+      },
+      {
+        "from": "web-artifacts-builder",
+        "to": "e2e-testing",
+        "kind": "feeds",
+        "relationEvidence": "curated-inference"
+      },
+      {
+        "from": "diagnosing-bugs",
+        "to": "engineering-review",
+        "kind": "reviews",
+        "relationEvidence": "curated-inference"
+      },
+      {
+        "from": "measure-before-you-fix",
+        "to": "audit-performance",
+        "kind": "composes",
+        "relationEvidence": "curated-inference"
+      },
+      {
+        "from": "idea-lineage",
+        "to": "correction-pipeline",
+        "kind": "feedback",
+        "relationEvidence": "curated-inference"
+      },
+      {
+        "from": "decision-matrix",
+        "to": "deploy-to-vercel",
+        "kind": "blocks",
+        "relationEvidence": "curated-inference"
+      }
+    ]
+  },
   "projects": [
     {
       "id": "github:ruvnet/ruflo@a65bdf683a73dcc1f20d455658daab1cca07306b",
@@ -8285,6 +8601,7 @@
       "claimCeiling": "candidate-only",
       "origin": "benchmark-v1",
       "capabilityCluster": "core",
+      "workflowRefs": [],
       "benchmarkTrack": {
         "cohort": "v1-40",
         "order": 1
@@ -8380,6 +8697,7 @@
       "claimCeiling": "candidate-only",
       "origin": "benchmark-v1",
       "capabilityCluster": "core",
+      "workflowRefs": [],
       "benchmarkTrack": {
         "cohort": "v1-40",
         "order": 2
@@ -8455,6 +8773,7 @@
       "claimCeiling": "candidate-only",
       "origin": "benchmark-v1",
       "capabilityCluster": "core",
+      "workflowRefs": [],
       "benchmarkTrack": {
         "cohort": "v1-40",
         "order": 3
@@ -8540,6 +8859,7 @@
       "claimCeiling": "candidate-only",
       "origin": "benchmark-v1",
       "capabilityCluster": "core",
+      "workflowRefs": [],
       "benchmarkTrack": {
         "cohort": "v1-40",
         "order": 4
@@ -8626,6 +8946,7 @@
       "claimCeiling": "candidate-only",
       "origin": "benchmark-v1",
       "capabilityCluster": "core",
+      "workflowRefs": [],
       "benchmarkTrack": {
         "cohort": "v1-40",
         "order": 5
@@ -8701,6 +9022,7 @@
       "claimCeiling": "candidate-only",
       "origin": "benchmark-v1",
       "capabilityCluster": "core",
+      "workflowRefs": [],
       "benchmarkTrack": {
         "cohort": "v1-40",
         "order": 6
@@ -8777,6 +9099,7 @@
       "claimCeiling": "candidate-only",
       "origin": "benchmark-v1",
       "capabilityCluster": "core",
+      "workflowRefs": [],
       "benchmarkTrack": {
         "cohort": "v1-40",
         "order": 7
@@ -8852,6 +9175,7 @@
       "claimCeiling": "candidate-only",
       "origin": "benchmark-v1",
       "capabilityCluster": "core",
+      "workflowRefs": [],
       "benchmarkTrack": {
         "cohort": "v1-40",
         "order": 8
@@ -8927,6 +9251,7 @@
       "claimCeiling": "candidate-only",
       "origin": "benchmark-v1",
       "capabilityCluster": "core",
+      "workflowRefs": [],
       "benchmarkTrack": {
         "cohort": "v1-40",
         "order": 9
@@ -9003,6 +9328,7 @@
       "claimCeiling": "candidate-only",
       "origin": "benchmark-v1",
       "capabilityCluster": "core",
+      "workflowRefs": [],
       "benchmarkTrack": {
         "cohort": "v1-40",
         "order": 10
@@ -9078,6 +9404,7 @@
       "claimCeiling": "candidate-only",
       "origin": "benchmark-v1",
       "capabilityCluster": "core",
+      "workflowRefs": [],
       "benchmarkTrack": {
         "cohort": "v1-40",
         "order": 11
@@ -9153,6 +9480,7 @@
       "claimCeiling": "candidate-only",
       "origin": "benchmark-v1",
       "capabilityCluster": "core",
+      "workflowRefs": [],
       "benchmarkTrack": {
         "cohort": "v1-40",
         "order": 12
@@ -9238,6 +9566,7 @@
       "claimCeiling": "candidate-only",
       "origin": "benchmark-v1",
       "capabilityCluster": "core",
+      "workflowRefs": [],
       "benchmarkTrack": {
         "cohort": "v1-40",
         "order": 13
@@ -9333,6 +9662,7 @@
       "claimCeiling": "candidate-only",
       "origin": "benchmark-v1",
       "capabilityCluster": "core",
+      "workflowRefs": [],
       "benchmarkTrack": {
         "cohort": "v1-40",
         "order": 14
@@ -9408,6 +9738,7 @@
       "claimCeiling": "candidate-only",
       "origin": "benchmark-v1",
       "capabilityCluster": "core",
+      "workflowRefs": [],
       "benchmarkTrack": {
         "cohort": "v1-40",
         "order": 15
@@ -9483,6 +9814,7 @@
       "claimCeiling": "candidate-only",
       "origin": "benchmark-v1",
       "capabilityCluster": "core",
+      "workflowRefs": [],
       "benchmarkTrack": {
         "cohort": "v1-40",
         "order": 16
@@ -9558,6 +9890,7 @@
       "claimCeiling": "candidate-only",
       "origin": "benchmark-v1",
       "capabilityCluster": "core",
+      "workflowRefs": [],
       "benchmarkTrack": {
         "cohort": "v1-40",
         "order": 17
@@ -9633,6 +9966,7 @@
       "claimCeiling": "candidate-only",
       "origin": "benchmark-v1",
       "capabilityCluster": "core",
+      "workflowRefs": [],
       "benchmarkTrack": {
         "cohort": "v1-40",
         "order": 18
@@ -9708,6 +10042,7 @@
       "claimCeiling": "candidate-only",
       "origin": "benchmark-v1",
       "capabilityCluster": "core",
+      "workflowRefs": [],
       "benchmarkTrack": {
         "cohort": "v1-40",
         "order": 19
@@ -9783,6 +10118,7 @@
       "claimCeiling": "candidate-only",
       "origin": "benchmark-v1",
       "capabilityCluster": "core",
+      "workflowRefs": [],
       "benchmarkTrack": {
         "cohort": "v1-40",
         "order": 20
@@ -9858,6 +10194,7 @@
       "claimCeiling": "candidate-only",
       "origin": "benchmark-v1",
       "capabilityCluster": "core",
+      "workflowRefs": [],
       "benchmarkTrack": {
         "cohort": "v1-40",
         "order": 21
@@ -9933,6 +10270,7 @@
       "claimCeiling": "candidate-only",
       "origin": "benchmark-v1",
       "capabilityCluster": "core",
+      "workflowRefs": [],
       "benchmarkTrack": {
         "cohort": "v1-40",
         "order": 22
@@ -10008,6 +10346,7 @@
       "claimCeiling": "candidate-only",
       "origin": "benchmark-v1",
       "capabilityCluster": "core",
+      "workflowRefs": [],
       "benchmarkTrack": {
         "cohort": "v1-40",
         "order": 23
@@ -10103,6 +10442,7 @@
       "claimCeiling": "candidate-only",
       "origin": "benchmark-v1",
       "capabilityCluster": "core",
+      "workflowRefs": [],
       "benchmarkTrack": {
         "cohort": "v1-40",
         "order": 24
@@ -10179,6 +10519,7 @@
       "claimCeiling": "candidate-only",
       "origin": "benchmark-v1",
       "capabilityCluster": "core",
+      "workflowRefs": [],
       "benchmarkTrack": {
         "cohort": "v1-40",
         "order": 25
@@ -10254,6 +10595,7 @@
       "claimCeiling": "candidate-only",
       "origin": "benchmark-v1",
       "capabilityCluster": "core",
+      "workflowRefs": [],
       "benchmarkTrack": {
         "cohort": "v1-40",
         "order": 26
@@ -10329,6 +10671,7 @@
       "claimCeiling": "candidate-only",
       "origin": "benchmark-v1",
       "capabilityCluster": "core",
+      "workflowRefs": [],
       "benchmarkTrack": {
         "cohort": "v1-40",
         "order": 27
@@ -10416,6 +10759,7 @@
       "claimCeiling": "candidate-only",
       "origin": "benchmark-v1",
       "capabilityCluster": "core",
+      "workflowRefs": [],
       "benchmarkTrack": {
         "cohort": "v1-40",
         "order": 28
@@ -10491,6 +10835,7 @@
       "claimCeiling": "candidate-only",
       "origin": "benchmark-v1",
       "capabilityCluster": "core",
+      "workflowRefs": [],
       "benchmarkTrack": {
         "cohort": "v1-40",
         "order": 29
@@ -10576,6 +10921,7 @@
       "claimCeiling": "candidate-only",
       "origin": "benchmark-v1",
       "capabilityCluster": "core",
+      "workflowRefs": [],
       "benchmarkTrack": {
         "cohort": "v1-40",
         "order": 30
@@ -10661,6 +11007,7 @@
       "claimCeiling": "candidate-only",
       "origin": "benchmark-v1",
       "capabilityCluster": "core",
+      "workflowRefs": [],
       "benchmarkTrack": {
         "cohort": "v1-40",
         "order": 31
@@ -10736,6 +11083,7 @@
       "claimCeiling": "candidate-only",
       "origin": "benchmark-v1",
       "capabilityCluster": "core",
+      "workflowRefs": [],
       "benchmarkTrack": {
         "cohort": "v1-40",
         "order": 32
@@ -10811,6 +11159,7 @@
       "claimCeiling": "candidate-only",
       "origin": "benchmark-v1",
       "capabilityCluster": "core",
+      "workflowRefs": [],
       "benchmarkTrack": {
         "cohort": "v1-40",
         "order": 33
@@ -10908,6 +11257,7 @@
       "claimCeiling": "candidate-only",
       "origin": "benchmark-v1",
       "capabilityCluster": "core",
+      "workflowRefs": [],
       "benchmarkTrack": {
         "cohort": "v1-40",
         "order": 34
@@ -10983,6 +11333,7 @@
       "claimCeiling": "candidate-only",
       "origin": "benchmark-v1",
       "capabilityCluster": "core",
+      "workflowRefs": [],
       "benchmarkTrack": {
         "cohort": "v1-40",
         "order": 35
@@ -11058,6 +11409,7 @@
       "claimCeiling": "candidate-only",
       "origin": "benchmark-v1",
       "capabilityCluster": "core",
+      "workflowRefs": [],
       "benchmarkTrack": {
         "cohort": "v1-40",
         "order": 36
@@ -11134,6 +11486,7 @@
       "claimCeiling": "candidate-only",
       "origin": "benchmark-v1",
       "capabilityCluster": "core",
+      "workflowRefs": [],
       "benchmarkTrack": {
         "cohort": "v1-40",
         "order": 37
@@ -11210,6 +11563,7 @@
       "claimCeiling": "candidate-only",
       "origin": "benchmark-v1",
       "capabilityCluster": "core",
+      "workflowRefs": [],
       "benchmarkTrack": {
         "cohort": "v1-40",
         "order": 38
@@ -11285,6 +11639,7 @@
       "claimCeiling": "candidate-only",
       "origin": "benchmark-v1",
       "capabilityCluster": "core",
+      "workflowRefs": [],
       "benchmarkTrack": {
         "cohort": "v1-40",
         "order": 39
@@ -11360,6 +11715,7 @@
       "claimCeiling": "candidate-only",
       "origin": "benchmark-v1",
       "capabilityCluster": "core",
+      "workflowRefs": [],
       "benchmarkTrack": {
         "cohort": "v1-40",
         "order": 40
@@ -11437,6 +11793,7 @@
       "claimCeiling": "candidate-only",
       "origin": "role-expansion-v1",
       "capabilityCluster": "review",
+      "workflowRefs": [],
       "benchmarkTrack": null,
       "workbenchAssignments": [
         {
@@ -11540,6 +11897,7 @@
       "claimCeiling": "candidate-only",
       "origin": "role-expansion-v1",
       "capabilityCluster": "review",
+      "workflowRefs": [],
       "benchmarkTrack": null,
       "workbenchAssignments": [
         {
@@ -11614,6 +11972,7 @@
       "claimCeiling": "candidate-only",
       "origin": "role-expansion-v1",
       "capabilityCluster": "review",
+      "workflowRefs": [],
       "benchmarkTrack": null,
       "workbenchAssignments": [
         {
@@ -11697,6 +12056,7 @@
       "claimCeiling": "candidate-only",
       "origin": "role-expansion-v1",
       "capabilityCluster": "review",
+      "workflowRefs": [],
       "benchmarkTrack": null,
       "workbenchAssignments": [
         {
@@ -11780,6 +12140,7 @@
       "claimCeiling": "candidate-only",
       "origin": "role-expansion-v1",
       "capabilityCluster": "review",
+      "workflowRefs": [],
       "benchmarkTrack": null,
       "workbenchAssignments": [
         {
@@ -11863,6 +12224,7 @@
       "claimCeiling": "candidate-only",
       "origin": "role-expansion-v1",
       "capabilityCluster": "review",
+      "workflowRefs": [],
       "benchmarkTrack": null,
       "workbenchAssignments": [
         {
@@ -11938,6 +12300,7 @@
       "claimCeiling": "candidate-only",
       "origin": "role-expansion-v1",
       "capabilityCluster": "visualize",
+      "workflowRefs": [],
       "benchmarkTrack": null,
       "workbenchAssignments": [
         {
@@ -12013,6 +12376,7 @@
       "claimCeiling": "candidate-only",
       "origin": "role-expansion-v1",
       "capabilityCluster": "visualize",
+      "workflowRefs": [],
       "benchmarkTrack": null,
       "workbenchAssignments": [
         {
@@ -12098,6 +12462,7 @@
       "claimCeiling": "candidate-only",
       "origin": "role-expansion-v1",
       "capabilityCluster": "visualize",
+      "workflowRefs": [],
       "benchmarkTrack": null,
       "workbenchAssignments": [
         {
@@ -12182,6 +12547,7 @@
       "claimCeiling": "candidate-only",
       "origin": "role-expansion-v1",
       "capabilityCluster": "visualize",
+      "workflowRefs": [],
       "benchmarkTrack": null,
       "workbenchAssignments": [
         {
@@ -12267,6 +12633,7 @@
       "claimCeiling": "candidate-only",
       "origin": "role-expansion-v1",
       "capabilityCluster": "visualize",
+      "workflowRefs": [],
       "benchmarkTrack": null,
       "workbenchAssignments": [
         {
@@ -12371,6 +12738,7 @@
       "claimCeiling": "candidate-only",
       "origin": "role-expansion-v1",
       "capabilityCluster": "visualize",
+      "workflowRefs": [],
       "benchmarkTrack": null,
       "workbenchAssignments": [
         {
@@ -12445,6 +12813,7 @@
       "claimCeiling": "candidate-only",
       "origin": "role-expansion-v1",
       "capabilityCluster": "visualize",
+      "workflowRefs": [],
       "benchmarkTrack": null,
       "workbenchAssignments": [
         {
@@ -12528,6 +12897,7 @@
       "claimCeiling": "candidate-only",
       "origin": "role-expansion-v1",
       "capabilityCluster": "visualize",
+      "workflowRefs": [],
       "benchmarkTrack": null,
       "workbenchAssignments": [
         {
@@ -12601,6 +12971,7 @@
       "claimCeiling": "candidate-only",
       "origin": "role-expansion-v1",
       "capabilityCluster": "visualize",
+      "workflowRefs": [],
       "benchmarkTrack": null,
       "workbenchAssignments": [
         {
@@ -12690,6 +13061,7 @@
       "claimCeiling": "candidate-only",
       "origin": "role-expansion-v1",
       "capabilityCluster": "summarize",
+      "workflowRefs": [],
       "benchmarkTrack": null,
       "workbenchAssignments": [
         {
@@ -12794,6 +13166,7 @@
       "claimCeiling": "candidate-only",
       "origin": "role-expansion-v1",
       "capabilityCluster": "summarize",
+      "workflowRefs": [],
       "benchmarkTrack": null,
       "workbenchAssignments": [
         {
@@ -12877,6 +13250,7 @@
       "claimCeiling": "candidate-only",
       "origin": "role-expansion-v1",
       "capabilityCluster": "summarize",
+      "workflowRefs": [],
       "benchmarkTrack": null,
       "workbenchAssignments": [
         {
@@ -12950,6 +13324,7 @@
       "claimCeiling": "candidate-only",
       "origin": "role-expansion-v1",
       "capabilityCluster": "summarize",
+      "workflowRefs": [],
       "benchmarkTrack": null,
       "workbenchAssignments": [
         {
@@ -13033,6 +13408,7 @@
       "claimCeiling": "candidate-only",
       "origin": "role-expansion-v1",
       "capabilityCluster": "summarize",
+      "workflowRefs": [],
       "benchmarkTrack": null,
       "workbenchAssignments": [
         {
@@ -13107,6 +13483,7 @@
       "claimCeiling": "candidate-only",
       "origin": "role-expansion-v1",
       "capabilityCluster": "summarize",
+      "workflowRefs": [],
       "benchmarkTrack": null,
       "workbenchAssignments": [
         {
@@ -13191,6 +13568,7 @@
       "claimCeiling": "candidate-only",
       "origin": "role-expansion-v1",
       "capabilityCluster": "summarize",
+      "workflowRefs": [],
       "benchmarkTrack": null,
       "workbenchAssignments": [
         {
@@ -13275,6 +13653,7 @@
       "claimCeiling": "candidate-only",
       "origin": "role-expansion-v1",
       "capabilityCluster": "summarize",
+      "workflowRefs": [],
       "benchmarkTrack": null,
       "workbenchAssignments": [
         {
@@ -13346,6 +13725,7 @@
       "claimCeiling": "candidate-only",
       "origin": "role-expansion-v1",
       "capabilityCluster": "summarize",
+      "workflowRefs": [],
       "benchmarkTrack": null,
       "workbenchAssignments": [
         {
@@ -13420,6 +13800,7 @@
       "claimCeiling": "candidate-only",
       "origin": "role-expansion-v1",
       "capabilityCluster": "summarize",
+      "workflowRefs": [],
       "benchmarkTrack": null,
       "workbenchAssignments": [
         {
@@ -13513,6 +13894,7 @@
       "claimCeiling": "candidate-only",
       "origin": "role-expansion-v1",
       "capabilityCluster": "summarize",
+      "workflowRefs": [],
       "benchmarkTrack": null,
       "workbenchAssignments": [
         {
@@ -13587,6 +13969,7 @@
       "claimCeiling": "candidate-only",
       "origin": "role-expansion-v1",
       "capabilityCluster": "summarize",
+      "workflowRefs": [],
       "benchmarkTrack": null,
       "workbenchAssignments": [
         {
@@ -13680,6 +14063,7 @@
       "claimCeiling": "candidate-only",
       "origin": "role-expansion-v1",
       "capabilityCluster": "summarize",
+      "workflowRefs": [],
       "benchmarkTrack": null,
       "workbenchAssignments": [
         {
@@ -13753,6 +14137,7 @@
       "claimCeiling": "candidate-only",
       "origin": "role-expansion-v1",
       "capabilityCluster": "summarize",
+      "workflowRefs": [],
       "benchmarkTrack": null,
       "workbenchAssignments": [
         {
@@ -13837,6 +14222,7 @@
       "claimCeiling": "candidate-only",
       "origin": "role-expansion-v1",
       "capabilityCluster": "visualize",
+      "workflowRefs": [],
       "benchmarkTrack": null,
       "workbenchAssignments": [
         {
@@ -13921,6 +14307,7 @@
       "claimCeiling": "candidate-only",
       "origin": "role-expansion-v1",
       "capabilityCluster": "visualize",
+      "workflowRefs": [],
       "benchmarkTrack": null,
       "workbenchAssignments": [
         {
@@ -14008,6 +14395,7 @@
       "claimCeiling": "candidate-only",
       "origin": "role-expansion-v1",
       "capabilityCluster": "visualize",
+      "workflowRefs": [],
       "benchmarkTrack": null,
       "workbenchAssignments": [
         {
@@ -14052,6 +14440,1977 @@
         "publicSignalScore": 37.9,
         "researchPriority": 63.9
       }
+    },
+    {
+      "id": "github:insforge/insforge@fca20f318722c1fa89371e94878ba08b114c73b7#.agents/skills/insforge-dev/shared-schemas/SKILL.md",
+      "kind": "agentic-skill",
+      "name": "共享合同与 Schema",
+      "slug": "shared-schemas",
+      "repoFullName": "InsForge/InsForge",
+      "repoName": "InsForge",
+      "repoUrl": "https://github.com/InsForge/InsForge",
+      "headSha": "fca20f318722c1fa89371e94878ba08b114c73b7",
+      "path": ".agents/skills/insforge-dev/shared-schemas/SKILL.md",
+      "sourceUrl": "https://github.com/InsForge/InsForge/blob/fca20f318722c1fa89371e94878ba08b114c73b7/.agents/skills/insforge-dev/shared-schemas/SKILL.md",
+      "blobSha": "84bc60da224704380caddcf06c210fe0fb215d92",
+      "primaryModule": "M05",
+      "secondaryModules": [
+        "M08",
+        "M09"
+      ],
+      "opcDimensions": [
+        "产品与策略"
+      ],
+      "capabilityForm": "package-bound-skill",
+      "selection": "expanded",
+      "featuredRank": null,
+      "effectClass": "local-artifact",
+      "coreThree": {
+        "does": "把 Zod schema、API payload、后端验证、Dashboard 和 SDK 消费者对齐成一个可回查的共享合同。",
+        "conditions": "不能只复制说明文件；要在真实包边界检查破坏性变更、权限和下游消费者。",
+        "proof": "制造一次破坏性 schema 变更，检查影响清单、typecheck、错误返回和下游测试是否全部被捕获。"
+      },
+      "limitations": [
+        "强绑定 InsForge monorepo",
+        "跨项目需抽象共享合同模式"
+      ],
+      "selectedReason": "补上规格到实现之间最容易断裂的 API、数据和 UI 合同。",
+      "requirements": [
+        "跨包 domain payload 或 API 变更",
+        "完整 monorepo helper 与 typecheck 入口"
+      ],
+      "license": {
+        "status": "clear",
+        "label": "Apache-2.0",
+        "clear": true,
+        "scope": "repository"
+      },
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "role-expansion-v2",
+      "capabilityCluster": "core",
+      "workflowRefs": [
+        "WR05",
+        "WR08",
+        "WR09"
+      ],
+      "benchmarkTrack": null,
+      "workbenchAssignments": [
+        {
+          "moduleId": "M05",
+          "leadRole": "core",
+          "roles": [
+            "core"
+          ],
+          "rank": 3,
+          "coverageMode": "package-bound",
+          "reason": "M05 的主执行候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "core"
+      ],
+      "parentDecision": "workbench",
+      "scores": {
+        "fitScore": 94,
+        "qualityScore": 82.7,
+        "evidenceCoverage": 0.86,
+        "publicSignalScore": 73.7,
+        "researchPriority": 88.2
+      }
+    },
+    {
+      "id": "github:insforge/insforge@fca20f318722c1fa89371e94878ba08b114c73b7#.agents/skills/insforge-dev/e2e-testing/SKILL.md",
+      "kind": "agentic-skill",
+      "name": "跨环境 E2E 门禁",
+      "slug": "e2e-testing",
+      "repoFullName": "InsForge/InsForge",
+      "repoName": "InsForge",
+      "repoUrl": "https://github.com/InsForge/InsForge",
+      "headSha": "fca20f318722c1fa89371e94878ba08b114c73b7",
+      "path": ".agents/skills/insforge-dev/e2e-testing/SKILL.md",
+      "sourceUrl": "https://github.com/InsForge/InsForge/blob/fca20f318722c1fa89371e94878ba08b114c73b7/.agents/skills/insforge-dev/e2e-testing/SKILL.md",
+      "blobSha": "3a7b65192e2381865c7f4ffba8a77b820c952e86",
+      "primaryModule": "M09",
+      "secondaryModules": [
+        "M10"
+      ],
+      "opcDimensions": [
+        "质量与安全"
+      ],
+      "capabilityForm": "package-bound-skill",
+      "selection": "expanded",
+      "featuredRank": null,
+      "effectClass": "external",
+      "coreThree": {
+        "does": "把本地检查、镜像构建、远程 fixture E2E 和 PR gate 串成一条可判定的质量证据链。",
+        "conditions": "必须区分本地失败、远程 workflow 失败和 fixture 不匹配；外部写入与清理范围先锁定。",
+        "proof": "用一个已知失败 fixture 验证它能阻止发布，并把失败归因到正确环境而不是笼统报红。"
+      },
+      "limitations": [
+        "依赖 GitHub Actions 与远程 fixture",
+        "E2E 通过不等于权限和生产安全通过"
+      ],
+      "selectedReason": "把质量节点和发布节点之间的真实交互证据补成可执行门禁。",
+      "requirements": [
+        "本地 typecheck、lint、test、build 已通过",
+        "远程 fixture、Actions 与镜像权限"
+      ],
+      "license": {
+        "status": "clear",
+        "label": "Apache-2.0",
+        "clear": true,
+        "scope": "repository"
+      },
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "role-expansion-v2",
+      "capabilityCluster": "review",
+      "workflowRefs": [
+        "WR09",
+        "WR10"
+      ],
+      "benchmarkTrack": null,
+      "workbenchAssignments": [
+        {
+          "moduleId": "M09",
+          "leadRole": "review",
+          "roles": [
+            "review"
+          ],
+          "rank": 4,
+          "coverageMode": "package-bound",
+          "reason": "M09 的Review候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "review"
+      ],
+      "parentDecision": "workbench",
+      "scores": {
+        "fitScore": 93,
+        "qualityScore": 82.7,
+        "evidenceCoverage": 0.86,
+        "publicSignalScore": 73.7,
+        "researchPriority": 87.6
+      }
+    },
+    {
+      "id": "github:insforge/insforge@fca20f318722c1fa89371e94878ba08b114c73b7#.agents/skills/insforge-dev/ui/SKILL.md",
+      "kind": "agentic-skill",
+      "name": "公共 UI 组件实现",
+      "slug": "insforge-ui",
+      "repoFullName": "InsForge/InsForge",
+      "repoName": "InsForge",
+      "repoUrl": "https://github.com/InsForge/InsForge",
+      "headSha": "fca20f318722c1fa89371e94878ba08b114c73b7",
+      "path": ".agents/skills/insforge-dev/ui/SKILL.md",
+      "sourceUrl": "https://github.com/InsForge/InsForge/blob/fca20f318722c1fa89371e94878ba08b114c73b7/.agents/skills/insforge-dev/ui/SKILL.md",
+      "blobSha": "885fd5c95f31bc7c6d3ff2f7e188986710cdf2b6",
+      "primaryModule": "M08",
+      "secondaryModules": [
+        "M06",
+        "M09"
+      ],
+      "opcDimensions": [
+        "工程与自动化"
+      ],
+      "capabilityForm": "package-bound-skill",
+      "selection": "expanded",
+      "featuredRank": null,
+      "effectClass": "workspace",
+      "coreThree": {
+        "does": "按可复用 primitive、Radix wrapper、typed exports 和 cn() 约定完成一条 UI 实现切片。",
+        "conditions": "必须检查公共导出、下游 Dashboard、键盘操作和视觉回归，不能只看单个组件截图。",
+        "proof": "新增一个组件，跑 package build/typecheck，复核导出、消费者、响应式和无障碍行为。"
+      },
+      "limitations": [
+        "偏 React/TypeScript 组件包",
+        "不能替代产品 UX 研究"
+      ],
+      "selectedReason": "把原型决定落到公共组件和下游消费的真实实现路径。",
+      "requirements": [
+        "React/TypeScript 公共组件包",
+        "Radix wrapper、typed exports 与 Dashboard 消费者"
+      ],
+      "license": {
+        "status": "clear",
+        "label": "Apache-2.0",
+        "clear": true,
+        "scope": "repository"
+      },
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "role-expansion-v2",
+      "capabilityCluster": "core",
+      "workflowRefs": [
+        "WR06",
+        "WR08",
+        "WR09"
+      ],
+      "benchmarkTrack": null,
+      "workbenchAssignments": [
+        {
+          "moduleId": "M06",
+          "leadRole": "core",
+          "roles": [
+            "core"
+          ],
+          "rank": 4,
+          "coverageMode": "package-bound",
+          "reason": "M06 的主执行候选；按冻结说明评估角色适配，尚未据此晋级。"
+        },
+        {
+          "moduleId": "M08",
+          "leadRole": "core",
+          "roles": [
+            "core"
+          ],
+          "rank": 3,
+          "coverageMode": "package-bound",
+          "reason": "M08 的主执行候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "core"
+      ],
+      "parentDecision": "workbench",
+      "scores": {
+        "fitScore": 90,
+        "qualityScore": 82.7,
+        "evidenceCoverage": 0.86,
+        "publicSignalScore": 73.7,
+        "researchPriority": 86
+      }
+    },
+    {
+      "id": "github:insforge/insforge@fca20f318722c1fa89371e94878ba08b114c73b7#.agents/skills/insforge-dev/dashboard/SKILL.md",
+      "kind": "agentic-skill",
+      "name": "Dashboard 数据流切片",
+      "slug": "insforge-dashboard",
+      "repoFullName": "InsForge/InsForge",
+      "repoName": "InsForge",
+      "repoUrl": "https://github.com/InsForge/InsForge",
+      "headSha": "fca20f318722c1fa89371e94878ba08b114c73b7",
+      "path": ".agents/skills/insforge-dev/dashboard/SKILL.md",
+      "sourceUrl": "https://github.com/InsForge/InsForge/blob/fca20f318722c1fa89371e94878ba08b114c73b7/.agents/skills/insforge-dev/dashboard/SKILL.md",
+      "blobSha": "8c2c8963783ef8e0ab940691aac8a77fcb6ba9d0",
+      "primaryModule": "M08",
+      "secondaryModules": [
+        "M06",
+        "M10"
+      ],
+      "opcDimensions": [
+        "工程与自动化"
+      ],
+      "capabilityForm": "package-bound-skill",
+      "selection": "expanded",
+      "featuredRank": null,
+      "effectClass": "workspace",
+      "coreThree": {
+        "does": "沿 service、hook、UI 的数据流实现后台切片，同时对齐 self-hosting 与 cloud-hosting 边界。",
+        "conditions": "要先固定 auth refresh、错误状态、共享 schema 和多宿主差异；不能把 demo 数据当后端证据。",
+        "proof": "完成一条真实 slice，分别核对两种 hosting mode、权限刷新、错误处理和公共包边界。"
+      },
+      "limitations": [
+        "实现约束强",
+        "非 Dashboard 项目需要转译"
+      ],
+      "selectedReason": "补齐前端界面、后端服务和托管边界之间的可交付切片。",
+      "requirements": [
+        "后台或控制台页面",
+        "service → hook → UI 入口与 hosting mode"
+      ],
+      "license": {
+        "status": "clear",
+        "label": "Apache-2.0",
+        "clear": true,
+        "scope": "repository"
+      },
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "role-expansion-v2",
+      "capabilityCluster": "core",
+      "workflowRefs": [
+        "WR08",
+        "WR10"
+      ],
+      "benchmarkTrack": null,
+      "workbenchAssignments": [
+        {
+          "moduleId": "M08",
+          "leadRole": "core",
+          "roles": [
+            "core"
+          ],
+          "rank": 4,
+          "coverageMode": "package-bound",
+          "reason": "M08 的主执行候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "core"
+      ],
+      "parentDecision": "workbench",
+      "scores": {
+        "fitScore": 89,
+        "qualityScore": 82.7,
+        "evidenceCoverage": 0.86,
+        "publicSignalScore": 73.7,
+        "researchPriority": 85.4
+      }
+    },
+    {
+      "id": "github:vercel-labs/agent-skills@063bee94c3f4df8453406c830b0a7df0f2860278#skills/composition-patterns/SKILL.md",
+      "kind": "agentic-skill",
+      "name": "组件组合模式参考",
+      "slug": "composition-patterns",
+      "repoFullName": "vercel-labs/agent-skills",
+      "repoName": "agent-skills",
+      "repoUrl": "https://github.com/vercel-labs/agent-skills",
+      "headSha": "063bee94c3f4df8453406c830b0a7df0f2860278",
+      "path": "skills/composition-patterns/SKILL.md",
+      "sourceUrl": "https://github.com/vercel-labs/agent-skills/blob/063bee94c3f4df8453406c830b0a7df0f2860278/skills/composition-patterns/SKILL.md",
+      "blobSha": "d07025bf943345bc1cf15eb923594f889ff881f0",
+      "primaryModule": "M07",
+      "secondaryModules": [
+        "M08"
+      ],
+      "opcDimensions": [
+        "工程与自动化"
+      ],
+      "capabilityForm": "reference-only",
+      "selection": "expanded",
+      "featuredRank": null,
+      "effectClass": "local-artifact",
+      "coreThree": {
+        "does": "用 compound component、context provider 和组合 API 收敛复杂组件的状态与变体。",
+        "conditions": "先确认当前仓库许可证与 React 版本；重构要保留行为、兼容性和测试证据。",
+        "proof": "选一个开关过多的组件，比较重构前后 API、状态流、行为测试和 bundle 结果。"
+      },
+      "limitations": [
+        "Vercel 仓库许可证当前未确认",
+        "偏 React 生态",
+        "只能作参考链接"
+      ],
+      "selectedReason": "补足架构节点对组件边界和复用 API 的具体判断，但不越过许可门。",
+      "requirements": [
+        "复杂 React 组件或 boolean prop 膨胀",
+        "许可证确认后才可复制使用"
+      ],
+      "license": {
+        "status": "blocked",
+        "label": "未确认可适用许可证",
+        "clear": false,
+        "scope": "repository"
+      },
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "role-expansion-v2",
+      "capabilityCluster": "core",
+      "workflowRefs": [
+        "WR07",
+        "WR08"
+      ],
+      "benchmarkTrack": null,
+      "workbenchAssignments": [
+        {
+          "moduleId": "M07",
+          "leadRole": "core",
+          "roles": [
+            "core"
+          ],
+          "rank": 2,
+          "coverageMode": "adapter-required",
+          "reason": "M07 的主执行候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "core"
+      ],
+      "parentDecision": "watchlist",
+      "scores": {
+        "fitScore": 91,
+        "qualityScore": 80.8,
+        "evidenceCoverage": 0.76,
+        "publicSignalScore": 84.2,
+        "researchPriority": 86.7
+      }
+    },
+    {
+      "id": "github:vercel-labs/agent-skills@063bee94c3f4df8453406c830b0a7df0f2860278#skills/react-best-practices/SKILL.md",
+      "kind": "agentic-skill",
+      "name": "React 性能规则审查",
+      "slug": "react-best-practices",
+      "repoFullName": "vercel-labs/agent-skills",
+      "repoName": "agent-skills",
+      "repoUrl": "https://github.com/vercel-labs/agent-skills",
+      "headSha": "063bee94c3f4df8453406c830b0a7df0f2860278",
+      "path": "skills/react-best-practices/SKILL.md",
+      "sourceUrl": "https://github.com/vercel-labs/agent-skills/blob/063bee94c3f4df8453406c830b0a7df0f2860278/skills/react-best-practices/SKILL.md",
+      "blobSha": "237988de4a66dd8a71d30a2c24ebe1a86b58d04e",
+      "primaryModule": "M09",
+      "secondaryModules": [
+        "M08",
+        "M10"
+      ],
+      "opcDimensions": [
+        "质量与安全"
+      ],
+      "capabilityForm": "reference-only",
+      "selection": "expanded",
+      "featuredRank": null,
+      "effectClass": "read-only",
+      "coreThree": {
+        "does": "按影响优先级检查 waterfall、bundle、server/client fetching 和无效 rerender。",
+        "conditions": "规则只指出候选问题；必须结合真实 metrics、框架版本和用户路径确认，不把规则命中当生产结论。",
+        "proof": "给含串行 await、过大 import 和无效 rerender 的 fixture，检查高优先级召回与误报。"
+      },
+      "limitations": [
+        "许可证未确认，只能参考",
+        "规则 review 不能代替生产 metrics"
+      ],
+      "selectedReason": "把性能审查从主观感觉变成有顺序的工程检查。",
+      "requirements": [
+        "React/Next.js 代码与性能 review 目标",
+        "许可证与规则版本先固定"
+      ],
+      "license": {
+        "status": "blocked",
+        "label": "未确认可适用许可证",
+        "clear": false,
+        "scope": "repository"
+      },
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "role-expansion-v2",
+      "capabilityCluster": "review",
+      "workflowRefs": [
+        "WR09",
+        "WR10"
+      ],
+      "benchmarkTrack": null,
+      "workbenchAssignments": [
+        {
+          "moduleId": "M09",
+          "leadRole": "review",
+          "roles": [
+            "review"
+          ],
+          "rank": 5,
+          "coverageMode": "adapter-required",
+          "reason": "M09 的Review候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "review"
+      ],
+      "parentDecision": "watchlist",
+      "scores": {
+        "fitScore": 92,
+        "qualityScore": 80.8,
+        "evidenceCoverage": 0.76,
+        "publicSignalScore": 84.2,
+        "researchPriority": 87.2
+      }
+    },
+    {
+      "id": "github:vercel-labs/agent-skills@063bee94c3f4df8453406c830b0a7df0f2860278#skills/web-design-guidelines/SKILL.md",
+      "kind": "agentic-skill",
+      "name": "Web 体验与可访问性审查",
+      "slug": "web-design-guidelines",
+      "repoFullName": "vercel-labs/agent-skills",
+      "repoName": "agent-skills",
+      "repoUrl": "https://github.com/vercel-labs/agent-skills",
+      "headSha": "063bee94c3f4df8453406c830b0a7df0f2860278",
+      "path": "skills/web-design-guidelines/SKILL.md",
+      "sourceUrl": "https://github.com/vercel-labs/agent-skills/blob/063bee94c3f4df8453406c830b0a7df0f2860278/skills/web-design-guidelines/SKILL.md",
+      "blobSha": "ceae92ab319216a68274168fba9b63b998b65997",
+      "primaryModule": "M09",
+      "secondaryModules": [
+        "M06"
+      ],
+      "opcDimensions": [
+        "质量与安全"
+      ],
+      "capabilityForm": "reference-only",
+      "selection": "expanded",
+      "featuredRank": null,
+      "effectClass": "read-only",
+      "coreThree": {
+        "does": "从 UI、语义、键盘、表单错误和 UX 规则审查页面，并把问题落到文件位置。",
+        "conditions": "外部规则需要版本化；审查不能替代真实用户测试、浏览器复现和业务语义检查。",
+        "proof": "准备含焦点、表单错误和语义 HTML 问题的页面，检查定位、严重度和复现步骤。"
+      },
+      "limitations": [
+        "许可证未确认，只能参考",
+        "最新外部规则会改变结果"
+      ],
+      "selectedReason": "补齐质量节点中的可访问性和交互审查，不再只看代码和测试。",
+      "requirements": [
+        "现有页面、组件或交互",
+        "固定 guidelines 版本并允许文件定位"
+      ],
+      "license": {
+        "status": "blocked",
+        "label": "未确认可适用许可证",
+        "clear": false,
+        "scope": "repository"
+      },
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "role-expansion-v2",
+      "capabilityCluster": "review",
+      "workflowRefs": [
+        "WR09"
+      ],
+      "benchmarkTrack": null,
+      "workbenchAssignments": [
+        {
+          "moduleId": "M09",
+          "leadRole": "review",
+          "roles": [
+            "review"
+          ],
+          "rank": 6,
+          "coverageMode": "adapter-required",
+          "reason": "M09 的Review候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "review"
+      ],
+      "parentDecision": "watchlist",
+      "scores": {
+        "fitScore": 91,
+        "qualityScore": 80.8,
+        "evidenceCoverage": 0.76,
+        "publicSignalScore": 84.2,
+        "researchPriority": 86.7
+      }
+    },
+    {
+      "id": "github:vercel-labs/agent-skills@063bee94c3f4df8453406c830b0a7df0f2860278#skills/deploy-to-vercel/SKILL.md",
+      "kind": "agentic-skill",
+      "name": "Vercel Preview 发布参考",
+      "slug": "deploy-to-vercel",
+      "repoFullName": "vercel-labs/agent-skills",
+      "repoName": "agent-skills",
+      "repoUrl": "https://github.com/vercel-labs/agent-skills",
+      "headSha": "063bee94c3f4df8453406c830b0a7df0f2860278",
+      "path": "skills/deploy-to-vercel/SKILL.md",
+      "sourceUrl": "https://github.com/vercel-labs/agent-skills/blob/063bee94c3f4df8453406c830b0a7df0f2860278/skills/deploy-to-vercel/SKILL.md",
+      "blobSha": "a0251ce89a7636230be9c5b989a81e1a54a52a96",
+      "primaryModule": "M10",
+      "secondaryModules": [
+        "M09"
+      ],
+      "opcDimensions": [
+        "发布与运营"
+      ],
+      "capabilityForm": "reference-only",
+      "selection": "expanded",
+      "featuredRank": null,
+      "effectClass": "production",
+      "coreThree": {
+        "does": "先识别项目和 team，再默认 preview-first，最后交付部署链接和来源信息。",
+        "conditions": "production 需要单独授权；外部权限、环境变量、域名和回滚路径必须显式检查。",
+        "proof": "用未绑定项目和多 team fixture，验证不会误发 production，且失败可定位、可恢复。"
+      },
+      "limitations": [
+        "许可证未确认，只能参考",
+        "具有外部生产副作用",
+        "只适用于 Vercel 流程"
+      ],
+      "selectedReason": "填补发布 Readiness 中 preview、权限和发布范围的具体动作，但保留生产授权门。",
+      "requirements": [
+        "用户明确授权部署",
+        "remote、.vercel link、CLI auth 与 team scope"
+      ],
+      "license": {
+        "status": "blocked",
+        "label": "未确认可适用许可证",
+        "clear": false,
+        "scope": "repository"
+      },
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "role-expansion-v2",
+      "capabilityCluster": "core",
+      "workflowRefs": [
+        "WR10"
+      ],
+      "benchmarkTrack": null,
+      "workbenchAssignments": [
+        {
+          "moduleId": "M10",
+          "leadRole": "core",
+          "roles": [
+            "core"
+          ],
+          "rank": 2,
+          "coverageMode": "adapter-required",
+          "reason": "M10 的主执行候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "core"
+      ],
+      "parentDecision": "watchlist",
+      "scores": {
+        "fitScore": 88,
+        "qualityScore": 80.8,
+        "evidenceCoverage": 0.76,
+        "publicSignalScore": 84.2,
+        "researchPriority": 85
+      }
+    },
+    {
+      "id": "github:vercel-labs/agent-skills@063bee94c3f4df8453406c830b0a7df0f2860278#skills/vercel-optimize/SKILL.md",
+      "kind": "agentic-skill",
+      "name": "生产信号驱动优化",
+      "slug": "vercel-optimize",
+      "repoFullName": "vercel-labs/agent-skills",
+      "repoName": "agent-skills",
+      "repoUrl": "https://github.com/vercel-labs/agent-skills",
+      "headSha": "063bee94c3f4df8453406c830b0a7df0f2860278",
+      "path": "skills/vercel-optimize/SKILL.md",
+      "sourceUrl": "https://github.com/vercel-labs/agent-skills/blob/063bee94c3f4df8453406c830b0a7df0f2860278/skills/vercel-optimize/SKILL.md",
+      "blobSha": "c8a6d6d7075b2cc3f7921da89de86e6926f78985",
+      "primaryModule": "M11",
+      "secondaryModules": [
+        "M09",
+        "M10"
+      ],
+      "opcDimensions": [
+        "发布与运营"
+      ],
+      "capabilityForm": "reference-only",
+      "selection": "expanded",
+      "featuredRank": null,
+      "effectClass": "external",
+      "coreThree": {
+        "does": "先收集 metrics、usage、config，再用确定性门决定调查哪条路由和哪类成本。",
+        "conditions": "没有生产 signals 就停在候选阶段；优化动作要和发布、回滚和成本授权分开。",
+        "proof": "用无 signals、单路由 signals 和不支持框架三组 fixture，检查是否停下或缩小范围。"
+      },
+      "limitations": [
+        "许可证未确认，只能参考",
+        "依赖 Vercel CLI 与付费观测权限",
+        "没有生产数据不能下结论"
+      ],
+      "selectedReason": "把运行学习节点从“凭感觉优化”拉回信号、范围和可证伪假设。",
+      "requirements": [
+        "Vercel deployment 与生产 signals",
+        "CLI、Observability 权限和成本口径"
+      ],
+      "license": {
+        "status": "blocked",
+        "label": "未确认可适用许可证",
+        "clear": false,
+        "scope": "repository"
+      },
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "role-expansion-v2",
+      "capabilityCluster": "review",
+      "workflowRefs": [
+        "WR11"
+      ],
+      "benchmarkTrack": null,
+      "workbenchAssignments": [
+        {
+          "moduleId": "M11",
+          "leadRole": "review",
+          "roles": [
+            "review"
+          ],
+          "rank": 3,
+          "coverageMode": "adapter-required",
+          "reason": "M11 的Review候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "review"
+      ],
+      "parentDecision": "watchlist",
+      "scores": {
+        "fitScore": 89,
+        "qualityScore": 80.8,
+        "evidenceCoverage": 0.76,
+        "publicSignalScore": 84.2,
+        "researchPriority": 85.6
+      }
+    },
+    {
+      "id": "github:anthropics/skills@34040c9c568585f6929bedeaad110ad08f079624#skills/mcp-builder/SKILL.md",
+      "kind": "agentic-skill",
+      "name": "MCP 工具合同设计",
+      "slug": "mcp-builder",
+      "repoFullName": "anthropics/skills",
+      "repoName": "skills",
+      "repoUrl": "https://github.com/anthropics/skills",
+      "headSha": "34040c9c568585f6929bedeaad110ad08f079624",
+      "path": "skills/mcp-builder/SKILL.md",
+      "sourceUrl": "https://github.com/anthropics/skills/blob/34040c9c568585f6929bedeaad110ad08f079624/skills/mcp-builder/SKILL.md",
+      "blobSha": "8a1a77a47d141967b246adb4da4f91037578ff7d",
+      "primaryModule": "M05",
+      "secondaryModules": [
+        "M08",
+        "M10"
+      ],
+      "opcDimensions": [
+        "产品与策略"
+      ],
+      "capabilityForm": "direct-skill",
+      "selection": "expanded",
+      "featuredRank": null,
+      "effectClass": "external",
+      "coreThree": {
+        "does": "把外部 API 设计成命名清楚、分页可控、错误可读、权限可审计的 Agent 工具。",
+        "conditions": "先区分原子工具和工作流工具；网络、密钥、写入副作用和协议版本不能靠默认值。",
+        "proof": "为一个小 API 写两套工具方案，检查命名、分页、错误、权限、测试和发布入口。"
+      },
+      "limitations": [
+        "协议和 SDK 需按当前版本复核",
+        "外部工具可能产生写入副作用"
+      ],
+      "selectedReason": "把规格节点和 Agent 外部工具之间的接口设计补成可评审合同。",
+      "requirements": [
+        "待接入的外部 API 或服务",
+        "协议版本、权限、分页和错误合同"
+      ],
+      "license": {
+        "status": "per-skill",
+        "label": "目标 Skill 独立 Apache-2.0",
+        "clear": true,
+        "scope": "skill-directory"
+      },
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "role-expansion-v2",
+      "capabilityCluster": "core",
+      "workflowRefs": [
+        "WR05",
+        "WR08",
+        "WR10"
+      ],
+      "benchmarkTrack": null,
+      "workbenchAssignments": [
+        {
+          "moduleId": "M05",
+          "leadRole": "core",
+          "roles": [
+            "core"
+          ],
+          "rank": 4,
+          "coverageMode": "native",
+          "reason": "M05 的主执行候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "core"
+      ],
+      "parentDecision": "workbench",
+      "scores": {
+        "fitScore": 94,
+        "qualityScore": 78.3,
+        "evidenceCoverage": 0.65,
+        "publicSignalScore": 88.7,
+        "researchPriority": 87.8
+      }
+    },
+    {
+      "id": "github:anthropics/skills@34040c9c568585f6929bedeaad110ad08f079624#skills/web-artifacts-builder/SKILL.md",
+      "kind": "agentic-skill",
+      "name": "可交互 Web Artifact 构建",
+      "slug": "web-artifacts-builder",
+      "repoFullName": "anthropics/skills",
+      "repoName": "skills",
+      "repoUrl": "https://github.com/anthropics/skills",
+      "headSha": "34040c9c568585f6929bedeaad110ad08f079624",
+      "path": "skills/web-artifacts-builder/SKILL.md",
+      "sourceUrl": "https://github.com/anthropics/skills/blob/34040c9c568585f6929bedeaad110ad08f079624/skills/web-artifacts-builder/SKILL.md",
+      "blobSha": "8b39b19f259b4216ecb07574741dd8eaa9863a07",
+      "primaryModule": "M06",
+      "secondaryModules": [
+        "M08",
+        "M10"
+      ],
+      "opcDimensions": [
+        "设计与内容"
+      ],
+      "capabilityForm": "direct-skill",
+      "selection": "expanded",
+      "featuredRank": null,
+      "effectClass": "workspace",
+      "coreThree": {
+        "does": "从多组件前端初始化到 bundle，产出可交互、可分享且自包含的 Web artifact。",
+        "conditions": "明确这是原型或交付 artifact；需单独检查无障碍、移动端、依赖、内容事实和自包含性。",
+        "proof": "构建带路由、状态、响应式布局的样例，核对行为、bundle、键盘操作和无外链资源。"
+      },
+      "limitations": [
+        "原流程针对 Claude artifact",
+        "需要验证与 Codex/Pages 的适配"
+      ],
+      "selectedReason": "把原型验证和全栈实现之间的可运行视觉产物接起来。",
+      "requirements": [
+        "需要路由、状态和组件的前端 artifact",
+        "Node/React/Vite/Tailwind/shadcn 目录"
+      ],
+      "license": {
+        "status": "per-skill",
+        "label": "目标 Skill 独立 Apache-2.0",
+        "clear": true,
+        "scope": "skill-directory"
+      },
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "role-expansion-v2",
+      "capabilityCluster": "core",
+      "workflowRefs": [
+        "WR06",
+        "WR08",
+        "WR10"
+      ],
+      "benchmarkTrack": null,
+      "workbenchAssignments": [
+        {
+          "moduleId": "M06",
+          "leadRole": "core",
+          "roles": [
+            "core"
+          ],
+          "rank": 3,
+          "coverageMode": "native",
+          "reason": "M06 的主执行候选；按冻结说明评估角色适配，尚未据此晋级。"
+        },
+        {
+          "moduleId": "M08",
+          "leadRole": "visualize",
+          "roles": [
+            "visualize"
+          ],
+          "rank": 3,
+          "coverageMode": "combined",
+          "reason": "M08 的可视化候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "core",
+        "visualize"
+      ],
+      "parentDecision": "workbench",
+      "scores": {
+        "fitScore": 93,
+        "qualityScore": 78.3,
+        "evidenceCoverage": 0.65,
+        "publicSignalScore": 88.7,
+        "researchPriority": 87.2
+      }
+    },
+    {
+      "id": "github:garrytan/gbrain@668b9bac302705f3bca0ae4792a49fab0a79a74e#plugin-variants/gbrain-coding/skills/brain-ingest-gate/SKILL.md",
+      "kind": "agentic-skill",
+      "name": "知识写入去重门",
+      "slug": "brain-ingest-gate",
+      "repoFullName": "garrytan/gbrain",
+      "repoName": "gbrain",
+      "repoUrl": "https://github.com/garrytan/gbrain",
+      "headSha": "668b9bac302705f3bca0ae4792a49fab0a79a74e",
+      "path": "plugin-variants/gbrain-coding/skills/brain-ingest-gate/SKILL.md",
+      "sourceUrl": "https://github.com/garrytan/gbrain/blob/668b9bac302705f3bca0ae4792a49fab0a79a74e/plugin-variants/gbrain-coding/skills/brain-ingest-gate/SKILL.md",
+      "blobSha": "5d84ad511297ffd309220b36ea319b09bf38e661",
+      "primaryModule": "M00",
+      "secondaryModules": [
+        "M01",
+        "M13"
+      ],
+      "opcDimensions": [
+        "记忆与治理"
+      ],
+      "capabilityForm": "package-bound-skill",
+      "selection": "expanded",
+      "featuredRank": null,
+      "effectClass": "read-only",
+      "coreThree": {
+        "does": "写入长期知识前做实体解析、重复判断和 write/link/skip 分流，保留来源而不是 raw copy。",
+        "conditions": "它是 Agent 路由约定，不是数据库强制约束；争议事实必须停在人工确认。",
+        "proof": "用明确重复、疑似重复和全新三组输入，检查引用、目录选择、跳过理由和未决项。"
+      },
+      "limitations": [
+        "不是 runtime 强制门",
+        "依赖 gbrain 数据上下文"
+      ],
+      "selectedReason": "先治理上下文再进入项目初始化，降低长期知识污染。",
+      "requirements": [
+        "待写入的研究、会议或代码结论",
+        "实体解析、相似命中和引用来源"
+      ],
+      "license": {
+        "status": "clear",
+        "label": "MIT",
+        "clear": true,
+        "scope": "repository"
+      },
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "role-expansion-v2",
+      "capabilityCluster": "review",
+      "workflowRefs": [
+        "WR01",
+        "WR14"
+      ],
+      "benchmarkTrack": null,
+      "workbenchAssignments": [
+        {
+          "moduleId": "M00",
+          "leadRole": "review",
+          "roles": [
+            "review"
+          ],
+          "rank": 3,
+          "coverageMode": "native",
+          "reason": "M00 的Review候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "review"
+      ],
+      "parentDecision": "workbench",
+      "scores": {
+        "fitScore": 92,
+        "qualityScore": 84.8,
+        "evidenceCoverage": 0.86,
+        "publicSignalScore": 87.4,
+        "researchPriority": 89
+      }
+    },
+    {
+      "id": "github:garrytan/gbrain@668b9bac302705f3bca0ae4792a49fab0a79a74e#plugin-variants/gbrain-coding/skills/data-loss-gate/SKILL.md",
+      "kind": "agentic-skill",
+      "name": "数据损失前置审查",
+      "slug": "data-loss-gate",
+      "repoFullName": "garrytan/gbrain",
+      "repoName": "gbrain",
+      "repoUrl": "https://github.com/garrytan/gbrain",
+      "headSha": "668b9bac302705f3bca0ae4792a49fab0a79a74e",
+      "path": "plugin-variants/gbrain-coding/skills/data-loss-gate/SKILL.md",
+      "sourceUrl": "https://github.com/garrytan/gbrain/blob/668b9bac302705f3bca0ae4792a49fab0a79a74e/plugin-variants/gbrain-coding/skills/data-loss-gate/SKILL.md",
+      "blobSha": "a5dba98eb99ec26d2c832c7da59c2033b8ab8c8e",
+      "primaryModule": "M01",
+      "secondaryModules": [
+        "M09",
+        "M10"
+      ],
+      "opcDimensions": [
+        "记忆与治理"
+      ],
+      "capabilityForm": "package-bound-skill",
+      "selection": "expanded",
+      "featuredRank": null,
+      "effectClass": "read-only",
+      "coreThree": {
+        "does": "在破坏性清理前检查反向链接、图谱和历史，生成可恢复性卡片并等待明确确认。",
+        "conditions": "用户确认不等于系统强制保护；不可恢复操作必须单独标记并说明范围。",
+        "proof": "对可恢复、不可恢复、有链接和无链接四类 fixture，检查是否停在正确确认门。"
+      },
+      "limitations": [
+        "Agent 侧约定，不替代文件系统或数据库保护",
+        "需要准确的历史和链接数据"
+      ],
+      "selectedReason": "给初始化与发布节点补一条能阻止误删和错误清理的 Review。",
+      "requirements": [
+        "删除、truncate、批量替换或来源移除请求",
+        "backlinks、git history 与恢复方案"
+      ],
+      "license": {
+        "status": "clear",
+        "label": "MIT",
+        "clear": true,
+        "scope": "repository"
+      },
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "role-expansion-v2",
+      "capabilityCluster": "review",
+      "workflowRefs": [
+        "WR01",
+        "WR10"
+      ],
+      "benchmarkTrack": null,
+      "workbenchAssignments": [
+        {
+          "moduleId": "M01",
+          "leadRole": "review",
+          "roles": [
+            "review"
+          ],
+          "rank": 3,
+          "coverageMode": "native",
+          "reason": "M01 的Review候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "review"
+      ],
+      "parentDecision": "workbench",
+      "scores": {
+        "fitScore": 93,
+        "qualityScore": 84.8,
+        "evidenceCoverage": 0.86,
+        "publicSignalScore": 87.4,
+        "researchPriority": 89.5
+      }
+    },
+    {
+      "id": "github:garrytan/gbrain@668b9bac302705f3bca0ae4792a49fab0a79a74e#plugin-variants/gbrain-coding/skills/correction-pipeline/SKILL.md",
+      "kind": "agentic-skill",
+      "name": "事实纠错回源",
+      "slug": "correction-pipeline",
+      "repoFullName": "garrytan/gbrain",
+      "repoName": "gbrain",
+      "repoUrl": "https://github.com/garrytan/gbrain",
+      "headSha": "668b9bac302705f3bca0ae4792a49fab0a79a74e",
+      "path": "plugin-variants/gbrain-coding/skills/correction-pipeline/SKILL.md",
+      "sourceUrl": "https://github.com/garrytan/gbrain/blob/668b9bac302705f3bca0ae4792a49fab0a79a74e/plugin-variants/gbrain-coding/skills/correction-pipeline/SKILL.md",
+      "blobSha": "c2a029f25b85fb5e5f5ced8e9f5182bda0c1d59f",
+      "primaryModule": "M13",
+      "secondaryModules": [
+        "M11",
+        "M00"
+      ],
+      "opcDimensions": [
+        "记忆与治理"
+      ],
+      "capabilityForm": "package-bound-skill",
+      "selection": "expanded",
+      "featuredRank": null,
+      "effectClass": "workspace",
+      "coreThree": {
+        "does": "把错误追到来源，区分知识污染与临时臆测，修正源记录并留下防复发证据。",
+        "conditions": "争议事实不能自动覆盖；修源、回填和传播范围必须经过授权。",
+        "proof": "分别注入知识库错误和模型临时错误，检查回源、修复、影响面和复发检查。"
+      },
+      "limitations": [
+        "可能触发写入",
+        "依赖来源质量与用户授权"
+      ],
+      "selectedReason": "把运行中发现的错误真正送回能力进化和上下文治理，而不是只改一段文案。",
+      "requirements": [
+        "用户指出的错误事实或低可信来源",
+        "原始来源、知识记录和变更授权"
+      ],
+      "license": {
+        "status": "clear",
+        "label": "MIT",
+        "clear": true,
+        "scope": "repository"
+      },
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "role-expansion-v2",
+      "capabilityCluster": "review",
+      "workflowRefs": [
+        "WR13",
+        "WR14"
+      ],
+      "benchmarkTrack": null,
+      "workbenchAssignments": [
+        {
+          "moduleId": "M13",
+          "leadRole": "review",
+          "roles": [
+            "review"
+          ],
+          "rank": 3,
+          "coverageMode": "native",
+          "reason": "M13 的Review候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "review"
+      ],
+      "parentDecision": "workbench",
+      "scores": {
+        "fitScore": 93,
+        "qualityScore": 84.8,
+        "evidenceCoverage": 0.86,
+        "publicSignalScore": 87.4,
+        "researchPriority": 89.5
+      }
+    },
+    {
+      "id": "github:garrytan/gbrain@668b9bac302705f3bca0ae4792a49fab0a79a74e#plugin-variants/gbrain-coding/skills/idea-lineage/SKILL.md",
+      "kind": "agentic-skill",
+      "name": "想法谱系图",
+      "slug": "idea-lineage",
+      "repoFullName": "garrytan/gbrain",
+      "repoName": "gbrain",
+      "repoUrl": "https://github.com/garrytan/gbrain",
+      "headSha": "668b9bac302705f3bca0ae4792a49fab0a79a74e",
+      "path": "plugin-variants/gbrain-coding/skills/idea-lineage/SKILL.md",
+      "sourceUrl": "https://github.com/garrytan/gbrain/blob/668b9bac302705f3bca0ae4792a49fab0a79a74e/plugin-variants/gbrain-coding/skills/idea-lineage/SKILL.md",
+      "blobSha": "a8f2a9d2d3cd29700f3c56f51ca5fb9372290e03",
+      "primaryModule": "M13",
+      "secondaryModules": [
+        "M00",
+        "M11"
+      ],
+      "opcDimensions": [
+        "记忆与治理"
+      ],
+      "capabilityForm": "package-bound-skill",
+      "selection": "expanded",
+      "featuredRank": null,
+      "effectClass": "local-artifact",
+      "coreThree": {
+        "does": "沿时间线追踪想法的首次出现、改写、反转、矛盾、废弃分支和当前版本。",
+        "conditions": "没有完整时间线就报告缺口；谱系不是概念地图，也不能凭视觉补造关系。",
+        "proof": "用含多次改写和矛盾的 timeline，核对时间顺序、引用、当前版本和废弃分支。"
+      },
+      "limitations": [
+        "依赖 gbrain 数据质量",
+        "不适合泛化为所有知识关系图"
+      ],
+      "selectedReason": "填补 M13 的能力谱系可视化，让复盘能说明想法怎样变成候选 Skill。",
+      "requirements": [
+        "带时间和来源的多版本想法",
+        "反转、矛盾、废弃分支记录"
+      ],
+      "license": {
+        "status": "clear",
+        "label": "MIT",
+        "clear": true,
+        "scope": "repository"
+      },
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "role-expansion-v2",
+      "capabilityCluster": "visualize",
+      "workflowRefs": [
+        "WR13",
+        "WR14"
+      ],
+      "benchmarkTrack": null,
+      "workbenchAssignments": [
+        {
+          "moduleId": "M11",
+          "leadRole": "visualize",
+          "roles": [
+            "visualize"
+          ],
+          "rank": 3,
+          "coverageMode": "native",
+          "reason": "M11 的可视化候选；按冻结说明评估角色适配，尚未据此晋级。"
+        },
+        {
+          "moduleId": "M13",
+          "leadRole": "visualize",
+          "roles": [
+            "visualize"
+          ],
+          "rank": 3,
+          "coverageMode": "native",
+          "reason": "M13 的可视化候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "visualize"
+      ],
+      "parentDecision": "workbench",
+      "scores": {
+        "fitScore": 91,
+        "qualityScore": 84.8,
+        "evidenceCoverage": 0.86,
+        "publicSignalScore": 87.4,
+        "researchPriority": 88.4
+      }
+    },
+    {
+      "id": "github:garrytan/gbrain@668b9bac302705f3bca0ae4792a49fab0a79a74e#plugin-variants/gbrain-coding/skills/measure-before-you-fix/SKILL.md",
+      "kind": "agentic-skill",
+      "name": "修复前先测量",
+      "slug": "measure-before-you-fix",
+      "repoFullName": "garrytan/gbrain",
+      "repoName": "gbrain",
+      "repoUrl": "https://github.com/garrytan/gbrain",
+      "headSha": "668b9bac302705f3bca0ae4792a49fab0a79a74e",
+      "path": "plugin-variants/gbrain-coding/skills/measure-before-you-fix/SKILL.md",
+      "sourceUrl": "https://github.com/garrytan/gbrain/blob/668b9bac302705f3bca0ae4792a49fab0a79a74e/plugin-variants/gbrain-coding/skills/measure-before-you-fix/SKILL.md",
+      "blobSha": "0a8efca6b39727981c3893546b3731c003feeefc",
+      "primaryModule": "M11",
+      "secondaryModules": [
+        "M09",
+        "M08"
+      ],
+      "opcDimensions": [
+        "发布与运营"
+      ],
+      "capabilityForm": "package-bound-skill",
+      "selection": "expanded",
+      "featuredRank": null,
+      "effectClass": "read-only",
+      "coreThree": {
+        "does": "在调大 timeout、改重试或重写 pipeline 前先测量具体步骤，区分慢、卡死和阈值误报。",
+        "conditions": "测量结果不等于修复；不能把一次性 debug measurement 冒充长期监控。",
+        "proof": "构造真实慢、阈值误报和无 forward progress 三类情况，检查分流和证据。"
+      },
+      "limitations": [
+        "不直接修复问题",
+        "需要现有运行信号"
+      ],
+      "selectedReason": "给运行学习节点建立先证据、后动作的根因分析门。",
+      "requirements": [
+        "timeout、stale、slow 或无进展信号",
+        "可观测的步骤、时间和 forward progress"
+      ],
+      "license": {
+        "status": "clear",
+        "label": "MIT",
+        "clear": true,
+        "scope": "repository"
+      },
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "role-expansion-v2",
+      "capabilityCluster": "review",
+      "workflowRefs": [
+        "WR11"
+      ],
+      "benchmarkTrack": null,
+      "workbenchAssignments": [
+        {
+          "moduleId": "M11",
+          "leadRole": "review",
+          "roles": [
+            "review"
+          ],
+          "rank": 4,
+          "coverageMode": "native",
+          "reason": "M11 的Review候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "review"
+      ],
+      "parentDecision": "workbench",
+      "scores": {
+        "fitScore": 92,
+        "qualityScore": 84.8,
+        "evidenceCoverage": 0.86,
+        "publicSignalScore": 87.4,
+        "researchPriority": 89
+      }
+    },
+    {
+      "id": "github:dzhng/skills@c7957020f9fcb7321dbc339428b41cdff67c9637#skills/engineering/review/SKILL.md",
+      "kind": "agentic-skill",
+      "name": "三轮工程收口审查",
+      "slug": "engineering-review",
+      "repoFullName": "dzhng/skills",
+      "repoName": "skills",
+      "repoUrl": "https://github.com/dzhng/skills",
+      "headSha": "c7957020f9fcb7321dbc339428b41cdff67c9637",
+      "path": "skills/engineering/review/SKILL.md",
+      "sourceUrl": "https://github.com/dzhng/skills/blob/c7957020f9fcb7321dbc339428b41cdff67c9637/skills/engineering/review/SKILL.md",
+      "blobSha": "8ef4179ba3db06649e2947833c40b431ec7a274b",
+      "primaryModule": "M09",
+      "secondaryModules": [
+        "M10",
+        "M13"
+      ],
+      "opcDimensions": [
+        "质量与安全"
+      ],
+      "capabilityForm": "direct-skill",
+      "selection": "expanded",
+      "featuredRank": null,
+      "effectClass": "workspace",
+      "coreThree": {
+        "does": "按 shape、diff、docs 顺序做 closeout pass，发现结构问题时回到前一轮而不是直接宣布完成。",
+        "conditions": "依赖同仓库相关 Skill 的相对路径；必须保留实际 diff、测试和未决风险。",
+        "proof": "准备结构、差异和文档各一个问题的变更，核对顺序、回环和最终裁决。"
+      },
+      "limitations": [
+        "依赖同仓库 Skill 组合",
+        "审查通过不代表已获发布授权"
+      ],
+      "selectedReason": "给质量节点增加能落到最终交付判断的专用总结式 Review。",
+      "requirements": [
+        "已完成的 feature 或 slice",
+        "shape、diff、docs 和测试证据"
+      ],
+      "license": {
+        "status": "clear",
+        "label": "MIT",
+        "clear": true,
+        "scope": "repository"
+      },
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "role-expansion-v2",
+      "capabilityCluster": "review",
+      "workflowRefs": [
+        "WR09",
+        "WR10",
+        "WR13"
+      ],
+      "benchmarkTrack": null,
+      "workbenchAssignments": [
+        {
+          "moduleId": "M09",
+          "leadRole": "summarize",
+          "roles": [
+            "summarize"
+          ],
+          "rank": 3,
+          "coverageMode": "native",
+          "reason": "M09 的总结交接候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "summarize"
+      ],
+      "parentDecision": "workbench",
+      "scores": {
+        "fitScore": 94,
+        "qualityScore": 77.5,
+        "evidenceCoverage": 0.65,
+        "publicSignalScore": 39.1,
+        "researchPriority": 83.5
+      }
+    },
+    {
+      "id": "github:dzhng/skills@c7957020f9fcb7321dbc339428b41cdff67c9637#skills/engineering/audit-performance/SKILL.md",
+      "kind": "agentic-skill",
+      "name": "性能与进展审查",
+      "slug": "audit-performance",
+      "repoFullName": "dzhng/skills",
+      "repoName": "skills",
+      "repoUrl": "https://github.com/dzhng/skills",
+      "headSha": "c7957020f9fcb7321dbc339428b41cdff67c9637",
+      "path": "skills/engineering/audit-performance/SKILL.md",
+      "sourceUrl": "https://github.com/dzhng/skills/blob/c7957020f9fcb7321dbc339428b41cdff67c9637/skills/engineering/audit-performance/SKILL.md",
+      "blobSha": "ef283b109f5b9c41069bd68b999b69774a8eb036",
+      "primaryModule": "M11",
+      "secondaryModules": [
+        "M09",
+        "M08"
+      ],
+      "opcDimensions": [
+        "发布与运营"
+      ],
+      "capabilityForm": "direct-skill",
+      "selection": "expanded",
+      "featuredRank": null,
+      "effectClass": "read-only",
+      "coreThree": {
+        "does": "按热路径、工作放大、forward progress、现有 cap/backoff 和用户影响排序性能问题。",
+        "conditions": "必须看到真实调用链和信号；大数字本身不能直接变成优化任务。",
+        "proof": "用无界、合理上限和可自愈 polling fixture，检查排序、dismiss 和行动建议。"
+      },
+      "limitations": [
+        "缺生产信号时只能候选",
+        "不能只按代码行数判断性能"
+      ],
+      "selectedReason": "让质量 Review 和运行学习共享一套可解释的性能判断。",
+      "requirements": [
+        "热路径、OOM、500、retry/poll 或慢任务",
+        "生产调用链与用户影响"
+      ],
+      "license": {
+        "status": "clear",
+        "label": "MIT",
+        "clear": true,
+        "scope": "repository"
+      },
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "role-expansion-v2",
+      "capabilityCluster": "review",
+      "workflowRefs": [
+        "WR09",
+        "WR11"
+      ],
+      "benchmarkTrack": null,
+      "workbenchAssignments": [
+        {
+          "moduleId": "M11",
+          "leadRole": "review",
+          "roles": [
+            "review"
+          ],
+          "rank": 5,
+          "coverageMode": "native",
+          "reason": "M11 的Review候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "review"
+      ],
+      "parentDecision": "workbench",
+      "scores": {
+        "fitScore": 92,
+        "qualityScore": 77.5,
+        "evidenceCoverage": 0.65,
+        "publicSignalScore": 39.1,
+        "researchPriority": 82.4
+      }
+    },
+    {
+      "id": "github:dzhng/skills@c7957020f9fcb7321dbc339428b41cdff67c9637#skills/engineering/implement-spec/SKILL.md",
+      "kind": "agentic-skill",
+      "name": "按规格切片实现",
+      "slug": "implement-spec",
+      "repoFullName": "dzhng/skills",
+      "repoName": "skills",
+      "repoUrl": "https://github.com/dzhng/skills",
+      "headSha": "c7957020f9fcb7321dbc339428b41cdff67c9637",
+      "path": "skills/engineering/implement-spec/SKILL.md",
+      "sourceUrl": "https://github.com/dzhng/skills/blob/c7957020f9fcb7321dbc339428b41cdff67c9637/skills/engineering/implement-spec/SKILL.md",
+      "blobSha": "17c01e1ef3f3c1eade47408bc36eb844fa59c2ef",
+      "primaryModule": "M08",
+      "secondaryModules": [
+        "M07",
+        "M09"
+      ],
+      "opcDimensions": [
+        "工程与自动化"
+      ],
+      "capabilityForm": "direct-skill",
+      "selection": "expanded",
+      "featuredRank": null,
+      "effectClass": "workspace",
+      "coreThree": {
+        "does": "以 spec 为源，按可审查 slice 推进，维护 checkpoint、依赖图、handoff 和全局 TODO。",
+        "conditions": "并行与 commit 规则要适配当前权限；每个 slice 仍需实际 contract、浏览器或回归验证。",
+        "proof": "用两个可并行和一个有依赖的 slice，检查 wavefront、checkpoint、失败回退和最终证据。"
+      },
+      "limitations": [
+        "内含并行委派和 checkpoint 约定",
+        "需适配当前 Codex main-branch 规则"
+      ],
+      "selectedReason": "把架构切片真正接到实现，而不是只停留在 ticket 文档。",
+      "requirements": [
+        "长规格、多 slice 或多 Agent 任务",
+        "checkpoint、依赖图和 contract verification"
+      ],
+      "license": {
+        "status": "clear",
+        "label": "MIT",
+        "clear": true,
+        "scope": "repository"
+      },
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "role-expansion-v2",
+      "capabilityCluster": "core",
+      "workflowRefs": [
+        "WR07",
+        "WR08",
+        "WR09"
+      ],
+      "benchmarkTrack": null,
+      "workbenchAssignments": [
+        {
+          "moduleId": "M07",
+          "leadRole": "core",
+          "roles": [
+            "core"
+          ],
+          "rank": 3,
+          "coverageMode": "native",
+          "reason": "M07 的主执行候选；按冻结说明评估角色适配，尚未据此晋级。"
+        },
+        {
+          "moduleId": "M08",
+          "leadRole": "core",
+          "roles": [
+            "core"
+          ],
+          "rank": 5,
+          "coverageMode": "native",
+          "reason": "M08 的主执行候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "core"
+      ],
+      "parentDecision": "workbench",
+      "scores": {
+        "fitScore": 93,
+        "qualityScore": 77.5,
+        "evidenceCoverage": 0.65,
+        "publicSignalScore": 39.1,
+        "researchPriority": 83
+      }
+    },
+    {
+      "id": "github:dzhng/skills@c7957020f9fcb7321dbc339428b41cdff67c9637#skills/engineering/eli5/SKILL.md",
+      "kind": "agentic-skill",
+      "name": "边界清楚的通俗交接",
+      "slug": "eli5",
+      "repoFullName": "dzhng/skills",
+      "repoName": "skills",
+      "repoUrl": "https://github.com/dzhng/skills",
+      "headSha": "c7957020f9fcb7321dbc339428b41cdff67c9637",
+      "path": "skills/engineering/eli5/SKILL.md",
+      "sourceUrl": "https://github.com/dzhng/skills/blob/c7957020f9fcb7321dbc339428b41cdff67c9637/skills/engineering/eli5/SKILL.md",
+      "blobSha": "c42a9dd10e6dbddaa258b5dcf0f6d6a5437e18bc",
+      "primaryModule": "M13",
+      "secondaryModules": [
+        "M05",
+        "M06",
+        "M10"
+      ],
+      "opcDimensions": [
+        "记忆与治理"
+      ],
+      "capabilityForm": "direct-skill",
+      "selection": "expanded",
+      "featuredRank": null,
+      "effectClass": "local-artifact",
+      "coreThree": {
+        "does": "用具体场景、术语定义和现状/提案分界解释复杂工作，并用伪代码暴露触发条件与顺序。",
+        "conditions": "通俗表达不能删掉权限、时序、证据和未知项；它改善交接，不增加执行能力。",
+        "proof": "让未参与者复述一份含权限和 schema 变更的 spec，检查条件、顺序和未验证部分。"
+      },
+      "limitations": [
+        "表达能力而非执行能力",
+        "不能掩盖证据不足"
+      ],
+      "selectedReason": "让每个节点的交接变成可复述的三件事：做什么、何时做、凭什么算完成。",
+      "requirements": [
+        "需要跨角色解释的规格、变更或发布说明",
+        "真实场景、术语和未验证边界"
+      ],
+      "license": {
+        "status": "clear",
+        "label": "MIT",
+        "clear": true,
+        "scope": "repository"
+      },
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "role-expansion-v2",
+      "capabilityCluster": "summarize",
+      "workflowRefs": [
+        "WR06",
+        "WR10",
+        "WR13"
+      ],
+      "benchmarkTrack": null,
+      "workbenchAssignments": [
+        {
+          "moduleId": "M06",
+          "leadRole": "summarize",
+          "roles": [
+            "summarize"
+          ],
+          "rank": 4,
+          "coverageMode": "generalist",
+          "reason": "M06 的总结交接候选；按冻结说明评估角色适配，尚未据此晋级。"
+        },
+        {
+          "moduleId": "M13",
+          "leadRole": "summarize",
+          "roles": [
+            "summarize"
+          ],
+          "rank": 4,
+          "coverageMode": "native",
+          "reason": "M13 的总结交接候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "summarize"
+      ],
+      "parentDecision": "workbench",
+      "scores": {
+        "fitScore": 88,
+        "qualityScore": 77.5,
+        "evidenceCoverage": 0.65,
+        "publicSignalScore": 39.1,
+        "researchPriority": 80.2
+      }
+    },
+    {
+      "id": "github:mattpocock/skills@959a8e9f1edc3adbe2f7e3054bb6fbefa6696260#skills/engineering/diagnosing-bugs/SKILL.md",
+      "kind": "agentic-skill",
+      "name": "可复现 Bug 诊断",
+      "slug": "diagnosing-bugs",
+      "repoFullName": "mattpocock/skills",
+      "repoName": "skills",
+      "repoUrl": "https://github.com/mattpocock/skills",
+      "headSha": "959a8e9f1edc3adbe2f7e3054bb6fbefa6696260",
+      "path": "skills/engineering/diagnosing-bugs/SKILL.md",
+      "sourceUrl": "https://github.com/mattpocock/skills/blob/959a8e9f1edc3adbe2f7e3054bb6fbefa6696260/skills/engineering/diagnosing-bugs/SKILL.md",
+      "blobSha": "061c25a524acaa93d4534e9e08a793c0a5fe45fd",
+      "primaryModule": "M08",
+      "secondaryModules": [
+        "M09",
+        "M11"
+      ],
+      "opcDimensions": [
+        "工程与自动化"
+      ],
+      "capabilityForm": "direct-skill",
+      "selection": "expanded",
+      "featuredRank": null,
+      "effectClass": "workspace",
+      "coreThree": {
+        "does": "先重现和最小化，再列假设、加观测、验证回归，最后清掉临时诊断代码。",
+        "conditions": "没有 red-capable fixture 或可信日志只能标未知；修复与根因证据不能混为一谈。",
+        "proof": "用已知故障 fixture 检查复现、最小例、假设淘汰、回归测试和清理结果。"
+      },
+      "limitations": [
+        "需要可观察的代码与测试入口",
+        "静态审阅未证明运行时效果"
+      ],
+      "selectedReason": "补足实现节点的根因诊断，并把结果交给质量和运行学习。",
+      "requirements": [
+        "可复现或可最小化的故障",
+        "确定性测试、假设列表和可观测入口"
+      ],
+      "license": {
+        "status": "clear",
+        "label": "MIT",
+        "clear": true,
+        "scope": "repository"
+      },
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "role-expansion-v2",
+      "capabilityCluster": "review",
+      "workflowRefs": [
+        "WR08",
+        "WR09",
+        "WR11"
+      ],
+      "benchmarkTrack": null,
+      "workbenchAssignments": [
+        {
+          "moduleId": "M08",
+          "leadRole": "review",
+          "roles": [
+            "review"
+          ],
+          "rank": 4,
+          "coverageMode": "native",
+          "reason": "M08 的Review候选；按冻结说明评估角色适配，尚未据此晋级。"
+        },
+        {
+          "moduleId": "M11",
+          "leadRole": "review",
+          "roles": [
+            "review"
+          ],
+          "rank": 6,
+          "coverageMode": "native",
+          "reason": "M11 的Review候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "review"
+      ],
+      "parentDecision": "workbench",
+      "scores": {
+        "fitScore": 95,
+        "qualityScore": 83,
+        "evidenceCoverage": 0.78,
+        "publicSignalScore": 98,
+        "researchPriority": 90.8
+      }
+    },
+    {
+      "id": "github:iflytek/skillhub@36de54157bff59c18c5eff255d2c158df45a3e2a#builtin-skills/skills/decision-matrix/SKILL.md",
+      "kind": "agentic-skill",
+      "name": "透明取舍矩阵",
+      "slug": "decision-matrix",
+      "repoFullName": "iflytek/skillhub",
+      "repoName": "skillhub",
+      "repoUrl": "https://github.com/iflytek/skillhub",
+      "headSha": "36de54157bff59c18c5eff255d2c158df45a3e2a",
+      "path": "builtin-skills/skills/decision-matrix/SKILL.md",
+      "sourceUrl": "https://github.com/iflytek/skillhub/blob/36de54157bff59c18c5eff255d2c158df45a3e2a/builtin-skills/skills/decision-matrix/SKILL.md",
+      "blobSha": "b8ba522e766115aae525eea00514b48f224dd51e",
+      "primaryModule": "M04",
+      "secondaryModules": [
+        "M10"
+      ],
+      "opcDimensions": [
+        "产品与策略"
+      ],
+      "capabilityForm": "package-bound-skill",
+      "selection": "expanded",
+      "featuredRank": null,
+      "effectClass": "local-artifact",
+      "coreThree": {
+        "does": "用加权矩阵、pre-mortem 或 ICE 把方案取舍、假设和会改变结论的信息写明。",
+        "conditions": "分数表达用户偏好，不是客观真理；高风险决定仍需专业事实和负责人确认。",
+        "proof": "对含冲突标准的三方案样本检查权重、反证、可逆性、敏感性和 go/no-go 条件。"
+      },
+      "limitations": [
+        "依赖 Skill 目录和 references",
+        "矩阵不能替代业务授权"
+      ],
+      "selectedReason": "补上策略节点的核心决策工具，并为发布 visual 状态提供可追溯依据。",
+      "requirements": [
+        "至少两个真实方案和用户标准",
+        "成本、可逆性、风险与信息缺口"
+      ],
+      "license": {
+        "status": "clear",
+        "label": "Apache-2.0",
+        "clear": true,
+        "scope": "repository"
+      },
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "role-expansion-v2",
+      "capabilityCluster": "review",
+      "workflowRefs": [
+        "WR04",
+        "WR05",
+        "WR10"
+      ],
+      "benchmarkTrack": null,
+      "workbenchAssignments": [
+        {
+          "moduleId": "M04",
+          "leadRole": "core",
+          "roles": [
+            "core"
+          ],
+          "rank": 2,
+          "coverageMode": "package-bound",
+          "reason": "M04 的主执行候选；按冻结说明评估角色适配，尚未据此晋级。"
+        },
+        {
+          "moduleId": "M10",
+          "leadRole": "visualize",
+          "roles": [
+            "visualize"
+          ],
+          "rank": 3,
+          "coverageMode": "package-bound",
+          "reason": "M10 的可视化候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "core",
+        "visualize"
+      ],
+      "parentDecision": "workbench",
+      "scores": {
+        "fitScore": 91,
+        "qualityScore": 81.1,
+        "evidenceCoverage": 0.86,
+        "publicSignalScore": 70.4,
+        "researchPriority": 85.7
+      }
+    },
+    {
+      "id": "github:iflytek/skillhub@36de54157bff59c18c5eff255d2c158df45a3e2a#builtin-skills/skills/meeting-note-summarizer/SKILL.md",
+      "kind": "agentic-skill",
+      "name": "会议决定与行动交接",
+      "slug": "meeting-note-summarizer-v2",
+      "repoFullName": "iflytek/skillhub",
+      "repoName": "skillhub",
+      "repoUrl": "https://github.com/iflytek/skillhub",
+      "headSha": "36de54157bff59c18c5eff255d2c158df45a3e2a",
+      "path": "builtin-skills/skills/meeting-note-summarizer/SKILL.md",
+      "sourceUrl": "https://github.com/iflytek/skillhub/blob/36de54157bff59c18c5eff255d2c158df45a3e2a/builtin-skills/skills/meeting-note-summarizer/SKILL.md",
+      "blobSha": "d0c182ac5c0c2617b991a81e4a91543f9fe1878a",
+      "primaryModule": "M06",
+      "secondaryModules": [
+        "M09",
+        "M10"
+      ],
+      "opcDimensions": [
+        "设计与内容"
+      ],
+      "capabilityForm": "package-bound-skill",
+      "selection": "expanded",
+      "featuredRank": null,
+      "effectClass": "local-artifact",
+      "coreThree": {
+        "does": "把原型评审或测试会议拆成决定、行动项、讨论、问题和下一步，保留原始确定性。",
+        "conditions": "不能把提议升级为承诺；缺失负责人、日期和决定要明确写未提供。",
+        "proof": "对含模糊提议、冲突意见和未定期限的记录，核对决定、owner、deadline 和遗漏。"
+      },
+      "limitations": [
+        "依赖完整记录和目录 helper",
+        "总结不等于批准"
+      ],
+      "selectedReason": "直接补齐原型、质量和发布之间最常丢失的决定与行动交接。",
+      "requirements": [
+        "会议记录、转录或观察笔记",
+        "决定、负责人、期限和未知项"
+      ],
+      "license": {
+        "status": "clear",
+        "label": "Apache-2.0",
+        "clear": true,
+        "scope": "repository"
+      },
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "role-expansion-v2",
+      "capabilityCluster": "summarize",
+      "workflowRefs": [
+        "WR06",
+        "WR09",
+        "WR10"
+      ],
+      "benchmarkTrack": null,
+      "workbenchAssignments": [
+        {
+          "moduleId": "M06",
+          "leadRole": "summarize",
+          "roles": [
+            "summarize"
+          ],
+          "rank": 3,
+          "coverageMode": "package-bound",
+          "reason": "M06 的总结交接候选；按冻结说明评估角色适配，尚未据此晋级。"
+        },
+        {
+          "moduleId": "M09",
+          "leadRole": "summarize",
+          "roles": [
+            "summarize"
+          ],
+          "rank": 4,
+          "coverageMode": "package-bound",
+          "reason": "M09 的总结交接候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "summarize"
+      ],
+      "parentDecision": "workbench",
+      "scores": {
+        "fitScore": 90,
+        "qualityScore": 81.1,
+        "evidenceCoverage": 0.86,
+        "publicSignalScore": 70.4,
+        "researchPriority": 85.1
+      }
+    },
+    {
+      "id": "github:nexu-io/html-anything@553ed98c283f9c0f489902d035416a972d6a9699#next/src/lib/templates/skills/frame-flowchart-sticky/SKILL.md",
+      "kind": "agentic-skill",
+      "name": "切片与发布流程图封装",
+      "slug": "frame-flowchart-sticky",
+      "repoFullName": "nexu-io/html-anything",
+      "repoName": "html-anything",
+      "repoUrl": "https://github.com/nexu-io/html-anything",
+      "headSha": "553ed98c283f9c0f489902d035416a972d6a9699",
+      "path": "next/src/lib/templates/skills/frame-flowchart-sticky/SKILL.md",
+      "sourceUrl": "https://github.com/nexu-io/html-anything/blob/553ed98c283f9c0f489902d035416a972d6a9699/next/src/lib/templates/skills/frame-flowchart-sticky/SKILL.md",
+      "blobSha": "f87725310288ffbd337feddf8b9a9dadcc8f58b3",
+      "primaryModule": "M08",
+      "secondaryModules": [
+        "M10",
+        "M13"
+      ],
+      "opcDimensions": [
+        "工程与自动化"
+      ],
+      "capabilityForm": "wrap-candidate",
+      "selection": "expanded",
+      "featuredRank": null,
+      "effectClass": "local-artifact",
+      "coreThree": {
+        "does": "把实现切片、发布状态、阻塞和回滚关系做成可读的流程图或 sticky-note artifact。",
+        "conditions": "它不是原生 Codex Skill；每条连线要回到状态或来源，不能用图形权威感掩盖未知。",
+        "proof": "用含阻塞和回滚的切片清单，核对节点、箭头、owner、移动端可读性和来源回链。"
+      },
+      "limitations": [
+        "需要 wrapper",
+        "图形不等于执行依赖",
+        "依赖模板运行时"
+      ],
+      "selectedReason": "补齐 M08/M10 的状态可视化，同时明确 wrapper 与真实依赖的边界。",
+      "requirements": [
+        "真实切片、状态、回滚和 owner 数据",
+        "另行设计 HTML Anything wrapper"
+      ],
+      "license": {
+        "status": "clear",
+        "label": "Apache-2.0",
+        "clear": true,
+        "scope": "repository"
+      },
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "role-expansion-v2",
+      "capabilityCluster": "visualize",
+      "workflowRefs": [
+        "WR08",
+        "WR10",
+        "WR13"
+      ],
+      "benchmarkTrack": null,
+      "workbenchAssignments": [
+        {
+          "moduleId": "M08",
+          "leadRole": "visualize",
+          "roles": [
+            "visualize"
+          ],
+          "rank": 4,
+          "coverageMode": "wrapper",
+          "reason": "M08 的可视化候选；按冻结说明评估角色适配，尚未据此晋级。"
+        },
+        {
+          "moduleId": "M10",
+          "leadRole": "visualize",
+          "roles": [
+            "visualize"
+          ],
+          "rank": 4,
+          "coverageMode": "wrapper",
+          "reason": "M10 的可视化候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "visualize"
+      ],
+      "parentDecision": "workbench",
+      "scores": {
+        "fitScore": 87,
+        "qualityScore": 78.6,
+        "evidenceCoverage": 0.8,
+        "publicSignalScore": 62.7,
+        "researchPriority": 81.9
+      }
     }
   ],
   "coverage": {
@@ -14066,25 +16425,31 @@
     "quarantined": 0,
     "rawSkillPaths": 8779,
     "repoUniqueSkillBlobs": 4326,
-    "curatedSkillCount": 72,
+    "curatedSkillCount": 96,
     "featuredSkillCount": 40,
     "benchmarkCohortCount": 40,
-    "expandedCapabilityCount": 32,
-    "expandedNativeSkillPathCount": 29,
+    "expandedCapabilityCount": 56,
+    "expandedNativeSkillPathCount": 53,
     "expandedWorkflowCandidateCount": 3,
-    "nativeSkillPathCount": 67,
+    "expansionBatchCounts": {
+      "role-expansion-v1": 32,
+      "role-expansion-v2": 24
+    },
+    "workflowRelationCount": 14,
+    "workflowBoundSkillCount": 24,
+    "nativeSkillPathCount": 91,
     "workflowCandidateCount": 5,
-    "roleAssignmentCount": 116,
+    "roleAssignmentCount": 149,
     "roleCoverageByModule": {
       "M00": {
         "core": 2,
-        "review": 2,
+        "review": 3,
         "visualize": 2,
         "summarize": 2
       },
       "M01": {
         "core": 2,
-        "review": 2,
+        "review": 3,
         "visualize": 2,
         "summarize": 2
       },
@@ -14101,51 +16466,51 @@
         "summarize": 2
       },
       "M04": {
-        "core": 1,
+        "core": 2,
         "review": 2,
         "visualize": 2,
         "summarize": 2
       },
       "M05": {
-        "core": 2,
+        "core": 4,
         "review": 2,
         "visualize": 2,
         "summarize": 2
       },
       "M06": {
-        "core": 2,
+        "core": 4,
         "review": 2,
         "visualize": 3,
-        "summarize": 2
+        "summarize": 4
       },
       "M07": {
-        "core": 1,
+        "core": 3,
         "review": 2,
         "visualize": 2,
         "summarize": 2
       },
       "M08": {
-        "core": 2,
-        "review": 3,
-        "visualize": 2,
+        "core": 5,
+        "review": 4,
+        "visualize": 4,
         "summarize": 2
       },
       "M09": {
         "core": 1,
-        "review": 3,
+        "review": 6,
         "visualize": 2,
-        "summarize": 2
+        "summarize": 4
       },
       "M10": {
-        "core": 1,
+        "core": 2,
         "review": 3,
-        "visualize": 2,
+        "visualize": 4,
         "summarize": 3
       },
       "M11": {
         "core": 2,
-        "review": 2,
-        "visualize": 2,
+        "review": 6,
+        "visualize": 3,
         "summarize": 2
       },
       "M12": {
@@ -14156,9 +16521,9 @@
       },
       "M13": {
         "core": 2,
-        "review": 2,
-        "visualize": 2,
-        "summarize": 3
+        "review": 3,
+        "visualize": 3,
+        "summarize": 4
       }
     },
     "runtimeVerified": 0

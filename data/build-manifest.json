@@ -1,31 +1,31 @@
 {
   "schemaVersion": 4,
-  "generatedAt": "2026-09-16T08:51:19.923Z",
+  "generatedAt": "2026-09-16T18:38:12.103Z",
   "artifact": "public/index.html",
-  "artifactBytes": 3149364,
-  "artifactSha256": "ac1b675226e056991ca118fc320becadd6b2494f4bb93abe75b31dfc2fa91923",
+  "artifactBytes": 3175063,
+  "artifactSha256": "6520990435daa29a3e8f2d647ae6daa8d0d6db17bfe8cccedbdce2469f851d1e",
   "pluginCount": 4184,
   "moduleCount": 14,
   "agenticProjectCount": 81,
-  "agenticSkillCount": 72,
+  "agenticSkillCount": 96,
   "embeddedData": {
     "encoding": "gzip-base64",
-    "jsonBytes": 14998778,
-    "gzipBytes": 2281980,
-    "encodedBytes": 3042640,
-    "sha256": "58751d13f283c48224b285721558b46664b8c1dd5905faaed0e98bc34ba0a2e1"
+    "jsonBytes": 15095875,
+    "gzipBytes": 2298000,
+    "encodedBytes": 3064000,
+    "sha256": "1eddc2acbd4960e3c63600ead9f56fbf832caf1a2c1b5e5f25bc467b8e057658"
   },
   "skillCoverage": {
     "frozenSkillCountClaims": 5405,
-    "evidenceRows": 5420,
-    "frozenExact": 5312,
+    "evidenceRows": 5425,
+    "frozenExact": 5202,
     "localBundleExact": 13,
-    "currentVersionDrift": 95,
-    "pluginExact": 4145,
+    "currentVersionDrift": 210,
+    "pluginExact": 4114,
     "pluginLocalExact": 10,
-    "pluginDrift": 23,
-    "pluginHistoricalMissing": 4,
-    "pluginsWithGap": 25
+    "pluginDrift": 52,
+    "pluginHistoricalMissing": 6,
+    "pluginsWithGap": 54
   },
   "agenticCoverage": {
     "repositoryCount": 81,
@@ -39,25 +39,31 @@
     "quarantined": 0,
     "rawSkillPaths": 8779,
     "repoUniqueSkillBlobs": 4326,
-    "curatedSkillCount": 72,
+    "curatedSkillCount": 96,
     "featuredSkillCount": 40,
     "benchmarkCohortCount": 40,
-    "expandedCapabilityCount": 32,
-    "expandedNativeSkillPathCount": 29,
+    "expandedCapabilityCount": 56,
+    "expandedNativeSkillPathCount": 53,
     "expandedWorkflowCandidateCount": 3,
-    "nativeSkillPathCount": 67,
+    "expansionBatchCounts": {
+      "role-expansion-v1": 32,
+      "role-expansion-v2": 24
+    },
+    "workflowRelationCount": 14,
+    "workflowBoundSkillCount": 24,
+    "nativeSkillPathCount": 91,
     "workflowCandidateCount": 5,
-    "roleAssignmentCount": 116,
+    "roleAssignmentCount": 149,
     "roleCoverageByModule": {
       "M00": {
         "core": 2,
-        "review": 2,
+        "review": 3,
         "visualize": 2,
         "summarize": 2
       },
       "M01": {
         "core": 2,
-        "review": 2,
+        "review": 3,
         "visualize": 2,
         "summarize": 2
       },
@@ -74,51 +80,51 @@
         "summarize": 2
       },
       "M04": {
-        "core": 1,
+        "core": 2,
         "review": 2,
         "visualize": 2,
         "summarize": 2
       },
       "M05": {
-        "core": 2,
+        "core": 4,
         "review": 2,
         "visualize": 2,
         "summarize": 2
       },
       "M06": {
-        "core": 2,
+        "core": 4,
         "review": 2,
         "visualize": 3,
-        "summarize": 2
+        "summarize": 4
       },
       "M07": {
-        "core": 1,
+        "core": 3,
         "review": 2,
         "visualize": 2,
         "summarize": 2
       },
       "M08": {
-        "core": 2,
-        "review": 3,
-        "visualize": 2,
+        "core": 5,
+        "review": 4,
+        "visualize": 4,
         "summarize": 2
       },
       "M09": {
         "core": 1,
-        "review": 3,
+        "review": 6,
         "visualize": 2,
-        "summarize": 2
+        "summarize": 4
       },
       "M10": {
-        "core": 1,
+        "core": 2,
         "review": 3,
-        "visualize": 2,
+        "visualize": 4,
         "summarize": 3
       },
       "M11": {
         "core": 2,
-        "review": 2,
-        "visualize": 2,
+        "review": 6,
+        "visualize": 3,
         "summarize": 2
       },
       "M12": {
@@ -129,9 +135,9 @@
       },
       "M13": {
         "core": 2,
-        "review": 2,
-        "visualize": 2,
-        "summarize": 3
+        "review": 3,
+        "visualize": 3,
+        "summarize": 4
       }
     },
     "runtimeVerified": 0
@@ -178,7 +184,7 @@
   "agenticSource": {
     "listUrl": "https://github.com/stars/zjgulai/lists/agentic-tools",
     "capturedAt": "2026-09-16T05:19:10.149Z",
-    "evaluatedAt": "2026-09-16T08:45:54.117Z",
+    "evaluatedAt": "2026-09-16T18:38:04.285Z",
     "membershipSha256": "912d4f33a5e1cdf38e1312bd6687d6cf6f8d4331552dc732b7ba96eed57e5bc9",
     "repositoryCount": 81
   },
@@ -188,10 +194,10 @@
       "plugins": 768,
       "skills": 220,
       "agenticProjects": 11,
-      "agenticSkills": 8,
+      "agenticSkills": 9,
       "agenticRoles": {
         "core": 2,
-        "review": 2,
+        "review": 3,
         "visualize": 2,
         "summarize": 2
       },
@@ -202,10 +208,10 @@
       "plugins": 44,
       "skills": 229,
       "agenticProjects": 4,
-      "agenticSkills": 8,
+      "agenticSkills": 9,
       "agenticRoles": {
         "core": 2,
-        "review": 2,
+        "review": 3,
         "visualize": 2,
         "summarize": 2
       },
@@ -214,7 +220,7 @@
     {
       "id": "M02",
       "plugins": 1272,
-      "skills": 991,
+      "skills": 994,
       "agenticProjects": 7,
       "agenticSkills": 9,
       "agenticRoles": {
@@ -244,9 +250,9 @@
       "plugins": 62,
       "skills": 207,
       "agenticProjects": 1,
-      "agenticSkills": 7,
+      "agenticSkills": 8,
       "agenticRoles": {
-        "core": 1,
+        "core": 2,
         "review": 2,
         "visualize": 2,
         "summarize": 2
@@ -258,9 +264,9 @@
       "plugins": 77,
       "skills": 362,
       "agenticProjects": 2,
-      "agenticSkills": 8,
+      "agenticSkills": 10,
       "agenticRoles": {
-        "core": 2,
+        "core": 4,
         "review": 2,
         "visualize": 2,
         "summarize": 2
@@ -270,14 +276,14 @@
     {
       "id": "M06",
       "plugins": 230,
-      "skills": 422,
+      "skills": 424,
       "agenticProjects": 8,
-      "agenticSkills": 9,
+      "agenticSkills": 13,
       "agenticRoles": {
-        "core": 2,
+        "core": 4,
         "review": 2,
         "visualize": 3,
-        "summarize": 2
+        "summarize": 4
       },
       "review": 157
     },
@@ -286,9 +292,9 @@
       "plugins": 20,
       "skills": 111,
       "agenticProjects": 10,
-      "agenticSkills": 7,
+      "agenticSkills": 9,
       "agenticRoles": {
-        "core": 1,
+        "core": 3,
         "review": 2,
         "visualize": 2,
         "summarize": 2
@@ -300,11 +306,11 @@
       "plugins": 220,
       "skills": 731,
       "agenticProjects": 6,
-      "agenticSkills": 9,
+      "agenticSkills": 15,
       "agenticRoles": {
-        "core": 2,
-        "review": 3,
-        "visualize": 2,
+        "core": 5,
+        "review": 4,
+        "visualize": 4,
         "summarize": 2
       },
       "review": 151
@@ -312,27 +318,27 @@
     {
       "id": "M09",
       "plugins": 484,
-      "skills": 1004,
+      "skills": 1005,
       "agenticProjects": 5,
-      "agenticSkills": 8,
+      "agenticSkills": 13,
       "agenticRoles": {
         "core": 1,
-        "review": 3,
+        "review": 6,
         "visualize": 2,
-        "summarize": 2
+        "summarize": 4
       },
       "review": 371
     },
     {
       "id": "M10",
       "plugins": 115,
-      "skills": 324,
+      "skills": 323,
       "agenticProjects": 2,
-      "agenticSkills": 9,
+      "agenticSkills": 12,
       "agenticRoles": {
-        "core": 1,
+        "core": 2,
         "review": 3,
-        "visualize": 2,
+        "visualize": 4,
         "summarize": 3
       },
       "review": 59
@@ -342,11 +348,11 @@
       "plugins": 41,
       "skills": 123,
       "agenticProjects": 5,
-      "agenticSkills": 8,
+      "agenticSkills": 13,
       "agenticRoles": {
         "core": 2,
-        "review": 2,
-        "visualize": 2,
+        "review": 6,
+        "visualize": 3,
         "summarize": 2
       },
       "review": 33
@@ -370,12 +376,12 @@
       "plugins": 60,
       "skills": 84,
       "agenticProjects": 12,
-      "agenticSkills": 9,
+      "agenticSkills": 12,
       "agenticRoles": {
         "core": 2,
-        "review": 2,
-        "visualize": 2,
-        "summarize": 3
+        "review": 3,
+        "visualize": 3,
+        "summarize": 4
       },
       "review": 30
     }
@@ -386,10 +392,10 @@
   },
   "sourceHashes": {
     "snapshot": "6493698e13c32a6cd37569740c1447e4317dda623c215cdbe7ca16d443c6823b",
-    "catalog": "9acc7eecb2c483ece11ffdb284fc6f64557a7e97ae9f52ef5cc6c94b4c0bd5fc",
+    "catalog": "a90587680621900bc94dbc396826cd8e44cbb891c70f9cbe3e512595cc6cf5c8",
     "agenticSource": "0ad9a5508ba63223366392829140bc2c471b549e2c91aa20b089e197768a3c27",
-    "agenticEvaluations": "0e56dbdbfff2c17dfbdc29f26a2c2b632579ed3dd17a7f1c50123a741cce85a7",
-    "agenticRoleCuration": "8d675213ec81abaace9e9bfb2c84c27dd6955a7af65af86ec30b6abe345f0d3b",
+    "agenticEvaluations": "71d823a275b77346a1608d6481f0780bae37ad885cc9ffc688f05475b1444975",
+    "agenticRoleCuration": "2157940dd14b15ae32eb01f0f07d60625650a1b397ed5fa6e4c4bd7a843594e1",
     "agenticBenchmark": "6ad81332f3eb8c8c798436adc3d72aace923bff54a95311b6be276c394647650"
   },
   "checks": {
@@ -407,6 +413,8 @@
     "agenticRuntimeVerifiedClaims": 0,
     "benchmarkCalibrationRuns": 16,
     "benchmarkTaskVerifiedClaims": 0,
-    "benchmarkPromotions": 0
+    "benchmarkPromotions": 0,
+    "workflowRelationCount": 14,
+    "workflowBoundSkillCount": 24
   }
 }

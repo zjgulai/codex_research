@@ -27,11 +27,15 @@ if (start === -1 || end === -1) {
   if (data.modules.length !== 14) errors.push("Module count is not 14");
   if (data.skills.length !== data.meta.skillCoverage.evidenceRows) errors.push("Skill evidence count mismatch");
   if (data.agenticProjects.length !== 81 || data.meta.agenticCoverage.repositoryCount !== 81) errors.push("Agentic project count is not 81");
-  if (data.agenticSkills.length !== 72 || data.meta.agenticCoverage.curatedSkillCount !== 72) errors.push("Curated Agent capability count is not 72");
+  if (data.agenticSkills.length !== data.meta.agenticCoverage.curatedSkillCount) errors.push("Curated Agent capability count does not match coverage");
   if (data.agenticSkills.filter((item) => item.benchmarkTrack?.cohort === "v1-40").length !== 40) errors.push("Frozen benchmark cohort is not 40");
-  if (data.meta.agenticCoverage.expandedNativeSkillPathCount !== 29 || data.meta.agenticCoverage.expandedWorkflowCandidateCount !== 3) errors.push("Role expansion is not 29 native paths plus 3 workflow candidates");
-  if (data.meta.agenticCoverage.nativeSkillPathCount !== 67 || data.meta.agenticCoverage.workflowCandidateCount !== 5) errors.push("Agent capability form split is not 67 paths plus 5 workflow candidates");
-  if (data.meta.agenticCoverage.roleAssignmentCount !== 116) errors.push("Agent workbench assignment count is not 116");
+  const expandedSkills = data.agenticSkills.filter((item) => item.origin?.startsWith("role-expansion-"));
+  const nativeSkillPaths = data.agenticSkills.filter((item) => Boolean(item.path));
+  const workflowCandidates = data.agenticSkills.filter((item) => !item.path);
+  if (data.meta.agenticCoverage.expandedCapabilityCount !== expandedSkills.length) errors.push("Expanded capability coverage count mismatch");
+  if (data.meta.agenticCoverage.expandedNativeSkillPathCount !== expandedSkills.filter((item) => Boolean(item.path)).length) errors.push("Expanded native path count mismatch");
+  if (data.meta.agenticCoverage.expandedWorkflowCandidateCount !== expandedSkills.filter((item) => !item.path).length) errors.push("Expanded workflow candidate count mismatch");
+  if (data.meta.agenticCoverage.nativeSkillPathCount !== nativeSkillPaths.length || data.meta.agenticCoverage.workflowCandidateCount !== workflowCandidates.length) errors.push("Agent capability form split mismatch");
   if (data.meta.agenticCoverage.runtimeVerified !== 0) errors.push("Static release claims runtime-verified Agent Skills");
   if (data.agenticBenchmark?.coverage?.completedRuns !== 16) errors.push("Calibration run count is not 16");
   if (data.agenticBenchmark?.coverage?.taskBenchmarked !== 0 || data.agenticBenchmark?.coverage?.promotedToDefault !== 0) errors.push("Calibration was upgraded into benchmark or default status");
@@ -85,7 +89,24 @@ if (start === -1 || end === -1) {
       if (roleCoverage[assignment.moduleId]?.[assignment.leadRole] != null) roleCoverage[assignment.moduleId][assignment.leadRole] += 1;
     }
   }
-  if (assignmentCount !== 116 || assignmentCount !== data.meta.agenticCoverage.roleAssignmentCount) errors.push("Recomputed Agent workbench assignment count is not 116");
+  const workflowGraph = data.workflowGraph;
+  const workflowEdges = workflowGraph?.moduleEdges || [];
+  const workflowEdgeIds = new Set(workflowEdges.map((edge) => edge.id));
+  const agenticSlugs = new Set(data.agenticSkills.map((item) => item.slug));
+  if (!workflowGraph || workflowGraph.schemaVersion !== "agentic-workflow-graph.v1" || workflowEdgeIds.size !== workflowEdges.length) errors.push("Workflow graph is missing or edge IDs are not unique");
+  for (const edge of workflowEdges) {
+    if (!moduleIds.has(edge.fromModule) || !moduleIds.has(edge.toModule) || !roleIds.has(edge.fromRole) || !roleIds.has(edge.toRole)) errors.push("Workflow edge endpoint is invalid: " + edge.id);
+    if (!edge.inputArtifact || !edge.outputArtifact || !edge.handoff || !edge.validation) errors.push("Workflow edge is incomplete: " + edge.id);
+    if (!Array.isArray(edge.candidateSlugs) || !edge.candidateSlugs.length || edge.candidateSlugs.some((slug) => !agenticSlugs.has(slug))) errors.push("Workflow edge capability mapping is invalid: " + edge.id);
+  }
+  for (const edge of workflowGraph?.capabilityEdges || []) {
+    if (!agenticSlugs.has(edge.from) || !agenticSlugs.has(edge.to) || !edge.kind) errors.push("Workflow capability edge is invalid");
+  }
+  for (const item of data.agenticSkills) {
+    if (item.origin === "role-expansion-v2" && (!item.workflowRefs?.length || item.workflowRefs.some((ref) => !workflowEdgeIds.has(ref)))) errors.push("v2 capability lacks valid workflow relation: " + item.slug);
+    for (const ref of item.workflowRefs || []) if (!workflowEdgeIds.has(ref)) errors.push("Unknown workflow relation on capability: " + item.slug + " / " + ref);
+  }
+  if (assignmentCount !== data.meta.agenticCoverage.roleAssignmentCount) errors.push("Recomputed Agent workbench assignment count mismatch");
   for (const moduleId of moduleIds) {
     for (const roleId of expectedRoleIds) {
       if (roleCoverage[moduleId][roleId] !== data.meta.agenticCoverage.roleCoverageByModule?.[moduleId]?.[roleId]) {

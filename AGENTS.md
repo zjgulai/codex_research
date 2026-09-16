@@ -1,6 +1,7 @@
 # Repository guidance
 
 修改前先读 `README.md`、`METHODOLOGY.md` 与 `PLAN.md`；涉及界面与视觉时还要读 `design-qa.md`。
+涉及工作流术语、角色分配或关系图时，先读 `CONTEXT.md`，并保持词典中的边界。
 
 - 公开站点必须保持为 `public/index.html` 单文件；不得加入外部运行依赖、追踪器或远程资源。
 - 重新生成必须使用 `scripts/build-site.mjs`，并保留输入时间点、版本漂移和证据缺口。
@@ -10,6 +11,7 @@
 - 外部 Skill 的推荐键必须绑定 `repo + HEAD + path/blob`；需封装对象必须显式标为 `wrap-candidate`，不能伪装成可安装 Skill。
 - Agent 能力策展分为项目基线 `data/agentic-tools-curation.json` 与角色层 `data/agentic-role-curation.json`；修改 M00–M13 工作包前必须同时读取两者。`primaryModule` 是研究归类，`workbenchAssignments` 才是节点角色分配，不能互相代替。
 - 每个节点必须覆盖 `core / review / visualize / summarize` 四个角色；缺少专用能力时只能标 `generalist / combined / adapter-required / wrapper`，不得用通用 Skill 冒充专用能力。
+- 每条新增 Agent 能力必须同时有工作位分配与 `workflowRefs`；关系图中的 `blocks`、`feedback` 与普通交接边不能混用。
 - 原始 40 条能力固定为 `v1-40` benchmark cohort。扩展候选不得因为进入网站而自动进入旧 benchmark、改变候选编号或继承校准结果。
 - 运行 Agent Skill benchmark 前必须读取 `benchmarks/protocol.json`、`benchmarks/candidates.json` 和对应 suite；baseline / Skill 只能相差候选指令，原始运行记录留在 Git 忽略目录。
 - calibration、单 fixture、结构检查、Skill 被读取或一次成功输出都不能升级为 `smoke-tested` / `task-benchmarked`。评分器未校准时，delta 只能诊断，不得用于排名或默认栈晋级。

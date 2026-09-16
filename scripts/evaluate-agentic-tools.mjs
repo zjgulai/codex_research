@@ -39,6 +39,7 @@ const ROLE_IDS = new Set(["core", "review", "visualize", "summarize"]);
 const COVERAGE_NOTE_KEYS = new Set(["M01.review", "M06.summarize", "M08.visualize", "M09.summarize", "M10.visualize", "M13.visualize"]);
 const ADMISSION_LEVELS = new Set(["source-confirmed", "static-reviewed", "controlled-smoke", "task-benchmarked"]);
 const COVERAGE_MODES = new Set(["native", "generalist", "combined", "package-bound", "adapter-required", "wrapper"]);
+const WORKFLOW_EDGE_KINDS = new Set(["feeds", "reviews", "visualizes", "summarizes", "composes", "alternative", "blocks", "feedback"]);
 
 function percentile(values, ratio) {
   const sorted = values.slice().sort((a, b) => a - b);
@@ -286,6 +287,22 @@ function validateInputs() {
     if (!MODULE_IDS.includes(skill.primaryModule)) errors.push(`Expanded capability has invalid module ${skill.slug}`);
     if (!ADMISSION_LEVELS.has(skill.admissionLevel)) errors.push(`Expanded capability has invalid admission level ${skill.slug}`);
     if (!skill.coreThree?.does || !skill.coreThree?.conditions || !skill.coreThree?.proof) errors.push(`Expanded capability is missing coreThree ${skill.slug}`);
+    if (skill.expansionBatch && typeof skill.expansionBatch !== "string") errors.push(`Expanded capability has invalid batch ${skill.slug}`);
+    if (skill.workflowRefs && (!Array.isArray(skill.workflowRefs) || skill.workflowRefs.some((ref) => typeof ref !== "string"))) errors.push(`Expanded capability has invalid workflow refs ${skill.slug}`);
+  }
+  const workflowGraph = roleCuration.workflowGraph;
+  if (!workflowGraph || workflowGraph.schemaVersion !== "agentic-workflow-graph.v1" || !Array.isArray(workflowGraph.moduleEdges) || !Array.isArray(workflowGraph.capabilityEdges)) errors.push("Workflow graph schema is missing");
+  const edgeIds = (workflowGraph?.moduleEdges || []).map((edge) => edge.id);
+  if (new Set(edgeIds).size !== edgeIds.length) errors.push("Workflow module edge IDs are not unique");
+  for (const edge of workflowGraph?.moduleEdges || []) {
+    if (!edge.id || !MODULE_IDS.includes(edge.fromModule) || !MODULE_IDS.includes(edge.toModule)) errors.push(`Invalid workflow module edge ${edge.id || "(missing id)"}`);
+    if (!ROLE_IDS.has(edge.fromRole) || !ROLE_IDS.has(edge.toRole)) errors.push(`Invalid workflow edge roles ${edge.id || "(missing id)"}`);
+    if (!edge.inputArtifact || !edge.outputArtifact || !edge.handoff || !edge.validation) errors.push(`Incomplete workflow module edge ${edge.id || "(missing id)"}`);
+    if (edge.kind && !WORKFLOW_EDGE_KINDS.has(edge.kind)) errors.push(`Invalid workflow edge kind ${edge.id || "(missing id)"}`);
+    if (!Array.isArray(edge.candidateSlugs) || !edge.candidateSlugs.length) errors.push(`Workflow edge has no candidate mapping ${edge.id || "(missing id)"}`);
+  }
+  for (const edge of workflowGraph?.capabilityEdges || []) {
+    if (!edge.from || !edge.to || !WORKFLOW_EDGE_KINDS.has(edge.kind)) errors.push("Invalid workflow capability edge");
   }
   for (const moduleId of MODULE_IDS) {
     const moduleRoles = roleCuration.moduleRoleAssignments[moduleId];
@@ -315,7 +332,7 @@ const skillDefinitions = [
   })),
   ...roleCuration.additionalCapabilities.map((skill) => ({
     ...skill,
-    origin: "role-expansion-v1",
+    origin: skill.expansionBatch ? "role-expansion-v2" : "role-expansion-v1",
     selection: skill.selection || "expanded",
     featuredRank: null,
     benchmarkTrack: null,
@@ -401,6 +418,7 @@ const curatedSkills = skillDefinitions.map((skill) => {
     claimCeiling: "candidate-only",
     origin: skill.origin,
     capabilityCluster: skill.capabilityCluster || "core",
+    workflowRefs: unique(skill.workflowRefs || []),
     benchmarkTrack: skill.benchmarkTrack,
     workbenchAssignments: assignmentsBySlug.get(skill.slug),
     roleTags: unique(assignmentsBySlug.get(skill.slug).flatMap((assignment) => assignment.roles)),
@@ -414,6 +432,19 @@ const curatedSkills = skillDefinitions.map((skill) => {
     },
   };
 });
+
+const workflowGraph = roleCuration.workflowGraph;
+const workflowEdgeById = new Map((workflowGraph?.moduleEdges || []).map((edge) => [edge.id, edge]));
+const curatedSlugSet = new Set(curatedSkills.map((skill) => skill.slug));
+for (const edge of workflowGraph?.moduleEdges || []) {
+  for (const slug of edge.candidateSlugs || []) if (!curatedSlugSet.has(slug)) throw new Error(`Workflow edge ${edge.id} references unknown capability ${slug}`);
+}
+for (const edge of workflowGraph?.capabilityEdges || []) {
+  if (!curatedSlugSet.has(edge.from) || !curatedSlugSet.has(edge.to)) throw new Error(`Workflow capability edge references unknown capability: ${edge.from} -> ${edge.to}`);
+}
+for (const skill of curatedSkills) {
+  for (const ref of skill.workflowRefs || []) if (!workflowEdgeById.has(ref)) throw new Error(`Capability ${skill.slug} references unknown workflow edge ${ref}`);
+}
 
 const benchmarkCohort = curatedSkills.filter((skill) => skill.benchmarkTrack?.cohort === "v1-40")
   .sort((a, b) => a.benchmarkTrack.order - b.benchmarkTrack.order);
@@ -455,6 +486,7 @@ const output = {
   workbenchRoles: roleCuration.roles,
   coverageNotes: roleCuration.coverageNotes,
   capabilityChains: roleCuration.capabilityChains,
+  workflowGraph,
   projects,
   curatedSkills,
   coverage: {
@@ -472,9 +504,12 @@ const output = {
     curatedSkillCount: curatedSkills.length,
     featuredSkillCount: benchmarkCohort.length,
     benchmarkCohortCount: benchmarkCohort.length,
-    expandedCapabilityCount: curatedSkills.filter((skill) => skill.origin === "role-expansion-v1").length,
-    expandedNativeSkillPathCount: curatedSkills.filter((skill) => skill.origin === "role-expansion-v1" && Boolean(skill.path)).length,
-    expandedWorkflowCandidateCount: curatedSkills.filter((skill) => skill.origin === "role-expansion-v1" && !skill.path).length,
+    expandedCapabilityCount: curatedSkills.filter((skill) => skill.origin?.startsWith("role-expansion-")).length,
+    expandedNativeSkillPathCount: curatedSkills.filter((skill) => skill.origin?.startsWith("role-expansion-") && Boolean(skill.path)).length,
+    expandedWorkflowCandidateCount: curatedSkills.filter((skill) => skill.origin?.startsWith("role-expansion-") && !skill.path).length,
+    expansionBatchCounts: Object.fromEntries([...new Set(curatedSkills.filter((skill) => skill.origin?.startsWith("role-expansion-")).map((skill) => skill.origin))].sort().map((origin) => [origin, curatedSkills.filter((skill) => skill.origin === origin).length])),
+    workflowRelationCount: workflowGraph.moduleEdges.length,
+    workflowBoundSkillCount: curatedSkills.filter((skill) => skill.workflowRefs?.length).length,
     nativeSkillPathCount: curatedSkills.filter((skill) => Boolean(skill.path)).length,
     workflowCandidateCount: curatedSkills.filter((skill) => !skill.path).length,
     roleAssignmentCount: curatedSkills.reduce((sum, skill) => sum + skill.workbenchAssignments.length, 0),

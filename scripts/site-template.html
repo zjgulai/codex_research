@@ -513,6 +513,16 @@
       font-weight: 900;
       transform: translateY(-50%);
     }
+    .workflow-relations { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 18px; }
+    .workflow-card { min-width: 0; padding: 15px; border: 1px solid var(--line); border-radius: 14px; background: var(--bg); }
+    .workflow-card.feedback { border-color: var(--gold); }
+    .workflow-card-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .workflow-card-head strong { font-size: 14px; }
+    .workflow-hop { margin: 8px 0 6px; color: var(--ink); font-family: var(--mono); font-size: 11px; }
+    .workflow-artifact { color: var(--muted); font-size: 12px; }
+    .workflow-card p { margin: 8px 0 0; font-size: 13px; }
+    .workflow-candidates { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px; }
+    .workflow-candidates button { padding: 4px 7px; border: 1px solid var(--line); border-radius: 7px; background: var(--surface); color: var(--blue); font-size: 11px; }
     .source-links { display: flex; flex-wrap: wrap; gap: 12px; }
     dialog {
       width: min(900px, calc(100% - 28px));
@@ -640,6 +650,7 @@
       .result-grid { padding: 10px; }
       .audit-card.full { grid-column: auto; }
       .evidence-flow { grid-template-columns: 1fr; }
+      .workflow-relations { grid-template-columns: 1fr; }
       .evidence-flow div:not(:last-child)::after { content: "↓"; right: 50%; top: auto; bottom: -17px; transform: translateX(50%); }
       .dialog-three section { grid-template-columns: 1fr; gap: 6px; }
     }
@@ -1001,7 +1012,7 @@
           <div class="rail-intro"><h1 id="overview-title">全栈工作台地图</h1><p>做到哪一步，就选这一节点的插件或 Agent 能力。</p></div>
           <p class="phase-rail-label">开发阶段</p>
           <div class="node-list" id="node-list" aria-label="全栈开发阶段"></div>
-          <div class="rail-foot"><strong>4,184 + 72</strong>插件与 Agent 能力<div class="workspace-scope" id="overview-metrics" aria-label="研究范围"></div></div>
+          <div class="rail-foot"><strong id="agentic-count-label">4,184 + 96</strong>插件与 Agent 能力<div class="workspace-scope" id="overview-metrics" aria-label="研究范围"></div></div>
         </aside>
         <article class="node-panel" id="node-panel"></article>
       </div>
@@ -1010,7 +1021,7 @@
     <section class="view" id="view-catalog" aria-labelledby="catalog-title">
       <div class="page-head">
         <div><p class="eyebrow">完整目录</p><h1 id="catalog-title">需要更多，再来这里筛</h1></div>
-        <p>插件仍按节点给 Top 3；Agent 侧按主执行、Review、可视化、总结交接组成工作包。这里保留 4,184 个插件、72 个 Agent 能力与 81 个 GitHub 项目审计。</p>
+        <p>插件仍按节点给 Top 3；Agent 侧按主执行、Review、可视化、总结交接组成工作包。这里保留 4,184 个插件、96 个 Agent 能力与 81 个 GitHub 项目审计。</p>
       </div>
       <div class="catalog-shell">
         <div class="controls">
@@ -1039,7 +1050,7 @@
     <section class="view" id="view-audit" aria-labelledby="audit-title">
       <div class="page-head">
         <div><p class="eyebrow">研究方法</p><h1 id="audit-title">排名有依据，也有边界</h1></div>
-        <p>目录说明、安装状态、认证、一次调用和生产可用是五回事。这里不会把“看起来能用”写成“已经可用”。</p>
+          <p>目录说明、安装状态、认证、一次调用和生产可用是五回事。这里不会把“看起来能用”写成“已经可用”。</p>
       </div>
       <div class="audit-grid">
         <article class="audit-card full">
@@ -1074,9 +1085,14 @@
             <li>81 个仓库全部进入审计；存在 SKILL.md 不等于可直接安装。</li>
             <li>直接 Skill、整包依赖、需封装工具和只作参考分开处理。</li>
             <li>许可证、归档、空仓库、重复和低相关是硬门槛；Stars 只占研究优先级的 8%。</li>
-            <li>72 条能力中，67 条绑定原生 SKILL.md，5 条是工作流 / wrapper 候选；形式不同，不混写成同一种 Skill。</li>
+            <li>原 40 条 benchmark 不变；扩展候选按形态分层。</li>
             <li>原始 40 条继续作为固定 benchmark 队列；正式 benchmark 和生产验证仍为 0，4 条只进入执行器校准。</li>
           </ul>
+        </article>
+        <article class="audit-card full">
+          <h2>工作流接力</h2>
+          <p>交接看输入、输出、验收；不是依赖。</p>
+          <div class="workflow-relations" id="workflow-relations" aria-live="polite"></div>
         </article>
         <article class="audit-card full">
           <h2>四个工作位，不是一串卡片</h2>
@@ -1380,7 +1396,7 @@
     }
 
     APP_DATA.plugins.concat(APP_DATA.skills, APP_DATA.agenticSkills, APP_DATA.agenticProjects).forEach((item) => {
-      item._search = [item.name, item.id, item.parentName, item.developer, item.description, item.searchHints, item.solutionPrimary, item.primaryModule, item.fullName, item.repoFullName, item.path, item.selectedReason, item.coreThree && item.coreThree.does, item.coreThree && item.coreThree.conditions, ...(item.roleTags || []), ...((item.workbenchAssignments || []).flatMap((assignment) => [assignment.moduleId, assignment.leadRole, assignment.coverageMode])), ...(item.requirements || []), ...(item.limitations || [])].join(" ").toLowerCase();
+      item._search = [item.name, item.id, item.parentName, item.developer, item.description, item.searchHints, item.solutionPrimary, item.primaryModule, item.fullName, item.repoFullName, item.path, item.selectedReason, item.coreThree && item.coreThree.does, item.coreThree && item.coreThree.conditions, ...(item.roleTags || []), ...(item.workflowRefs || []), ...((item.workbenchAssignments || []).flatMap((assignment) => [assignment.moduleId, assignment.leadRole, assignment.coverageMode])), ...(item.requirements || []), ...(item.limitations || [])].join(" ").toLowerCase();
       entityMap.set(item.id, item);
     });
 
@@ -1398,13 +1414,32 @@
       const coverage = meta.skillCoverage;
       const agentic = meta.agenticCoverage;
       const benchmark = meta.agenticBenchmark;
+      byId("agentic-count-label").textContent = meta.pluginCount.toLocaleString("en-US") + " + " + agentic.curatedSkillCount;
       byId("overview-metrics").textContent = coverage.evidenceRows.toLocaleString("en-US") + " 条插件内 Skill 证据；" + agentic.curatedSkillCount + " 个外部能力组成 " + agentic.roleAssignmentCount + " 个节点工作位，原 40 条 benchmark 队列不变。";
       byId("footer-date").textContent = new Date(meta.generatedAt).toLocaleString("zh-CN", { hour12: false });
       byId("source-dates").textContent = "插件状态冻结：" + meta.frozenAt + "；研究快照：" + meta.researchAt + "；Skill catalog：" + meta.catalogFetchedAt + "；Agentic-Tools 列表冻结：" + meta.agenticSource.capturedAt + "。";
       byId("audit-plugin-copy").textContent = meta.pluginCount.toLocaleString("en-US") + " 个 canonical IDs；" + meta.installedCount + " 个在冻结快照中已安装；" + meta.reviewCount.toLocaleString("en-US") + " 个节点匹配需要人工复核。";
       byId("audit-skill-copy").textContent = coverage.evidenceRows.toLocaleString("en-US") + " 条可显示 Skill 证据，其中 " + coverage.frozenExact.toLocaleString("en-US") + " 条绑定冻结 remote 版本，" + coverage.localBundleExact + " 条绑定本地精确 bundle，" + coverage.currentVersionDrift + " 条只来自较新的漂移版本。";
-      byId("audit-agentic-copy").textContent = agentic.repositoryCount + " 个仓库 → " + agentic.rawSkillPaths.toLocaleString("en-US") + " 条 SKILL.md 路径 → " + agentic.repoUniqueSkillBlobs.toLocaleString("en-US") + " 个仓库内唯一 blob → " + agentic.curatedSkillCount + " 个去重能力 → " + agentic.roleAssignmentCount + " 个节点工作位。路径数和工作位数都不是可安装 Skill 数。";
+      const batchText = Object.entries(agentic.expansionBatchCounts || {}).map(([batch, count]) => batch + " " + count + " 条").join("、");
+      byId("audit-agentic-copy").textContent = agentic.repositoryCount + " 个仓库 → " + agentic.rawSkillPaths.toLocaleString("en-US") + " 条 SKILL.md 路径 → " + agentic.repoUniqueSkillBlobs.toLocaleString("en-US") + " 个仓库内唯一 blob → " + agentic.curatedSkillCount + " 个去重能力 → " + agentic.roleAssignmentCount + " 个节点工作位；扩展批次 " + batchText + "，另有 " + agentic.workflowRelationCount + " 条工作流关系。路径数和工作位数都不是可安装 Skill 数。";
       byId("audit-benchmark-copy").textContent = benchmark.coverage.calibrationCandidateCount + " 个候选进入校准，共 " + benchmark.coverage.completedRuns + " 次运行；执行器结论是 " + benchmark.suite.executorQualification + "，评分器结论是 " + benchmark.suite.scorerQualification + "。下一步先修评分口径，再扩到 12 个首批候选。";
+      renderWorkflowRelations();
+    }
+
+    function renderWorkflowRelations() {
+      const target = byId("workflow-relations");
+      if (!target) return;
+      const roleLabel = (id) => APP_DATA.workbenchRoles.find((role) => role.id === id)?.label || id;
+      const kindLabel = { feeds: "交接", feedback: "回流", blocks: "阻断" };
+      const graph = APP_DATA.workflowGraph || {};
+      target.innerHTML = (graph.moduleEdges || []).map((edge) => {
+        const from = APP_DATA.modules.find((module) => module.id === edge.fromModule);
+        const to = APP_DATA.modules.find((module) => module.id === edge.toModule);
+        const candidates = (edge.candidateSlugs || []).map((slug) => APP_DATA.agenticSkills.find((item) => item.slug === slug)).filter(Boolean);
+        const visibleCandidates = candidates.slice(0, 2).map((item) => '<button type="button" data-open-id="' + esc(item.id) + '">' + esc(item.name) + '</button>').join("");
+        const hiddenCandidateCount = candidates.length > 2 ? '<span class="fineprint">+' + (candidates.length - 2) + ' 条</span>' : '';
+        return '<article class="workflow-card ' + (edge.kind === "feedback" ? "feedback" : "") + '"><div class="workflow-card-head"><strong>' + esc(edge.id + " · " + (kindLabel[edge.kind] || edge.kind)) + '</strong><span class="badge">' + esc(edge.relationEvidence || "本站映射") + '</span></div><div class="workflow-hop">' + esc(edge.fromModule + " " + (from?.title || "") + " / " + roleLabel(edge.fromRole) + " → " + edge.toModule + " " + (to?.title || "") + " / " + roleLabel(edge.toRole)) + '</div><div class="workflow-artifact">' + esc(edge.inputArtifact + " → " + edge.outputArtifact) + '</div><p>' + esc(short(edge.handoff, 28)) + '</p><p class="fineprint">验收：' + esc(short(edge.validation, 24)) + '</p><div class="workflow-candidates">' + visibleCandidates + hiddenCandidateCount + '</div></article>';
+      }).join("") || '<p class="fineprint">当前没有可展示的工作流关系。</p>';
     }
 
     function renderNodeList() {
@@ -1570,6 +1605,15 @@
       return '<div class="detail-block"><b>' + esc(title) + '</b><span>' + esc(value || "未说明") + "</span></div>";
     }
 
+    function workflowRelationText(item) {
+      const refs = item.workflowRefs || [];
+      if (!refs.length) return "未绑定显式工作流关系";
+      return refs.map((ref) => {
+        const edge = (APP_DATA.workflowGraph?.moduleEdges || []).find((candidate) => candidate.id === ref);
+        return edge ? ref + "：" + edge.inputArtifact + " → " + edge.outputArtifact + "；" + edge.handoff : ref;
+      }).join("\n");
+    }
+
     function openAgenticDetail(item, updateHash, context) {
       const activeAssignment = item.kind === "agentic-skill" && context?.moduleId
         ? item.workbenchAssignments.find((assignment) => assignment.moduleId === context.moduleId && (!context.roleId || assignment.leadRole === context.roleId))
@@ -1597,6 +1641,7 @@
         detailBlock("研究主 / 次节点", item.primaryModule + (item.secondaryModules.length ? " / " + item.secondaryModules.join(", ") : " / 无")) +
         (activeAssignment ? detailBlock("当前工作位", activeAssignment.moduleId + " · " + activeRole.label + " · #" + activeAssignment.rank + " · " + coverageLabel(activeAssignment.coverageMode)) : "") +
         (!project ? detailBlock("工作位分配", item.workbenchAssignments.map((assignment) => assignment.moduleId + " · " + (APP_DATA.workbenchRoles.find((role) => role.id === assignment.leadRole)?.label || assignment.leadRole) + " · " + coverageLabel(assignment.coverageMode)).join("；")) : "") +
+        (!project ? detailBlock("工作流关系", workflowRelationText(item)) : "") +
         detailBlock("能力形态", item.shape + " · " + item.capabilityForm) +
         detailBlock("许可证", (item.license?.label || "未确认") + (item.license?.scope ? " · " + item.license.scope : "")) +
         detailBlock("证据状态", evidence) +
@@ -1717,6 +1762,10 @@
     byId("result-grid").addEventListener("click", (event) => {
       const button = event.target.closest("[data-open-id]");
       if (button) openDetail(button.dataset.openId, true, { moduleId: button.dataset.openModule, roleId: button.dataset.openRole });
+    });
+    byId("workflow-relations").addEventListener("click", (event) => {
+      const button = event.target.closest("[data-open-id]");
+      if (button) openDetail(button.dataset.openId);
     });
     byId("dialog-body").addEventListener("click", (event) => {
       const button = event.target.closest("[data-open-id]");

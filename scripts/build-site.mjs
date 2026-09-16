@@ -541,6 +541,7 @@ const data = {
   workbenchRoles: agenticEvaluations.workbenchRoles,
   coverageNotes: agenticEvaluations.coverageNotes,
   capabilityChains: agenticEvaluations.capabilityChains,
+  workflowGraph: agenticEvaluations.workflowGraph,
   agenticBenchmark: {
     suite: agenticBenchmark.suite,
     coverage: agenticBenchmark.coverage,
@@ -556,7 +557,7 @@ function validateData() {
   if (new Set(plugins.map((item) => item.id)).size !== plugins.length) errors.push("Plugin IDs are not unique");
   if (new Set(skills.map((item) => item.id)).size !== skills.length) errors.push("Skill IDs are not unique");
   if (agenticSource.repositories.length !== 81 || agenticProjects.length !== 81) errors.push("Expected 81 Agentic-Tools projects");
-  if (agenticSkills.length !== 72) errors.push("Expected 72 curated Agent capabilities");
+  if (agenticSkills.length !== agenticEvaluations.coverage.curatedSkillCount) errors.push("Curated Agent capability count does not match evaluator");
   if (agenticSkills.filter((item) => item.benchmarkTrack?.cohort === "v1-40").length !== 40) errors.push("Expected the frozen 40-candidate benchmark cohort");
   const expectedRoleIds = ["core", "review", "visualize", "summarize"];
   const actualRoleIds = agenticEvaluations.workbenchRoles.map((role) => role.id);
@@ -590,7 +591,15 @@ function validateData() {
     if (!item.admissionLevel || item.claimCeiling !== "candidate-only") errors.push("Agent capability evidence boundary is missing: " + item.id);
   }
   const assignmentCount = agenticSkills.reduce((sum, item) => sum + item.workbenchAssignments.length, 0);
-  if (assignmentCount !== 116 || assignmentCount !== agenticEvaluations.coverage.roleAssignmentCount) errors.push("Expected 116 recomputed Agent workbench assignments");
+  if (assignmentCount !== agenticEvaluations.coverage.roleAssignmentCount) errors.push("Recomputed Agent workbench assignments do not match evaluator");
+  const workflowGraph = agenticEvaluations.workflowGraph;
+  const workflowEdgeIds = new Set((workflowGraph?.moduleEdges || []).map((edge) => edge.id));
+  const agenticSlugs = new Set(agenticSkills.map((item) => item.slug));
+  if (!workflowGraph || workflowGraph.schemaVersion !== "agentic-workflow-graph.v1" || workflowEdgeIds.size !== (workflowGraph.moduleEdges || []).length) errors.push("Workflow graph is missing or has duplicate edge IDs");
+  for (const edge of workflowGraph?.moduleEdges || []) {
+    if (!MODULE_IDS.includes(edge.fromModule) || !MODULE_IDS.includes(edge.toModule) || !agenticSlugs.size || (edge.candidateSlugs || []).some((slug) => !agenticSlugs.has(slug))) errors.push("Workflow module edge references invalid data: " + edge.id);
+  }
+  for (const item of agenticSkills) for (const ref of item.workflowRefs || []) if (!workflowEdgeIds.has(ref)) errors.push("Agent capability references unknown workflow edge: " + item.slug + " / " + ref);
   const expectedCoverageNoteKeys = ["M01.review", "M06.summarize", "M08.visualize", "M09.summarize", "M10.visualize", "M13.visualize"];
   const coverageNoteKeys = Object.keys(agenticEvaluations.coverageNotes || {});
   if (coverageNoteKeys.length !== expectedCoverageNoteKeys.length || expectedCoverageNoteKeys.some((key) => !coverageNoteKeys.includes(key))) errors.push("Expected the six explicit weak-coverage notes");
@@ -648,6 +657,8 @@ const manifest = {
     benchmarkCalibrationRuns: agenticBenchmark.coverage.completedRuns,
     benchmarkTaskVerifiedClaims: agenticBenchmark.coverage.taskBenchmarked,
     benchmarkPromotions: agenticBenchmark.coverage.promotedToDefault,
+    workflowRelationCount: agenticEvaluations.coverage.workflowRelationCount,
+    workflowBoundSkillCount: agenticEvaluations.coverage.workflowBoundSkillCount,
   },
 };
 mkdirSync(dirname(manifestPath), { recursive: true });
