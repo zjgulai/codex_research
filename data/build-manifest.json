@@ -1,9 +1,9 @@
 {
   "schemaVersion": 4,
-  "generatedAt": "2026-09-16T18:38:12.103Z",
+  "generatedAt": "2026-09-16T19:38:12.099Z",
   "artifact": "public/index.html",
-  "artifactBytes": 3175063,
-  "artifactSha256": "6520990435daa29a3e8f2d647ae6daa8d0d6db17bfe8cccedbdce2469f851d1e",
+  "artifactBytes": 3175152,
+  "artifactSha256": "dc02b6fdd2bccccb069e9b06a7a1ed8cf9b6e26512295e2fcbaf10daf65c31bd",
   "pluginCount": 4184,
   "moduleCount": 14,
   "agenticProjectCount": 81,
@@ -11,9 +11,9 @@
   "embeddedData": {
     "encoding": "gzip-base64",
     "jsonBytes": 15095875,
-    "gzipBytes": 2298000,
-    "encodedBytes": 3064000,
-    "sha256": "1eddc2acbd4960e3c63600ead9f56fbf832caf1a2c1b5e5f25bc467b8e057658"
+    "gzipBytes": 2298014,
+    "encodedBytes": 3064020,
+    "sha256": "862578e48aa26db09990dd6b84de02a73b8a87e3c0a37ffdd7933c000fd0395f"
   },
   "skillCoverage": {
     "frozenSkillCountClaims": 5405,
@@ -392,7 +392,7 @@
   },
   "sourceHashes": {
     "snapshot": "6493698e13c32a6cd37569740c1447e4317dda623c215cdbe7ca16d443c6823b",
-    "catalog": "a90587680621900bc94dbc396826cd8e44cbb891c70f9cbe3e512595cc6cf5c8",
+    "catalog": "e40780b23c984b5970d9e1f60aeff377233e1fe489f7c1eb6d20e0b21f44a0c6",
     "agenticSource": "0ad9a5508ba63223366392829140bc2c471b549e2c91aa20b089e197768a3c27",
     "agenticEvaluations": "71d823a275b77346a1608d6481f0780bae37ad885cc9ffc688f05475b1444975",
     "agenticRoleCuration": "2157940dd14b15ae32eb01f0f07d60625650a1b397ed5fa6e4c4bd7a843594e1",

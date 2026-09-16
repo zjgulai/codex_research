@@ -1459,7 +1459,7 @@
         '<div class="candidate-main"><button type="button" data-open-id="' + esc(item.id) + '">' + esc(item.name) + '</button><small>' + esc(item.shape) + ' · #' + item.moduleRank + '</small></div>' +
         '<div class="candidate-capability">' + esc(short(core.does, 105)) + '</div>' +
         '<span class="readiness' + installedClass + '">' + esc(stateLabel) + '</span>' +
-        '<details><summary>为什么先看</summary><div class="candidate-evidence"><div><b>能帮什么</b>' + esc(core.does) + '</div><div><b>使用前要准备什么</b>' + esc(core.conditions) + '</div><div><b>怎样确认真能用</b>' + esc(core.proof) + '</div></div><p class="fineprint">' + esc(reason + " " + evidence) + '</p></details>' +
+        '<details><summary>为什么先看</summary><div class="candidate-evidence"><div><b>它能帮你做什么</b>' + esc(core.does) + '</div><div><b>用之前要准备什么</b>' + esc(core.conditions) + '</div><div><b>怎么确认它真的能用</b>' + esc(core.proof) + '</div></div><p class="fineprint">' + esc(reason + " " + evidence) + '</p></details>' +
         '</div>';
     }
 
@@ -1579,7 +1579,7 @@
         '<div class="card-badges"><span class="badge primary">' + esc(moduleBadge) + '</span><span class="badge">' + esc(item.shape || (item.kind === "plugin" ? "Plugin" : "Skill")) + '</span><span class="badge ' + (review ? "warn" : "") + '">' + (agentic ? esc(item.kind === "agentic-project" ? item.tier + " 档" : admissionLabel(item.admissionLevel)) : confidenceLabel(item.matchConfidence)) + '</span><span class="badge ' + (["production","secrets","external"].includes(item.effectClass) ? "danger" : "") + '">' + esc(item.effectClass) + "</span>" + versionBadge + "</div>" +
         '<h2>' + esc(item.name) + '</h2><div class="entity-id">' + esc(identity) + "</div>" +
         '<div class="card-scores"><div class="score"><strong>' + score(item.fitScore) + '</strong><span>' + (agentic ? (item.kind === "agentic-project" ? "项目质量" : activeAssignment ? "研究归类分" : "节点适配") : "阶段匹配度") + '</span></div><div class="score"><strong>' + score(item.functionalScore) + '</strong><span>' + middleLabel + '</span></div><div class="score"><strong>' + score(item.publicProxyScore) + '</strong><span>公开声量</span></div></div>' +
-        '<dl class="core-three"><div><dt>能帮你做什么</dt><dd>' + esc(short(core.does, 150)) + '</dd></div><div><dt>使用前要准备什么</dt><dd>' + esc(short(core.conditions, 125)) + '</dd></div><div><dt>怎样确认真能用</dt><dd>' + esc(short(core.proof, 140)) + "</dd></div></dl>" +
+        '<dl class="core-three"><div><dt>它能帮你做什么</dt><dd>' + esc(short(core.does, 150)) + '</dd></div><div><dt>用之前要准备什么</dt><dd>' + esc(short(core.conditions, 125)) + '</dd></div><div><dt>怎么确认它真的能用</dt><dd>' + esc(short(core.proof, 140)) + "</dd></div></dl>" +
         '<button class="open-detail" type="button" data-open-id="' + esc(item.id) + '"' + detailContext + '>查看详情和证据 →</button></article>';
     }
 
@@ -1635,7 +1635,7 @@
       byId("dialog-body").innerHTML =
         '<div class="card-badges"><span class="badge primary">' + activeModuleId + " · " + esc(module.title) + '</span><span class="badge">' + esc(item.shape) + '</span><span class="badge ' + (status.includes("受控") || status.includes("B") || status.includes("C") || status.includes("D") ? "warn" : "") + '">' + esc(status) + '</span><span class="badge ' + (["production","secrets","external"].includes(item.effectClass) ? "danger" : "") + '">' + esc(item.effectClass) + "</span></div>" +
         '<div class="card-scores"><div class="score"><strong>' + score(item.fitScore) + '</strong><span>' + (project ? "项目质量" : activeAssignment ? "研究归类分" : "节点适配") + '</span></div><div class="score"><strong>' + score(item.functionalScore) + '</strong><span>' + (project ? "证据覆盖" : "父项目质量") + '</span></div><div class="score"><strong>' + score(item.publicProxyScore) + '</strong><span>公开声量</span></div></div>' +
-        '<div class="dialog-three"><section><h3>1 · 核心能力</h3><p>' + esc(core.does) + '</p></section><section><h3>2 · 使用条件</h3><p>' + esc(core.conditions) + '</p></section><section><h3>3 · 最低验证</h3><p>' + esc(core.proof) + "</p></section></div>" +
+        '<div class="dialog-three"><section><h3>1 · 它能帮你做什么</h3><p>' + esc(core.does) + '</p></section><section><h3>2 · 用之前要准备什么</h3><p>' + esc(core.conditions) + '</p></section><section><h3>3 · 怎么确认它真的能用</h3><p>' + esc(core.proof) + "</p></section></div>" +
         '<div class="detail-grid">' + detailBlock("对象", identity) +
         detailBlock("固定版本", (item.headSha || "").slice(0, 12) + (item.blobSha ? " · blob " + item.blobSha.slice(0, 12) : "")) +
         detailBlock("研究主 / 次节点", item.primaryModule + (item.secondaryModules.length ? " / " + item.secondaryModules.join(", ") : " / 无")) +
@@ -1681,7 +1681,7 @@
       byId("dialog-body").innerHTML =
         '<div class="card-badges"><span class="badge primary">' + item.primaryModule + " · " + esc(module.title) + '</span><span class="badge">' + esc(item.runtimeState) + '</span><span class="badge ' + (item.matchNeedsReview ? "warn" : "") + '">' + confidenceLabel(item.matchConfidence) + '</span><span class="badge ' + (["production","secrets","external"].includes(item.effectClass) ? "danger" : "") + '">' + esc(item.effectClass) + "</span></div>" +
         '<div class="card-scores"><div class="score"><strong>' + score(item.fitScore) + '</strong><span>阶段匹配度</span></div><div class="score"><strong>' + score(item.functionalScore) + '</strong><span>功能覆盖</span></div><div class="score"><strong>' + score(item.publicProxyScore) + '</strong><span>公开信号</span></div></div>' +
-        '<div class="dialog-three"><section><h3>1 · 能帮你做什么</h3><p>' + esc(core.does) + '</p></section><section><h3>2 · 使用前要准备什么</h3><p>' + esc(core.conditions) + '</p></section><section><h3>3 · 怎样确认真能用</h3><p>' + esc(core.proof) + "</p></section></div>" +
+        '<div class="dialog-three"><section><h3>1 · 它能帮你做什么</h3><p>' + esc(core.does) + '</p></section><section><h3>2 · 用之前要准备什么</h3><p>' + esc(core.conditions) + '</p></section><section><h3>3 · 怎么确认它真的能用</h3><p>' + esc(core.proof) + "</p></section></div>" +
         '<div class="detail-grid">' + detailBlock("Canonical ID", item.kind === "plugin" ? item.id : item.parentId + " / " + item.skillName) +
         detailBlock("版本", item.kind === "plugin" ? "冻结 v" + item.versions.join(", ") + (item.versionAmbiguous ? " · 版本歧义" : "") : "证据 v" + item.version) +
         detailBlock("主 / 次节点", item.primaryModule + (item.secondaryModules.length ? " / " + item.secondaryModules.join(", ") : " / 无")) +
