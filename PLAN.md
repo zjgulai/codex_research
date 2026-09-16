@@ -65,14 +65,15 @@
 - [x] 更新方法、生成说明、项目长期规则与执行记录。
 - [x] 通过 ELI5 checker、secret / 路径 / diff 检查和独立数据复核。
 - [x] 完成桌面与 390px 手机视口的双工作台、目录、详情和控制台 QA。
-- [ ] 提交、推送并验证 Pages workflow、deployment 与公网字节。
+- [x] 提交、推送并验证 Pages workflow、deployment 与公网字节。
 
 ### 双工作台发布收据
 
-- 内容提交：待发布。
-- Pages workflow：待发布。
-- Pages deployment：待发布。
-- 公网文件：待发布。
+- 内容提交：`d6fc82f9271891ac0d81b4adc27dcf449dc0b9a3`。
+- Pages workflow：`35061465035`，结论 `success`。
+- Pages deployment：`6474716398`，状态 `success`。
+- 公网文件：3,109,539 bytes；SHA-256 `f3c86f12baf2e37e45ca967c20b49e3f5680628fe62cf01ad79d126dd09af86e`，与本地逐字节一致。
+- 公网页面已解压并显示 `Agent OPC Atlas`；双工作台切换、M06 三个 Agent Skill、研究范围文案和浏览器控制台均通过复核。
 
 ## 发布收据
 
