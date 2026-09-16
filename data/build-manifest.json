@@ -1,9 +1,9 @@
 {
   "schemaVersion": 4,
-  "generatedAt": "2026-09-16T19:38:12.099Z",
+  "generatedAt": "2026-09-16T20:20:25.397Z",
   "artifact": "public/index.html",
-  "artifactBytes": 3175152,
-  "artifactSha256": "dc02b6fdd2bccccb069e9b06a7a1ed8cf9b6e26512295e2fcbaf10daf65c31bd",
+  "artifactBytes": 3185750,
+  "artifactSha256": "13d39658e06a11ebe33f203bf1d0f9dc908b9eface7e2e9fcc84d4a1817e589e",
   "pluginCount": 4184,
   "moduleCount": 14,
   "agenticProjectCount": 81,
@@ -11,9 +11,9 @@
   "embeddedData": {
     "encoding": "gzip-base64",
     "jsonBytes": 15095875,
-    "gzipBytes": 2298014,
-    "encodedBytes": 3064020,
-    "sha256": "862578e48aa26db09990dd6b84de02a73b8a87e3c0a37ffdd7933c000fd0395f"
+    "gzipBytes": 2298005,
+    "encodedBytes": 3064008,
+    "sha256": "025d05e9b2cb71455c06bd4aea6d77ddc0f718b04960e9267353ad45e0da529a"
   },
   "skillCoverage": {
     "frozenSkillCountClaims": 5405,
