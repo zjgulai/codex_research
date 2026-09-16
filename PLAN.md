@@ -149,6 +149,14 @@
 - Vercel 的 5 条新增路径保持 `reference-only`，原因是许可证边界尚未独立确认；InsForge 等整包路径保持 `package-bound`，需要在目标仓库按其依赖条件部署后再验证。
 - 本批关系说明“交付如何接力”，不替代真实 API schema、权限、网络、OS 隔离、CI 或生产验收。
 
+### Phase 10 发布收据
+
+- 内容提交：`111497e96c9e525c929bffda3d006e2fd22057a5`。
+- Pages workflow：`35135816264`，结论 `success`。
+- Pages deployment：`6487933235`，状态 `success`。
+- 公网文件：3,175,063 bytes；SHA-256 `6520990435daa29a3e8f2d647ae6daa8d0d6db17bfe8cccedbdce2469f851d1e`，与本地逐字节一致。
+- 公网页面已核对 `4,184 + 96`、14 张工作流关系卡、M13 可视化联合筛选和关系详情；桌面 / 窄屏控制台无 warning/error。
+
 ## 初版目录发布收据
 
 - 内容提交：`4783fdd3ce7d704418efe77aced5a00ad9b2c61f`。
