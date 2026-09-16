@@ -30,6 +30,14 @@
 - 390 × 844 CSS 视口复核通过：document `scrollWidth === innerWidth`；阶段与节点列表只在自身容器内横向滚动；双工作台切换器保持首屏可见；详情 dialog 宽 352px、内部无横向溢出。
 - 浏览器控制台 `warning/error` 为 0。
 
+### Round 4 — Benchmark 校准披露
+
+- 桌面 1910 CSS px 复核通过：工作台、完整目录、研究方法三条主路径可用，页面 `scrollWidth === innerWidth`。
+- 4 条校准候选均可从 Agent Skill 目录检索并打开详情；每条都显示 baseline / Skill 诊断分、固定来源和“评分器未通过，不能排名或晋级”的边界。
+- 研究方法页明确披露 4 个候选、16 次运行、执行器通过、评分器失败和 0 条晋级，没有把校准 delta 写成效果排行。
+- 约 390 CSS px 窄屏复核通过：document 无横向溢出；Agent Skill 切换可用；详情 dialog 宽约 352px，左右边界均在视口内，关闭按钮可见。
+- 浏览器控制台 `warning/error` 为 0。
+
 ## 最终判定
 
 - P0：0

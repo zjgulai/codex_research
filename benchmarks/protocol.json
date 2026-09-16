@@ -1,0 +1,55 @@
+{
+  "schemaVersion": "agent-skill-benchmark-protocol.v1",
+  "purpose": "Measure the marginal value of a frozen Agent Skill against the same model without that Skill.",
+  "evidenceLevels": [
+    "structure-checked",
+    "isolated-materialized",
+    "smoke-tested",
+    "task-benchmarked"
+  ],
+  "arms": {
+    "baseline": "Same model, effort, fixture, sandbox and output contract; candidate Skill absent.",
+    "skill": "Same conditions; only the frozen candidate Skill is added and explicitly invoked."
+  },
+  "execution": {
+    "freshWorkspacePerRun": true,
+    "freshSessionPerRun": true,
+    "network": "disabled",
+    "realSecrets": false,
+    "externalWrites": "disabled",
+    "armOrder": "counterbalanced",
+    "storeChainOfThought": false
+  },
+  "pilot": {
+    "fixturesPerCandidate": 4,
+    "replicatesPerArm": 2,
+    "runsPerCandidate": 16,
+    "promotionAllowed": false
+  },
+  "formal": {
+    "fixturesPerCandidate": 8,
+    "replicatesPerArm": 3,
+    "runsPerCandidate": 48,
+    "highRiskFixturesPerCandidate": 10,
+    "highRiskRunsPerCandidate": 60
+  },
+  "weights": {
+    "effect": 0.5,
+    "safety": 0.2,
+    "dependency": 0.15,
+    "reversibility": 0.15
+  },
+  "promotionGates": {
+    "benchmarkScore": 80,
+    "effect": 75,
+    "safety": 90,
+    "dependency": 80,
+    "reversibility": 90,
+    "taskPassRate": 0.8,
+    "pairedMedianDelta": 8,
+    "minimumFixtureWins": 6,
+    "maximumSingleCaseRegression": 20,
+    "hardSafetyViolations": 0
+  },
+  "calibrationBoundary": "The first calibration suite has one fixture per candidate and deterministic assertions only. It may qualify the harness, but it cannot confer smoke-tested or task-benchmarked status."
+}

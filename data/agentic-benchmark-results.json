@@ -1,0 +1,2314 @@
+{
+  "schemaVersion": "agent-skill-benchmark-results.v1",
+  "generatedAt": "2026-09-16T07:40:53.161Z",
+  "suite": {
+    "id": "opc-instruction-calibration-2026-09-16",
+    "status": "harness-calibration-only",
+    "suiteSha256": "41d34ac88e1835b303ead2e4d3a15c06d703f2c7ab4aa9598161dfa51a8780d6",
+    "protocolSha256": "4209c47641d2301ffd1f769b3099de0f31c5170337b093781d6dc09e003dc9c2",
+    "candidatesSha256": "d92a1fe8793c7312d17f356ec0ebf11b4d97064255f5dbccef36e5fc50e0929f",
+    "model": "gpt-5.6-luna",
+    "reasoningEffort": "low",
+    "codexVersion": "codex-cli 0.145.0",
+    "sandboxPolicy": "codex-read-only-network-disabled",
+    "fixtureCountPerCandidate": 1,
+    "replicatesPerArm": 2,
+    "semanticJudge": "not-run",
+    "promotionAllowed": false,
+    "executorQualification": "passed",
+    "scorerQualification": "failed-needs-v2"
+  },
+  "coverage": {
+    "plannedCandidateCount": 40,
+    "firstWaveCandidateCount": 12,
+    "calibrationCandidateCount": 4,
+    "completedRuns": 16,
+    "baselineRuns": 8,
+    "skillRuns": 8,
+    "isolatedMaterialized": 4,
+    "isolatedInstalled": 0,
+    "smokeTested": 0,
+    "taskBenchmarked": 0,
+    "promotedToDefault": 0
+  },
+  "calibrationReview": {
+    "executor": "All 16 runs completed, all eight Skill arms read the frozen SKILL.md, baseline arms did not, and all workspaces were unchanged.",
+    "scorer": "Not qualified. The term matcher was sensitive to language and numeric variants, two candidates showed high replicate variance, and one fixture saturated at 100 in both arms.",
+    "network": "Web search was disabled and no network command was observed; OS-level egress denial was not independently proven.",
+    "nextAction": "Freeze a v2 multilingual semantic assertion format, add adversarial fixtures, calibrate an independent blind judge, then rerun the 12-candidate first wave."
+  },
+  "boundary": "One deterministic calibration fixture per candidate is insufficient for ranking or promotion. Delta values are diagnostic only and must not be used to rank candidates.",
+  "results": [
+    {
+      "candidateId": "github:phuryn/pm-skills@8607e3b077817f89bf4a9b623246219734ac3be0#pm-execution/skills/strategy-red-team/SKILL.md",
+      "candidateNumber": "C12",
+      "candidateSlug": "strategy-red-team",
+      "candidateName": "策略红队",
+      "primaryModule": "M04",
+      "caseId": "m04-strategy-red-team-001",
+      "benchmarkState": "calibration-only",
+      "baselineScores": [
+        80,
+        74
+      ],
+      "skillScores": [
+        94,
+        62
+      ],
+      "baselineMedian": 77,
+      "skillMedian": 78,
+      "deterministicDelta": 1,
+      "skillPassRate": 0.5,
+      "infrastructurePass": true,
+      "invocationObserved": true,
+      "hardGatePass": true,
+      "failedAssertions": [
+        "unknowns-visible",
+        "privacy-boundary",
+        "weak-demand-evidence"
+      ],
+      "diagnosticFlags": [
+        "high-replicate-variance"
+      ],
+      "scoreUsableForRanking": false,
+      "runIds": [
+        "m04-strategy-red-team-001-baseline-r1",
+        "m04-strategy-red-team-001-baseline-r2",
+        "m04-strategy-red-team-001-skill-r1",
+        "m04-strategy-red-team-001-skill-r2"
+      ]
+    },
+    {
+      "candidateId": "github:phuryn/pm-skills@8607e3b077817f89bf4a9b623246219734ac3be0#pm-execution/skills/test-scenarios/SKILL.md",
+      "candidateNumber": "C17",
+      "candidateSlug": "test-scenarios",
+      "candidateName": "验收场景设计",
+      "primaryModule": "M05",
+      "caseId": "m05-test-scenarios-001",
+      "benchmarkState": "calibration-only",
+      "baselineScores": [
+        86,
+        100
+      ],
+      "skillScores": [
+        100,
+        72
+      ],
+      "baselineMedian": 93,
+      "skillMedian": 86,
+      "deterministicDelta": -7,
+      "skillPassRate": 0.5,
+      "infrastructurePass": true,
+      "invocationObserved": true,
+      "hardGatePass": true,
+      "failedAssertions": [
+        "resend-invalidates-old",
+        "rate-limit",
+        "scenario-contract"
+      ],
+      "diagnosticFlags": [
+        "high-replicate-variance"
+      ],
+      "scoreUsableForRanking": false,
+      "runIds": [
+        "m05-test-scenarios-001-baseline-r1",
+        "m05-test-scenarios-001-baseline-r2",
+        "m05-test-scenarios-001-skill-r1",
+        "m05-test-scenarios-001-skill-r2"
+      ]
+    },
+    {
+      "candidateId": "github:phuryn/pm-skills@8607e3b077817f89bf4a9b623246219734ac3be0#pm-ai-shipping/skills/shipping-artifacts/SKILL.md",
+      "candidateNumber": "C30",
+      "candidateSlug": "shipping-artifacts",
+      "candidateName": "发布证据包",
+      "primaryModule": "M10",
+      "caseId": "m10-shipping-evidence-001",
+      "benchmarkState": "calibration-only",
+      "baselineScores": [
+        100,
+        100
+      ],
+      "skillScores": [
+        100,
+        100
+      ],
+      "baselineMedian": 100,
+      "skillMedian": 100,
+      "deterministicDelta": 0,
+      "skillPassRate": 1,
+      "infrastructurePass": true,
+      "invocationObserved": true,
+      "hardGatePass": true,
+      "failedAssertions": [],
+      "diagnosticFlags": [
+        "ceiling-saturation"
+      ],
+      "scoreUsableForRanking": false,
+      "runIds": [
+        "m10-shipping-evidence-001-baseline-r1",
+        "m10-shipping-evidence-001-baseline-r2",
+        "m10-shipping-evidence-001-skill-r1",
+        "m10-shipping-evidence-001-skill-r2"
+      ]
+    },
+    {
+      "candidateId": "github:phuryn/pm-skills@8607e3b077817f89bf4a9b623246219734ac3be0#pm-product-discovery/skills/metrics-dashboard/SKILL.md",
+      "candidateNumber": "C33",
+      "candidateSlug": "metrics-dashboard",
+      "candidateName": "指标看板定义",
+      "primaryModule": "M11",
+      "caseId": "m11-metrics-dashboard-001",
+      "benchmarkState": "calibration-only",
+      "baselineScores": [
+        68,
+        68
+      ],
+      "skillScores": [
+        70,
+        70
+      ],
+      "baselineMedian": 68,
+      "skillMedian": 70,
+      "deterministicDelta": 2,
+      "skillPassRate": 0,
+      "infrastructurePass": true,
+      "invocationObserved": true,
+      "hardGatePass": true,
+      "failedAssertions": [
+        "north-star-behavior",
+        "guardrail-failures"
+      ],
+      "diagnosticFlags": [],
+      "scoreUsableForRanking": false,
+      "runIds": [
+        "m11-metrics-dashboard-001-baseline-r1",
+        "m11-metrics-dashboard-001-baseline-r2",
+        "m11-metrics-dashboard-001-skill-r1",
+        "m11-metrics-dashboard-001-skill-r2"
+      ]
+    }
+  ],
+  "runs": [
+    {
+      "runId": "m04-strategy-red-team-001-baseline-r1",
+      "caseId": "m04-strategy-red-team-001",
+      "candidateSlug": "strategy-red-team",
+      "arm": "baseline",
+      "replicate": 1,
+      "deterministicScore": 80,
+      "infrastructurePass": true,
+      "invocationPass": true,
+      "passed": true,
+      "assertions": [
+        {
+          "id": "privacy-boundary",
+          "weight": 18,
+          "type": "terms",
+          "any": [
+            "consent",
+            "privacy",
+            "security",
+            "data residency",
+            "deletion"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "zoom-dependency",
+          "weight": 16,
+          "type": "terms",
+          "all": [
+            "Zoom"
+          ],
+          "any": [
+            "Marketplace",
+            "review",
+            "approval"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "weak-demand-evidence",
+          "weight": 14,
+          "type": "terms",
+          "any": [
+            "three calls",
+            "internal",
+            "external customer",
+            "design partner",
+            "paid commitment"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "falsifiable-failure",
+          "weight": 14,
+          "type": "terms",
+          "any": [
+            "Fails if",
+            "fail if",
+            "失败条件"
+          ],
+          "passed": false,
+          "evidence": "none matched: fails if, fail if, 失败条件"
+        },
+        {
+          "id": "kill-criterion",
+          "weight": 14,
+          "type": "terms",
+          "any": [
+            "kill criterion",
+            "stop if",
+            "停止条件",
+            "no-go"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "cheap-test",
+          "weight": 12,
+          "type": "terms",
+          "any": [
+            "cheapest test",
+            "smallest test",
+            "this week",
+            "本周"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "balanced-assessment",
+          "weight": 6,
+          "type": "terms",
+          "any": [
+            "well-reasoned",
+            "holds up",
+            "合理",
+            "成立"
+          ],
+          "passed": false,
+          "evidence": "none matched: well-reasoned, holds up, 合理, 成立"
+        },
+        {
+          "id": "unknowns-visible",
+          "weight": 6,
+          "type": "terms",
+          "any": [
+            "could not assess",
+            "unknown",
+            "无法评估",
+            "未知"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        }
+      ],
+      "durationMs": 28413,
+      "finalOutputSha256": "79a29f4aab5c220e9f505d91c1335e7b7b33116bec4502a6e434811efdf61c81"
+    },
+    {
+      "runId": "m04-strategy-red-team-001-baseline-r2",
+      "caseId": "m04-strategy-red-team-001",
+      "candidateSlug": "strategy-red-team",
+      "arm": "baseline",
+      "replicate": 2,
+      "deterministicScore": 74,
+      "infrastructurePass": true,
+      "invocationPass": true,
+      "passed": false,
+      "assertions": [
+        {
+          "id": "privacy-boundary",
+          "weight": 18,
+          "type": "terms",
+          "any": [
+            "consent",
+            "privacy",
+            "security",
+            "data residency",
+            "deletion"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "zoom-dependency",
+          "weight": 16,
+          "type": "terms",
+          "all": [
+            "Zoom"
+          ],
+          "any": [
+            "Marketplace",
+            "review",
+            "approval"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "weak-demand-evidence",
+          "weight": 14,
+          "type": "terms",
+          "any": [
+            "three calls",
+            "internal",
+            "external customer",
+            "design partner",
+            "paid commitment"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "falsifiable-failure",
+          "weight": 14,
+          "type": "terms",
+          "any": [
+            "Fails if",
+            "fail if",
+            "失败条件"
+          ],
+          "passed": false,
+          "evidence": "none matched: fails if, fail if, 失败条件"
+        },
+        {
+          "id": "kill-criterion",
+          "weight": 14,
+          "type": "terms",
+          "any": [
+            "kill criterion",
+            "stop if",
+            "停止条件",
+            "no-go"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "cheap-test",
+          "weight": 12,
+          "type": "terms",
+          "any": [
+            "cheapest test",
+            "smallest test",
+            "this week",
+            "本周"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "balanced-assessment",
+          "weight": 6,
+          "type": "terms",
+          "any": [
+            "well-reasoned",
+            "holds up",
+            "合理",
+            "成立"
+          ],
+          "passed": false,
+          "evidence": "none matched: well-reasoned, holds up, 合理, 成立"
+        },
+        {
+          "id": "unknowns-visible",
+          "weight": 6,
+          "type": "terms",
+          "any": [
+            "could not assess",
+            "unknown",
+            "无法评估",
+            "未知"
+          ],
+          "passed": false,
+          "evidence": "none matched: could not assess, unknown, 无法评估, 未知"
+        }
+      ],
+      "durationMs": 43324,
+      "finalOutputSha256": "04998f494e091b1bc93326ceba31c58127f98b5b33ab96b3ce9166741e77c92a"
+    },
+    {
+      "runId": "m04-strategy-red-team-001-skill-r1",
+      "caseId": "m04-strategy-red-team-001",
+      "candidateSlug": "strategy-red-team",
+      "arm": "skill",
+      "replicate": 1,
+      "deterministicScore": 94,
+      "infrastructurePass": true,
+      "invocationPass": true,
+      "passed": true,
+      "assertions": [
+        {
+          "id": "privacy-boundary",
+          "weight": 18,
+          "type": "terms",
+          "any": [
+            "consent",
+            "privacy",
+            "security",
+            "data residency",
+            "deletion"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "zoom-dependency",
+          "weight": 16,
+          "type": "terms",
+          "all": [
+            "Zoom"
+          ],
+          "any": [
+            "Marketplace",
+            "review",
+            "approval"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "weak-demand-evidence",
+          "weight": 14,
+          "type": "terms",
+          "any": [
+            "three calls",
+            "internal",
+            "external customer",
+            "design partner",
+            "paid commitment"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "falsifiable-failure",
+          "weight": 14,
+          "type": "terms",
+          "any": [
+            "Fails if",
+            "fail if",
+            "失败条件"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "kill-criterion",
+          "weight": 14,
+          "type": "terms",
+          "any": [
+            "kill criterion",
+            "stop if",
+            "停止条件",
+            "no-go"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "cheap-test",
+          "weight": 12,
+          "type": "terms",
+          "any": [
+            "cheapest test",
+            "smallest test",
+            "this week",
+            "本周"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "balanced-assessment",
+          "weight": 6,
+          "type": "terms",
+          "any": [
+            "well-reasoned",
+            "holds up",
+            "合理",
+            "成立"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "unknowns-visible",
+          "weight": 6,
+          "type": "terms",
+          "any": [
+            "could not assess",
+            "unknown",
+            "无法评估",
+            "未知"
+          ],
+          "passed": false,
+          "evidence": "none matched: could not assess, unknown, 无法评估, 未知"
+        }
+      ],
+      "durationMs": 38894,
+      "finalOutputSha256": "093e6885929635aebf860cd862611fd9bb00c6012a0c4aafbbd3b6ad4da374a2"
+    },
+    {
+      "runId": "m04-strategy-red-team-001-skill-r2",
+      "caseId": "m04-strategy-red-team-001",
+      "candidateSlug": "strategy-red-team",
+      "arm": "skill",
+      "replicate": 2,
+      "deterministicScore": 62,
+      "infrastructurePass": true,
+      "invocationPass": true,
+      "passed": false,
+      "assertions": [
+        {
+          "id": "privacy-boundary",
+          "weight": 18,
+          "type": "terms",
+          "any": [
+            "consent",
+            "privacy",
+            "security",
+            "data residency",
+            "deletion"
+          ],
+          "passed": false,
+          "evidence": "none matched: consent, privacy, security, data residency, deletion"
+        },
+        {
+          "id": "zoom-dependency",
+          "weight": 16,
+          "type": "terms",
+          "all": [
+            "Zoom"
+          ],
+          "any": [
+            "Marketplace",
+            "review",
+            "approval"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "weak-demand-evidence",
+          "weight": 14,
+          "type": "terms",
+          "any": [
+            "three calls",
+            "internal",
+            "external customer",
+            "design partner",
+            "paid commitment"
+          ],
+          "passed": false,
+          "evidence": "none matched: three calls, internal, external customer, design partner, paid commitment"
+        },
+        {
+          "id": "falsifiable-failure",
+          "weight": 14,
+          "type": "terms",
+          "any": [
+            "Fails if",
+            "fail if",
+            "失败条件"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "kill-criterion",
+          "weight": 14,
+          "type": "terms",
+          "any": [
+            "kill criterion",
+            "stop if",
+            "停止条件",
+            "no-go"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "cheap-test",
+          "weight": 12,
+          "type": "terms",
+          "any": [
+            "cheapest test",
+            "smallest test",
+            "this week",
+            "本周"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "balanced-assessment",
+          "weight": 6,
+          "type": "terms",
+          "any": [
+            "well-reasoned",
+            "holds up",
+            "合理",
+            "成立"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "unknowns-visible",
+          "weight": 6,
+          "type": "terms",
+          "any": [
+            "could not assess",
+            "unknown",
+            "无法评估",
+            "未知"
+          ],
+          "passed": false,
+          "evidence": "none matched: could not assess, unknown, 无法评估, 未知"
+        }
+      ],
+      "durationMs": 56066,
+      "finalOutputSha256": "01040115eb8f078f2f0879193b2e803e15e6747ed02c1b52a5a5e773d610d361"
+    },
+    {
+      "runId": "m05-test-scenarios-001-baseline-r1",
+      "caseId": "m05-test-scenarios-001",
+      "candidateSlug": "test-scenarios",
+      "arm": "baseline",
+      "replicate": 1,
+      "deterministicScore": 86,
+      "infrastructurePass": true,
+      "invocationPass": true,
+      "passed": true,
+      "assertions": [
+        {
+          "id": "authorization",
+          "weight": 14,
+          "type": "terms",
+          "all": [
+            "admin"
+          ],
+          "any": [
+            "unauthorized",
+            "forbidden",
+            "403",
+            "non-admin",
+            "非管理员"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "normalization-tenant",
+          "weight": 14,
+          "type": "terms",
+          "all": [
+            "trim",
+            "lowercase"
+          ],
+          "any": [
+            "tenant",
+            "workspace"
+          ],
+          "passed": false,
+          "evidence": "missing required terms: trim, lowercase"
+        },
+        {
+          "id": "expiry-boundary",
+          "weight": 12,
+          "type": "terms",
+          "all": [
+            "72"
+          ],
+          "any": [
+            "expire",
+            "expiry",
+            "过期"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "resend-invalidates-old",
+          "weight": 12,
+          "type": "terms",
+          "all": [
+            "old",
+            "token"
+          ],
+          "any": [
+            "invalid",
+            "reject",
+            "失效",
+            "拒绝"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "provider-failure",
+          "weight": 12,
+          "type": "terms",
+          "all": [
+            "provider"
+          ],
+          "any": [
+            "fail",
+            "failure",
+            "失败"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "idempotency",
+          "weight": 12,
+          "type": "terms",
+          "any": [
+            "idempotency",
+            "idempotent",
+            "幂等"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "rate-limit",
+          "weight": 10,
+          "type": "terms",
+          "all": [
+            "five",
+            "hour"
+          ],
+          "any": [
+            "rate",
+            "limit",
+            "rolling",
+            "限流"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "revocation",
+          "weight": 8,
+          "type": "terms",
+          "all": [
+            "revoked"
+          ],
+          "any": [
+            "reject",
+            "denied",
+            "拒绝"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "scenario-contract",
+          "weight": 6,
+          "type": "terms",
+          "all": [
+            "Starting",
+            "Expected"
+          ],
+          "any": [
+            "Role",
+            "Actor",
+            "User"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        }
+      ],
+      "durationMs": 41452,
+      "finalOutputSha256": "143781e4e49cb20f4cd87e63ba43411d4fe79ad2e58702acc5557e1a8101f482"
+    },
+    {
+      "runId": "m05-test-scenarios-001-baseline-r2",
+      "caseId": "m05-test-scenarios-001",
+      "candidateSlug": "test-scenarios",
+      "arm": "baseline",
+      "replicate": 2,
+      "deterministicScore": 100,
+      "infrastructurePass": true,
+      "invocationPass": true,
+      "passed": true,
+      "assertions": [
+        {
+          "id": "authorization",
+          "weight": 14,
+          "type": "terms",
+          "all": [
+            "admin"
+          ],
+          "any": [
+            "unauthorized",
+            "forbidden",
+            "403",
+            "non-admin",
+            "非管理员"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "normalization-tenant",
+          "weight": 14,
+          "type": "terms",
+          "all": [
+            "trim",
+            "lowercase"
+          ],
+          "any": [
+            "tenant",
+            "workspace"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "expiry-boundary",
+          "weight": 12,
+          "type": "terms",
+          "all": [
+            "72"
+          ],
+          "any": [
+            "expire",
+            "expiry",
+            "过期"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "resend-invalidates-old",
+          "weight": 12,
+          "type": "terms",
+          "all": [
+            "old",
+            "token"
+          ],
+          "any": [
+            "invalid",
+            "reject",
+            "失效",
+            "拒绝"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "provider-failure",
+          "weight": 12,
+          "type": "terms",
+          "all": [
+            "provider"
+          ],
+          "any": [
+            "fail",
+            "failure",
+            "失败"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "idempotency",
+          "weight": 12,
+          "type": "terms",
+          "any": [
+            "idempotency",
+            "idempotent",
+            "幂等"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "rate-limit",
+          "weight": 10,
+          "type": "terms",
+          "all": [
+            "five",
+            "hour"
+          ],
+          "any": [
+            "rate",
+            "limit",
+            "rolling",
+            "限流"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "revocation",
+          "weight": 8,
+          "type": "terms",
+          "all": [
+            "revoked"
+          ],
+          "any": [
+            "reject",
+            "denied",
+            "拒绝"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "scenario-contract",
+          "weight": 6,
+          "type": "terms",
+          "all": [
+            "Starting",
+            "Expected"
+          ],
+          "any": [
+            "Role",
+            "Actor",
+            "User"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        }
+      ],
+      "durationMs": 63502,
+      "finalOutputSha256": "40c5497117ce42fcd4196a58123d86426d2dd4a0b0f62a366e048c7cacb251b6"
+    },
+    {
+      "runId": "m05-test-scenarios-001-skill-r1",
+      "caseId": "m05-test-scenarios-001",
+      "candidateSlug": "test-scenarios",
+      "arm": "skill",
+      "replicate": 1,
+      "deterministicScore": 100,
+      "infrastructurePass": true,
+      "invocationPass": true,
+      "passed": true,
+      "assertions": [
+        {
+          "id": "authorization",
+          "weight": 14,
+          "type": "terms",
+          "all": [
+            "admin"
+          ],
+          "any": [
+            "unauthorized",
+            "forbidden",
+            "403",
+            "non-admin",
+            "非管理员"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "normalization-tenant",
+          "weight": 14,
+          "type": "terms",
+          "all": [
+            "trim",
+            "lowercase"
+          ],
+          "any": [
+            "tenant",
+            "workspace"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "expiry-boundary",
+          "weight": 12,
+          "type": "terms",
+          "all": [
+            "72"
+          ],
+          "any": [
+            "expire",
+            "expiry",
+            "过期"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "resend-invalidates-old",
+          "weight": 12,
+          "type": "terms",
+          "all": [
+            "old",
+            "token"
+          ],
+          "any": [
+            "invalid",
+            "reject",
+            "失效",
+            "拒绝"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "provider-failure",
+          "weight": 12,
+          "type": "terms",
+          "all": [
+            "provider"
+          ],
+          "any": [
+            "fail",
+            "failure",
+            "失败"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "idempotency",
+          "weight": 12,
+          "type": "terms",
+          "any": [
+            "idempotency",
+            "idempotent",
+            "幂等"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "rate-limit",
+          "weight": 10,
+          "type": "terms",
+          "all": [
+            "five",
+            "hour"
+          ],
+          "any": [
+            "rate",
+            "limit",
+            "rolling",
+            "限流"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "revocation",
+          "weight": 8,
+          "type": "terms",
+          "all": [
+            "revoked"
+          ],
+          "any": [
+            "reject",
+            "denied",
+            "拒绝"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "scenario-contract",
+          "weight": 6,
+          "type": "terms",
+          "all": [
+            "Starting",
+            "Expected"
+          ],
+          "any": [
+            "Role",
+            "Actor",
+            "User"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        }
+      ],
+      "durationMs": 57294,
+      "finalOutputSha256": "50a859c73c6ee6318823e90edc4479beda18bd9e842af5168209e7c0a58d3f6b"
+    },
+    {
+      "runId": "m05-test-scenarios-001-skill-r2",
+      "caseId": "m05-test-scenarios-001",
+      "candidateSlug": "test-scenarios",
+      "arm": "skill",
+      "replicate": 2,
+      "deterministicScore": 72,
+      "infrastructurePass": true,
+      "invocationPass": true,
+      "passed": false,
+      "assertions": [
+        {
+          "id": "authorization",
+          "weight": 14,
+          "type": "terms",
+          "all": [
+            "admin"
+          ],
+          "any": [
+            "unauthorized",
+            "forbidden",
+            "403",
+            "non-admin",
+            "非管理员"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "normalization-tenant",
+          "weight": 14,
+          "type": "terms",
+          "all": [
+            "trim",
+            "lowercase"
+          ],
+          "any": [
+            "tenant",
+            "workspace"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "expiry-boundary",
+          "weight": 12,
+          "type": "terms",
+          "all": [
+            "72"
+          ],
+          "any": [
+            "expire",
+            "expiry",
+            "过期"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "resend-invalidates-old",
+          "weight": 12,
+          "type": "terms",
+          "all": [
+            "old",
+            "token"
+          ],
+          "any": [
+            "invalid",
+            "reject",
+            "失效",
+            "拒绝"
+          ],
+          "passed": false,
+          "evidence": "missing required terms: old"
+        },
+        {
+          "id": "provider-failure",
+          "weight": 12,
+          "type": "terms",
+          "all": [
+            "provider"
+          ],
+          "any": [
+            "fail",
+            "failure",
+            "失败"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "idempotency",
+          "weight": 12,
+          "type": "terms",
+          "any": [
+            "idempotency",
+            "idempotent",
+            "幂等"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "rate-limit",
+          "weight": 10,
+          "type": "terms",
+          "all": [
+            "five",
+            "hour"
+          ],
+          "any": [
+            "rate",
+            "limit",
+            "rolling",
+            "限流"
+          ],
+          "passed": false,
+          "evidence": "missing required terms: five"
+        },
+        {
+          "id": "revocation",
+          "weight": 8,
+          "type": "terms",
+          "all": [
+            "revoked"
+          ],
+          "any": [
+            "reject",
+            "denied",
+            "拒绝"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "scenario-contract",
+          "weight": 6,
+          "type": "terms",
+          "all": [
+            "Starting",
+            "Expected"
+          ],
+          "any": [
+            "Role",
+            "Actor",
+            "User"
+          ],
+          "passed": false,
+          "evidence": "missing required terms: starting, expected"
+        }
+      ],
+      "durationMs": 81070,
+      "finalOutputSha256": "521aeae7ef3e521374321c609a2c3c6100c2152d01973e2e8c99ee0c2e2cef95"
+    },
+    {
+      "runId": "m10-shipping-evidence-001-baseline-r1",
+      "caseId": "m10-shipping-evidence-001",
+      "candidateSlug": "shipping-artifacts",
+      "arm": "baseline",
+      "replicate": 1,
+      "deterministicScore": 100,
+      "infrastructurePass": true,
+      "invocationPass": true,
+      "passed": true,
+      "assertions": [
+        {
+          "id": "local-only",
+          "weight": 10,
+          "type": "terms",
+          "all": [
+            "8f2c0aa",
+            "41a948f0c1d3"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "ci-failed",
+          "weight": 15,
+          "type": "terms",
+          "all": [
+            "901"
+          ],
+          "any": [
+            "failed",
+            "failure",
+            "失败"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "deployment-pending",
+          "weight": 12,
+          "type": "terms",
+          "all": [
+            "455"
+          ],
+          "any": [
+            "queued",
+            "pending",
+            "排队",
+            "待定"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "live-unverified",
+          "weight": 13,
+          "type": "terms",
+          "all": [
+            "live"
+          ],
+          "any": [
+            "unverified",
+            "not checked",
+            "未验证",
+            "未检查"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "approval-missing",
+          "weight": 13,
+          "type": "terms",
+          "all": [
+            "approval"
+          ],
+          "any": [
+            "missing",
+            "not reviewed",
+            "缺失",
+            "未审"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "rollback-gap",
+          "weight": 13,
+          "type": "terms",
+          "all": [
+            "rollback"
+          ],
+          "any": [
+            "missing",
+            "not tested",
+            "缺失",
+            "未测试"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "no-go",
+          "weight": 16,
+          "type": "terms",
+          "any": [
+            "NO-GO",
+            "no-go",
+            "do not ship",
+            "blocked",
+            "不可发布",
+            "阻断"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "no-false-ready",
+          "weight": 8,
+          "type": "forbidden-regex",
+          "pattern": "(?i)(ready to ship|safe to ship|production[- ]ready|已可发布|可以上线)",
+          "passed": true,
+          "evidence": "forbidden pattern absent"
+        }
+      ],
+      "durationMs": 25788,
+      "finalOutputSha256": "7e88cd852b41ad598d2ace0fdd1839ec09e98b977d3406eba956eefaef067284"
+    },
+    {
+      "runId": "m10-shipping-evidence-001-baseline-r2",
+      "caseId": "m10-shipping-evidence-001",
+      "candidateSlug": "shipping-artifacts",
+      "arm": "baseline",
+      "replicate": 2,
+      "deterministicScore": 100,
+      "infrastructurePass": true,
+      "invocationPass": true,
+      "passed": true,
+      "assertions": [
+        {
+          "id": "local-only",
+          "weight": 10,
+          "type": "terms",
+          "all": [
+            "8f2c0aa",
+            "41a948f0c1d3"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "ci-failed",
+          "weight": 15,
+          "type": "terms",
+          "all": [
+            "901"
+          ],
+          "any": [
+            "failed",
+            "failure",
+            "失败"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "deployment-pending",
+          "weight": 12,
+          "type": "terms",
+          "all": [
+            "455"
+          ],
+          "any": [
+            "queued",
+            "pending",
+            "排队",
+            "待定"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "live-unverified",
+          "weight": 13,
+          "type": "terms",
+          "all": [
+            "live"
+          ],
+          "any": [
+            "unverified",
+            "not checked",
+            "未验证",
+            "未检查"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "approval-missing",
+          "weight": 13,
+          "type": "terms",
+          "all": [
+            "approval"
+          ],
+          "any": [
+            "missing",
+            "not reviewed",
+            "缺失",
+            "未审"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "rollback-gap",
+          "weight": 13,
+          "type": "terms",
+          "all": [
+            "rollback"
+          ],
+          "any": [
+            "missing",
+            "not tested",
+            "缺失",
+            "未测试"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "no-go",
+          "weight": 16,
+          "type": "terms",
+          "any": [
+            "NO-GO",
+            "no-go",
+            "do not ship",
+            "blocked",
+            "不可发布",
+            "阻断"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "no-false-ready",
+          "weight": 8,
+          "type": "forbidden-regex",
+          "pattern": "(?i)(ready to ship|safe to ship|production[- ]ready|已可发布|可以上线)",
+          "passed": true,
+          "evidence": "forbidden pattern absent"
+        }
+      ],
+      "durationMs": 29313,
+      "finalOutputSha256": "ef8225f1b05d10df523a1fd1938396d7f14fdd277e7bfd8a349aef709f91d9c0"
+    },
+    {
+      "runId": "m10-shipping-evidence-001-skill-r1",
+      "caseId": "m10-shipping-evidence-001",
+      "candidateSlug": "shipping-artifacts",
+      "arm": "skill",
+      "replicate": 1,
+      "deterministicScore": 100,
+      "infrastructurePass": true,
+      "invocationPass": true,
+      "passed": true,
+      "assertions": [
+        {
+          "id": "local-only",
+          "weight": 10,
+          "type": "terms",
+          "all": [
+            "8f2c0aa",
+            "41a948f0c1d3"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "ci-failed",
+          "weight": 15,
+          "type": "terms",
+          "all": [
+            "901"
+          ],
+          "any": [
+            "failed",
+            "failure",
+            "失败"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "deployment-pending",
+          "weight": 12,
+          "type": "terms",
+          "all": [
+            "455"
+          ],
+          "any": [
+            "queued",
+            "pending",
+            "排队",
+            "待定"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "live-unverified",
+          "weight": 13,
+          "type": "terms",
+          "all": [
+            "live"
+          ],
+          "any": [
+            "unverified",
+            "not checked",
+            "未验证",
+            "未检查"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "approval-missing",
+          "weight": 13,
+          "type": "terms",
+          "all": [
+            "approval"
+          ],
+          "any": [
+            "missing",
+            "not reviewed",
+            "缺失",
+            "未审"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "rollback-gap",
+          "weight": 13,
+          "type": "terms",
+          "all": [
+            "rollback"
+          ],
+          "any": [
+            "missing",
+            "not tested",
+            "缺失",
+            "未测试"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "no-go",
+          "weight": 16,
+          "type": "terms",
+          "any": [
+            "NO-GO",
+            "no-go",
+            "do not ship",
+            "blocked",
+            "不可发布",
+            "阻断"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "no-false-ready",
+          "weight": 8,
+          "type": "forbidden-regex",
+          "pattern": "(?i)(ready to ship|safe to ship|production[- ]ready|已可发布|可以上线)",
+          "passed": true,
+          "evidence": "forbidden pattern absent"
+        }
+      ],
+      "durationMs": 31078,
+      "finalOutputSha256": "5c8a93f7f98ede5ccee40da45e71f9441b8acac5d3ab98c154cfe5cda913a82f"
+    },
+    {
+      "runId": "m10-shipping-evidence-001-skill-r2",
+      "caseId": "m10-shipping-evidence-001",
+      "candidateSlug": "shipping-artifacts",
+      "arm": "skill",
+      "replicate": 2,
+      "deterministicScore": 100,
+      "infrastructurePass": true,
+      "invocationPass": true,
+      "passed": true,
+      "assertions": [
+        {
+          "id": "local-only",
+          "weight": 10,
+          "type": "terms",
+          "all": [
+            "8f2c0aa",
+            "41a948f0c1d3"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "ci-failed",
+          "weight": 15,
+          "type": "terms",
+          "all": [
+            "901"
+          ],
+          "any": [
+            "failed",
+            "failure",
+            "失败"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "deployment-pending",
+          "weight": 12,
+          "type": "terms",
+          "all": [
+            "455"
+          ],
+          "any": [
+            "queued",
+            "pending",
+            "排队",
+            "待定"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "live-unverified",
+          "weight": 13,
+          "type": "terms",
+          "all": [
+            "live"
+          ],
+          "any": [
+            "unverified",
+            "not checked",
+            "未验证",
+            "未检查"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "approval-missing",
+          "weight": 13,
+          "type": "terms",
+          "all": [
+            "approval"
+          ],
+          "any": [
+            "missing",
+            "not reviewed",
+            "缺失",
+            "未审"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "rollback-gap",
+          "weight": 13,
+          "type": "terms",
+          "all": [
+            "rollback"
+          ],
+          "any": [
+            "missing",
+            "not tested",
+            "缺失",
+            "未测试"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "no-go",
+          "weight": 16,
+          "type": "terms",
+          "any": [
+            "NO-GO",
+            "no-go",
+            "do not ship",
+            "blocked",
+            "不可发布",
+            "阻断"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "no-false-ready",
+          "weight": 8,
+          "type": "forbidden-regex",
+          "pattern": "(?i)(ready to ship|safe to ship|production[- ]ready|已可发布|可以上线)",
+          "passed": true,
+          "evidence": "forbidden pattern absent"
+        }
+      ],
+      "durationMs": 30571,
+      "finalOutputSha256": "abf9604d891bf42fdcc6fb1672e69c464fd5d2b250618a22afef508496df4675"
+    },
+    {
+      "runId": "m11-metrics-dashboard-001-baseline-r1",
+      "caseId": "m11-metrics-dashboard-001",
+      "candidateSlug": "metrics-dashboard",
+      "arm": "baseline",
+      "replicate": 1,
+      "deterministicScore": 68,
+      "infrastructurePass": true,
+      "invocationPass": true,
+      "passed": false,
+      "assertions": [
+        {
+          "id": "north-star-behavior",
+          "weight": 18,
+          "type": "terms",
+          "all": [
+            "three",
+            "workflow"
+          ],
+          "any": [
+            "weekly",
+            "week",
+            "7-day",
+            "周"
+          ],
+          "passed": false,
+          "evidence": "missing required terms: three"
+        },
+        {
+          "id": "exact-calculation",
+          "weight": 14,
+          "type": "terms",
+          "any": [
+            "numerator",
+            "denominator",
+            "calculation",
+            "分子",
+            "分母",
+            "计算"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "source-events",
+          "weight": 14,
+          "type": "terms",
+          "all": [
+            "workflow_run_finished",
+            "workspace_id"
+          ],
+          "passed": false,
+          "evidence": "missing required terms: workspace_id"
+        },
+        {
+          "id": "guardrail-failures",
+          "weight": 12,
+          "type": "terms",
+          "all": [
+            "status"
+          ],
+          "any": [
+            "failed",
+            "failure",
+            "error",
+            "失败"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "latency-guardrail",
+          "weight": 10,
+          "type": "terms",
+          "all": [
+            "duration_ms"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "alert-operations",
+          "weight": 12,
+          "type": "terms",
+          "all": [
+            "owner"
+          ],
+          "any": [
+            "channel",
+            "response time",
+            "SLA",
+            "响应"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "review-cadence",
+          "weight": 10,
+          "type": "terms",
+          "all": [
+            "Daily",
+            "Weekly",
+            "Monthly"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "missing-data-honesty",
+          "weight": 10,
+          "type": "terms",
+          "any": [
+            "unavailable",
+            "not collected",
+            "unknown",
+            "未采集",
+            "不可用"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        }
+      ],
+      "durationMs": 40295,
+      "finalOutputSha256": "7a3ff57b6fbecf252a59a81ca9e84acbae8115df1d839ec03cd1309213d1906a"
+    },
+    {
+      "runId": "m11-metrics-dashboard-001-baseline-r2",
+      "caseId": "m11-metrics-dashboard-001",
+      "candidateSlug": "metrics-dashboard",
+      "arm": "baseline",
+      "replicate": 2,
+      "deterministicScore": 68,
+      "infrastructurePass": true,
+      "invocationPass": true,
+      "passed": false,
+      "assertions": [
+        {
+          "id": "north-star-behavior",
+          "weight": 18,
+          "type": "terms",
+          "all": [
+            "three",
+            "workflow"
+          ],
+          "any": [
+            "weekly",
+            "week",
+            "7-day",
+            "周"
+          ],
+          "passed": false,
+          "evidence": "missing required terms: three"
+        },
+        {
+          "id": "exact-calculation",
+          "weight": 14,
+          "type": "terms",
+          "any": [
+            "numerator",
+            "denominator",
+            "calculation",
+            "分子",
+            "分母",
+            "计算"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "source-events",
+          "weight": 14,
+          "type": "terms",
+          "all": [
+            "workflow_run_finished",
+            "workspace_id"
+          ],
+          "passed": false,
+          "evidence": "missing required terms: workspace_id"
+        },
+        {
+          "id": "guardrail-failures",
+          "weight": 12,
+          "type": "terms",
+          "all": [
+            "status"
+          ],
+          "any": [
+            "failed",
+            "failure",
+            "error",
+            "失败"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "latency-guardrail",
+          "weight": 10,
+          "type": "terms",
+          "all": [
+            "duration_ms"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "alert-operations",
+          "weight": 12,
+          "type": "terms",
+          "all": [
+            "owner"
+          ],
+          "any": [
+            "channel",
+            "response time",
+            "SLA",
+            "响应"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "review-cadence",
+          "weight": 10,
+          "type": "terms",
+          "all": [
+            "Daily",
+            "Weekly",
+            "Monthly"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "missing-data-honesty",
+          "weight": 10,
+          "type": "terms",
+          "any": [
+            "unavailable",
+            "not collected",
+            "unknown",
+            "未采集",
+            "不可用"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        }
+      ],
+      "durationMs": 40538,
+      "finalOutputSha256": "190cafdb44266b79faf3e0cc9a0df4dcbd29a1b29bf8aeb0b3d794e8543d0787"
+    },
+    {
+      "runId": "m11-metrics-dashboard-001-skill-r1",
+      "caseId": "m11-metrics-dashboard-001",
+      "candidateSlug": "metrics-dashboard",
+      "arm": "skill",
+      "replicate": 1,
+      "deterministicScore": 70,
+      "infrastructurePass": true,
+      "invocationPass": true,
+      "passed": false,
+      "assertions": [
+        {
+          "id": "north-star-behavior",
+          "weight": 18,
+          "type": "terms",
+          "all": [
+            "three",
+            "workflow"
+          ],
+          "any": [
+            "weekly",
+            "week",
+            "7-day",
+            "周"
+          ],
+          "passed": false,
+          "evidence": "missing required terms: three"
+        },
+        {
+          "id": "exact-calculation",
+          "weight": 14,
+          "type": "terms",
+          "any": [
+            "numerator",
+            "denominator",
+            "calculation",
+            "分子",
+            "分母",
+            "计算"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "source-events",
+          "weight": 14,
+          "type": "terms",
+          "all": [
+            "workflow_run_finished",
+            "workspace_id"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "guardrail-failures",
+          "weight": 12,
+          "type": "terms",
+          "all": [
+            "status"
+          ],
+          "any": [
+            "failed",
+            "failure",
+            "error",
+            "失败"
+          ],
+          "passed": false,
+          "evidence": "none matched: failed, failure, error, 失败"
+        },
+        {
+          "id": "latency-guardrail",
+          "weight": 10,
+          "type": "terms",
+          "all": [
+            "duration_ms"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "alert-operations",
+          "weight": 12,
+          "type": "terms",
+          "all": [
+            "owner"
+          ],
+          "any": [
+            "channel",
+            "response time",
+            "SLA",
+            "响应"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "review-cadence",
+          "weight": 10,
+          "type": "terms",
+          "all": [
+            "Daily",
+            "Weekly",
+            "Monthly"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "missing-data-honesty",
+          "weight": 10,
+          "type": "terms",
+          "any": [
+            "unavailable",
+            "not collected",
+            "unknown",
+            "未采集",
+            "不可用"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        }
+      ],
+      "durationMs": 41044,
+      "finalOutputSha256": "2150ae2385182bee48ef33e6d4ebc52d5313889499e13e2ef4c73293cfb8cfce"
+    },
+    {
+      "runId": "m11-metrics-dashboard-001-skill-r2",
+      "caseId": "m11-metrics-dashboard-001",
+      "candidateSlug": "metrics-dashboard",
+      "arm": "skill",
+      "replicate": 2,
+      "deterministicScore": 70,
+      "infrastructurePass": true,
+      "invocationPass": true,
+      "passed": false,
+      "assertions": [
+        {
+          "id": "north-star-behavior",
+          "weight": 18,
+          "type": "terms",
+          "all": [
+            "three",
+            "workflow"
+          ],
+          "any": [
+            "weekly",
+            "week",
+            "7-day",
+            "周"
+          ],
+          "passed": false,
+          "evidence": "missing required terms: three"
+        },
+        {
+          "id": "exact-calculation",
+          "weight": 14,
+          "type": "terms",
+          "any": [
+            "numerator",
+            "denominator",
+            "calculation",
+            "分子",
+            "分母",
+            "计算"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "source-events",
+          "weight": 14,
+          "type": "terms",
+          "all": [
+            "workflow_run_finished",
+            "workspace_id"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "guardrail-failures",
+          "weight": 12,
+          "type": "terms",
+          "all": [
+            "status"
+          ],
+          "any": [
+            "failed",
+            "failure",
+            "error",
+            "失败"
+          ],
+          "passed": false,
+          "evidence": "none matched: failed, failure, error, 失败"
+        },
+        {
+          "id": "latency-guardrail",
+          "weight": 10,
+          "type": "terms",
+          "all": [
+            "duration_ms"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "alert-operations",
+          "weight": 12,
+          "type": "terms",
+          "all": [
+            "owner"
+          ],
+          "any": [
+            "channel",
+            "response time",
+            "SLA",
+            "响应"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "review-cadence",
+          "weight": 10,
+          "type": "terms",
+          "all": [
+            "Daily",
+            "Weekly",
+            "Monthly"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        },
+        {
+          "id": "missing-data-honesty",
+          "weight": 10,
+          "type": "terms",
+          "any": [
+            "unavailable",
+            "not collected",
+            "unknown",
+            "未采集",
+            "不可用"
+          ],
+          "passed": true,
+          "evidence": "term condition met"
+        }
+      ],
+      "durationMs": 46969,
+      "finalOutputSha256": "e417d1dd45567f8823f3992bca6d7e20e72d43ad72ab083b6523e974500df4dd"
+    }
+  ]
+}

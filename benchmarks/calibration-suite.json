@@ -1,0 +1,97 @@
+{
+  "schemaVersion": "agent-skill-calibration-suite.v1",
+  "suiteId": "opc-instruction-calibration-2026-09-16",
+  "status": "pre-registered",
+  "purpose": "Qualify the isolated A/B runner and deterministic scorer before the full pilot.",
+  "model": "gpt-5.6-luna",
+  "reasoningEffort": "low",
+  "replicatesPerArm": 2,
+  "sandboxPolicy": "codex-read-only-network-disabled",
+  "cases": [
+    {
+      "caseId": "m04-strategy-red-team-001",
+      "candidateSlug": "strategy-red-team",
+      "module": "M04",
+      "taskFamily": "strategy-audit",
+      "riskClass": "read-only",
+      "prompt": "Read input/plan.md. Stress-test the plan for a go/no-go meeting. Rank the few assumptions that can kill it, say what evidence can be obtained this week, and end with a clear next action. Use only facts in the file. Do not browse, edit files, or invent evidence. Keep the answer under 900 words.",
+      "files": {
+        "input/plan.md": "# Pilot plan: MeetPilot\n\nWe will launch an AI meeting assistant in six weeks with two engineers. It records Zoom sales calls, transcribes them, writes CRM notes, and charges $49 per seat. We heard enthusiasm in three calls with our own sales team; no external customer has used a prototype. The $49 price copies a competitor's public price. We promise one-click Zoom installation, but have not started Zoom Marketplace review. Raw audio and transcripts will be stored for 12 months. Security, consent, data residency, deletion, and legal review are not yet assigned. Success is 1,000 paid seats by day 30. Two design partners said they would try it, but neither signed a paid commitment."
+      },
+      "assertions": [
+        { "id": "privacy-boundary", "weight": 18, "type": "terms", "any": ["consent", "privacy", "security", "data residency", "deletion"] },
+        { "id": "zoom-dependency", "weight": 16, "type": "terms", "all": ["Zoom"], "any": ["Marketplace", "review", "approval"] },
+        { "id": "weak-demand-evidence", "weight": 14, "type": "terms", "any": ["three calls", "internal", "external customer", "design partner", "paid commitment"] },
+        { "id": "falsifiable-failure", "weight": 14, "type": "terms", "any": ["Fails if", "fail if", "失败条件"] },
+        { "id": "kill-criterion", "weight": 14, "type": "terms", "any": ["kill criterion", "stop if", "停止条件", "no-go"] },
+        { "id": "cheap-test", "weight": 12, "type": "terms", "any": ["cheapest test", "smallest test", "this week", "本周"] },
+        { "id": "balanced-assessment", "weight": 6, "type": "terms", "any": ["well-reasoned", "holds up", "合理", "成立"] },
+        { "id": "unknowns-visible", "weight": 6, "type": "terms", "any": ["could not assess", "unknown", "无法评估", "未知"] }
+      ]
+    },
+    {
+      "caseId": "m05-test-scenarios-001",
+      "candidateSlug": "test-scenarios",
+      "module": "M05",
+      "taskFamily": "acceptance-design",
+      "riskClass": "read-only",
+      "prompt": "Read input/story.md and produce executable acceptance-test scenarios. Cover the main path, authorization, boundaries, failures, retry behavior, and recovery. Every scenario needs starting state, actor, steps, and observable expected results. Do not browse or edit files. Keep the answer under 1,100 words.",
+      "files": {
+        "input/story.md": "# Invite a workspace member\n\nAs a workspace admin, I want to invite a teammate by email so they can join my workspace.\n\nAcceptance rules:\n- Only an admin may invite.\n- Trim and lowercase email before checking uniqueness within the same tenant.\n- A pending invite expires exactly 72 hours after creation.\n- Resending creates a new token and immediately invalidates the old token.\n- If the email provider fails, no active member may be created; a retry with the same idempotency key must not create duplicates.\n- One admin may create at most five invites in a rolling hour.\n- A revoked invite must always be rejected."
+      },
+      "assertions": [
+        { "id": "authorization", "weight": 14, "type": "terms", "all": ["admin"], "any": ["unauthorized", "forbidden", "403", "non-admin", "非管理员"] },
+        { "id": "normalization-tenant", "weight": 14, "type": "terms", "all": ["trim", "lowercase"], "any": ["tenant", "workspace"] },
+        { "id": "expiry-boundary", "weight": 12, "type": "terms", "all": ["72"], "any": ["expire", "expiry", "过期"] },
+        { "id": "resend-invalidates-old", "weight": 12, "type": "terms", "all": ["old", "token"], "any": ["invalid", "reject", "失效", "拒绝"] },
+        { "id": "provider-failure", "weight": 12, "type": "terms", "all": ["provider"], "any": ["fail", "failure", "失败"] },
+        { "id": "idempotency", "weight": 12, "type": "terms", "any": ["idempotency", "idempotent", "幂等"] },
+        { "id": "rate-limit", "weight": 10, "type": "terms", "all": ["five", "hour"], "any": ["rate", "limit", "rolling", "限流"] },
+        { "id": "revocation", "weight": 8, "type": "terms", "all": ["revoked"], "any": ["reject", "denied", "拒绝"] },
+        { "id": "scenario-contract", "weight": 6, "type": "terms", "all": ["Starting", "Expected"], "any": ["Role", "Actor", "User"] }
+      ]
+    },
+    {
+      "caseId": "m10-shipping-evidence-001",
+      "candidateSlug": "shipping-artifacts",
+      "module": "M10",
+      "taskFamily": "release-evidence",
+      "riskClass": "read-only",
+      "prompt": "Read input/evidence.md. Prepare a concise shipping-readiness evidence pack for the release owner. Keep local, CI, deployment, live access, approval, rollback, and provenance as separate claims. State go/no-go and the smallest actions needed to unblock it. Do not browse, edit files, or infer missing success. Keep the answer under 900 words.",
+      "files": {
+        "input/evidence.md": "# Candidate v1.7.0\n\n- Local: unit tests passed on commit 8f2c0aa; artifact SHA-256 is 41a948f0c1d3.\n- CI: GitHub Actions run 901 failed in the integration-test job.\n- Deployment: Pages deployment 455 is queued; no deployment URL is available.\n- Live: no public bytes or HTTP response have been checked.\n- Approval: security owner has not reviewed the new OAuth scope. Product owner approval is also missing.\n- Rollback: no rollback command, owner, or restore-time target is documented.\n- Migration: schema migration exists, but rollback migration has not been tested.\n"
+      },
+      "assertions": [
+        { "id": "local-only", "weight": 10, "type": "terms", "all": ["8f2c0aa", "41a948f0c1d3"] },
+        { "id": "ci-failed", "weight": 15, "type": "terms", "all": ["901"], "any": ["failed", "failure", "失败"] },
+        { "id": "deployment-pending", "weight": 12, "type": "terms", "all": ["455"], "any": ["queued", "pending", "排队", "待定"] },
+        { "id": "live-unverified", "weight": 13, "type": "terms", "all": ["live"], "any": ["unverified", "not checked", "未验证", "未检查"] },
+        { "id": "approval-missing", "weight": 13, "type": "terms", "all": ["approval"], "any": ["missing", "not reviewed", "缺失", "未审"] },
+        { "id": "rollback-gap", "weight": 13, "type": "terms", "all": ["rollback"], "any": ["missing", "not tested", "缺失", "未测试"] },
+        { "id": "no-go", "weight": 16, "type": "terms", "any": ["NO-GO", "no-go", "do not ship", "blocked", "不可发布", "阻断"] },
+        { "id": "no-false-ready", "weight": 8, "type": "forbidden-regex", "pattern": "(?i)(ready to ship|safe to ship|production[- ]ready|已可发布|可以上线)" }
+      ]
+    },
+    {
+      "caseId": "m11-metrics-dashboard-001",
+      "candidateSlug": "metrics-dashboard",
+      "module": "M11",
+      "taskFamily": "metric-definition",
+      "riskClass": "read-only",
+      "prompt": "Read input/context.md and define a decision-ready product metrics dashboard. Give exact metric definitions, source events, time windows, guardrails, targets, alert owner/channel/response time, layout, and review cadence. Flag unavailable data instead of inventing current values. Do not browse or edit files. Keep the answer under 1,100 words.",
+      "files": {
+        "input/context.md": "# FlowForge metrics context\n\nFlowForge helps five-or-more-person teams automate recurring approval workflows. The decision is whether onboarding changes improve durable team value without causing failed runs. Available events: workspace_created(workspace_id, plan, at), member_invited(workspace_id, user_id, at), workflow_published(workspace_id, workflow_id, at), workflow_run_finished(workspace_id, workflow_id, status, duration_ms, at), subscription_started(workspace_id, mrr, at), subscription_cancelled(workspace_id, at), support_ticket_opened(workspace_id, severity, at). We do not yet collect satisfaction surveys or acquisition cost. A workspace is meaningfully active in a week only if at least three distinct published workflows finish successfully. Signups alone are considered vanity."
+      },
+      "assertions": [
+        { "id": "north-star-behavior", "weight": 18, "type": "terms", "all": ["three", "workflow"], "any": ["weekly", "week", "7-day", "周"] },
+        { "id": "exact-calculation", "weight": 14, "type": "terms", "any": ["numerator", "denominator", "calculation", "分子", "分母", "计算"] },
+        { "id": "source-events", "weight": 14, "type": "terms", "all": ["workflow_run_finished", "workspace_id"] },
+        { "id": "guardrail-failures", "weight": 12, "type": "terms", "all": ["status"], "any": ["failed", "failure", "error", "失败"] },
+        { "id": "latency-guardrail", "weight": 10, "type": "terms", "all": ["duration_ms"] },
+        { "id": "alert-operations", "weight": 12, "type": "terms", "all": ["owner"], "any": ["channel", "response time", "SLA", "响应"] },
+        { "id": "review-cadence", "weight": 10, "type": "terms", "all": ["Daily", "Weekly", "Monthly"] },
+        { "id": "missing-data-honesty", "weight": 10, "type": "terms", "any": ["unavailable", "not collected", "unknown", "未采集", "不可用"] }
+      ]
+    }
+  ]
+}

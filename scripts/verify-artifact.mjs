@@ -26,6 +26,10 @@ if (start === -1 || end === -1) {
   if (data.agenticProjects.length !== 81 || data.meta.agenticCoverage.repositoryCount !== 81) errors.push("Agentic project count is not 81");
   if (data.agenticSkills.length !== 40 || data.meta.agenticCoverage.curatedSkillCount !== 40) errors.push("Curated Agent Skill count is not 40");
   if (data.meta.agenticCoverage.runtimeVerified !== 0) errors.push("Static release claims runtime-verified Agent Skills");
+  if (data.agenticBenchmark?.coverage?.completedRuns !== 16) errors.push("Calibration run count is not 16");
+  if (data.agenticBenchmark?.coverage?.taskBenchmarked !== 0 || data.agenticBenchmark?.coverage?.promotedToDefault !== 0) errors.push("Calibration was upgraded into benchmark or default status");
+  if (data.agenticBenchmark?.suite?.scorerQualification !== "failed-needs-v2") errors.push("Calibration scorer boundary is missing");
+  if (data.agenticBenchmark?.results?.some((item) => item.scoreUsableForRanking !== false || item.benchmarkState !== "calibration-only")) errors.push("Diagnostic calibration score is exposed as ranking evidence");
   const pluginIds = new Set(data.plugins.map((item) => item.id));
   const agenticProjectIds = new Set(data.agenticProjects.map((item) => item.id));
   if (pluginIds.size !== data.plugins.length) errors.push("Duplicate plugin IDs");
@@ -49,6 +53,9 @@ if (start === -1 || end === -1) {
     if (!item.coreThree?.does || !item.coreThree?.conditions || !item.coreThree?.proof) errors.push("Missing Agent Skill core-three: " + item.id);
     if (item.path && (!item.blobSha || !item.sourceUrl)) errors.push("Agent Skill path lacks frozen blob evidence: " + item.id);
   }
+  const benchmarkIds = new Set((data.agenticBenchmark?.results || []).map((item) => item.candidateId));
+  if (benchmarkIds.size !== 4 || data.agenticSkills.filter((item) => item.benchmark).length !== 4) errors.push("Expected four benchmark calibration candidates");
+  if (data.agenticSkills.some((item) => Boolean(item.benchmark) !== benchmarkIds.has(item.id))) errors.push("Embedded benchmark linkage mismatch");
   for (const moduleId of moduleIds) {
     const ranks = data.agenticSkills.filter((item) => item.primaryModule === moduleId).map((item) => item.featuredRank).sort((a, b) => a - b);
     if (ranks.length > 3 || ranks.some((rank, index) => rank !== index + 1)) errors.push("Invalid Agent Skill ranks for " + moduleId);
@@ -77,6 +84,7 @@ for (const id of ["overview-metrics", "node-list", "node-panel", "search", "resu
 }
 if (!html.includes("function coreTexts(item)")) errors.push("Runtime core-three generator missing");
 if (!html.includes('new DecompressionStream("gzip")')) errors.push("Runtime gzip decoder missing");
+if (!html.includes("16 次 A/B 校准")) errors.push("Benchmark calibration disclosure missing");
 
 const artifactHash = createHash("sha256").update(html).digest("hex");
 if (manifest.artifactSha256 !== artifactHash) errors.push("Manifest SHA-256 does not match artifact");

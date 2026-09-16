@@ -68,9 +68,25 @@ Skill 记录以 `canonicalPluginId + releaseVersion + skillName` 为键。父插
 
 项目质量分由相关度 25%、能力价值 20%、工作流就绪度 20%、有效性证据 15%、项目健康 10% 和信任 10% 组成。公开声量单列，使用 Stars、forks、subscribers、增长速度和 release 新鲜度的对数归一代理；它最多只占研究优先级 8%，且不能越过硬门槛。Stars 不是安装量、用户数、留存或生产采用。
 
-本轮验证状态只允许 `docs-only` 和 `structure-checked`。`runtimeVerified` 固定为 0：没有安装第三方仓库，没有运行其代码，没有做对照 benchmark，也没有生产验证。
+全量 40 条候选的正式验证状态仍只允许 `docs-only` 和 `structure-checked`，`runtimeVerified` 继续固定为 0。第一轮另有 4 条单文件 Skill 进入“执行器校准”：只把固定 blob 放进一次性工作区，让同一模型在 baseline / Skill 两个 arm 上各运行两次。它验证的是 runner，不是候选效果，因此不会改写上述正式状态。
 
-## 6. 排序
+## 6. Benchmark 门槛
+
+最小实验单位是 `candidate × fixture × arm × replicate`。baseline 与 Skill arm 的模型、reasoning effort、输入、输出合同和权限保持一致；Skill arm 只多出固定到 `repo + HEAD + path/blob` 的候选指令。自动触发另做 smoke suite，不能与“指令本身有没有价值”混为一项。
+
+证据等级严格分开：
+
+- `structure-checked`：只核对静态结构与来源；
+- `isolated-materialized`：固定文件被放入一次性目录并实际读取，但没有证明完整安装或 OS 级网络隔离；
+- `smoke-tested`：显式调用、正负触发、缺依赖和失败边界全部过门；
+- `task-benchmarked`：至少 8 个独立 fixture × 2 arm × 3 次重复，且通过效果、安全、依赖、可撤回四轴硬门；
+- 默认 OPC 栈：只能由 `task-benchmarked` 候选经人工审查晋级。
+
+第一版校准覆盖 4 条 B0 单文件 Skill、16 次运行。执行器结果为：16/16 完成、8/8 Skill arm 实际读取固定 `SKILL.md`、8/8 baseline 没有读取、16/16 工作区前后哈希一致。它没有运行第三方脚本，也没有真实账号、外部写入或生产动作。
+
+评分器没有过门：关键词匹配对中英文和 `3 / three` 等写法敏感；两条候选的重复分差超过 20；发布证据 fixture 的 baseline 与 Skill 都达到 100，出现天花板效应。全部 delta 只作诊断，`scoreUsableForRanking` 固定为 false；`smokeTested`、`taskBenchmarked` 和 `promotedToDefault` 均为 0。下一轮必须先冻结 v2 多语言断言、增加对抗样例并校准独立盲评。
+
+## 7. 排序
 
 网站保留三种可切换视角，不把它们伪装成一个“真排名”：
 
@@ -82,7 +98,7 @@ Skill 记录以 `canonicalPluginId + releaseVersion + skillName` 为键。父插
 
 工作台不是第四种自动分数。插件侧在每个节点的完整排名上增加一层显式编辑选择：优先考虑 Agent 全栈开发的通用性、当前是否已安装，以及是否能给出清楚的最小验证。Agent Skill 侧优先显示直接 Skill，并把整包依赖与需封装能力标为受控候选。每节点最多 3 个；M01 与 M10 只有 2 个过门槛候选。原始排名不被改写，用户可一键回到完整目录复核。这个编辑层用于缩小候选，不代表作者背书、运行通过或生产可用。
 
-## 7. 状态与风险
+## 8. 状态与风险
 
 `installed` 仅表示快照中的安装状态。网站没有逐个完成认证、工具调用、写入、安全或生产稳定性测试，因此不会把任何项目标为 `Ready Now`。
 
@@ -92,8 +108,8 @@ Skill 记录以 `canonicalPluginId + releaseVersion + skillName` 为键。父插
 
 它是根据说明和接口形态推断的审计提示，不是正式权限清单。写入、删除、发信、付费、发布、交易或生产动作仍需查看真实工具 schema、最小权限、预览或 dry-run、read-back 与明确授权。
 
-## 8. 公开发布边界
+## 9. 公开发布边界
 
-单页只内嵌派生后的必要字段，不发布本地配置、认证信息、原始缓存路径或研究临时文件。派生数据以 `gzip + Base64` 内嵌，页面使用浏览器原生 `DecompressionStream` 解压；不依赖 CDN、外部脚本或数据请求。第三方网站不会被自动加载；外链只在用户点击时导航。
+单页只内嵌派生后的必要字段，不发布本地配置、认证信息、原始缓存路径、原始 Agent 事件流或研究临时文件。Benchmark 原始回答和事件记录位于 Git 忽略目录；页面只发布冻结版本、运行条件、聚合断言、哈希和限制。派生数据以 `gzip + Base64` 内嵌，页面使用浏览器原生 `DecompressionStream` 解压；不依赖 CDN、外部脚本或数据请求。第三方网站不会被自动加载；外链只在用户点击时导航。
 
 发布验证分开记录：本地 HTML 检查、Git commit、远端 push、Actions workflow、Pages deployment 与公开页面字节验证，任何一项都不能替代下一项。

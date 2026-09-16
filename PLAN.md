@@ -75,6 +75,25 @@
 - 公网文件：3,109,539 bytes；SHA-256 `f3c86f12baf2e37e45ca967c20b49e3f5680628fe62cf01ad79d126dd09af86e`，与本地逐字节一致。
 - 公网页面已解压并显示 `Agent OPC Atlas`；双工作台切换、M06 三个 Agent Skill、研究范围文案和浏览器控制台均通过复核。
 
+## Phase 8 — Agent Skill 可复现 Benchmark
+
+- [x] 将 40 条候选分成 B0–B5 与 S0；记录风险、测试模式、最小物料和首批 12 条。
+- [x] 冻结 baseline / Skill 双 arm、fixture、重复次数、四轴门槛、停止条件和不晋级边界。
+- [x] 实现固定 Git blob 校验、一次性工作区、Codex ephemeral runner、只读哈希、结构化输出、事件摘要和可复算 scorer。
+- [x] 对 4 条 B0 单文件 Skill 完成 16 次 A/B 校准；16 次执行成功，8 个 Skill arm 全部读取目标 Skill，工作区零变化。
+- [x] 对第一版 scorer 做反向审计；确认语言敏感、高重复方差和天花板效应，明确判定 `failed-needs-v2`，0 条晋级。
+- [x] 把校准事实、失败原因和 0 晋级边界接回网站、manifest 与独立 artifact verifier。
+- [ ] 冻结 v2 多语言语义断言，加入对抗 fixture，并用独立盲评样本校准 Judge。
+- [ ] 对 12 条首批候选各跑 4 fixture × 2 arm × 2 replicate 的淘汰型 pilot。
+- [ ] 对 pilot 过门者运行正式 8 fixture × 2 arm × 3 replicate benchmark，再由人工决定默认 OPC 栈。
+
+### Phase 8A 校准结论
+
+- 校准不是能力排名。诊断 delta 不得用于重排 40 条候选。
+- `isolatedMaterialized = 4`；`isolatedInstalled = 0`；`smokeTested = 0`；`taskBenchmarked = 0`；`promotedToDefault = 0`。
+- web search 已禁用，事件中未发现网络命令；本轮没有独立证明 OS 级 egress 阻断，因此不使用“安全沙箱已验证”措辞。
+- 原始运行目录不提交、不发布；公开结果只保留 provenance、断言、聚合和失败边界。
+
 ## 发布收据
 
 - 内容提交：`4783fdd3ce7d704418efe77aced5a00ad9b2c61f`。

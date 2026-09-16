@@ -9,8 +9,8 @@ const args = Object.fromEntries(process.argv.slice(2).map((arg) => {
   const parts = arg.replace(/^--/, "").split("=");
   return [parts.shift(), parts.length ? parts.join("=") : true];
 }));
-if (!args.snapshot || !args.catalog || !args["agentic-source"] || !args["agentic-evaluations"]) {
-  console.error("Usage: node scripts/build-site.mjs --snapshot=... --catalog=... --agentic-source=... --agentic-evaluations=... [--local-cache=...] [--output=public/index.html] [--manifest=data/build-manifest.json]");
+if (!args.snapshot || !args.catalog || !args["agentic-source"] || !args["agentic-evaluations"] || !args["agentic-benchmarks"]) {
+  console.error("Usage: node scripts/build-site.mjs --snapshot=... --catalog=... --agentic-source=... --agentic-evaluations=... --agentic-benchmarks=... [--local-cache=...] [--output=public/index.html] [--manifest=data/build-manifest.json]");
   process.exit(2);
 }
 
@@ -22,10 +22,12 @@ const snapshotRaw = readFileSync(args.snapshot, "utf8");
 const catalogRaw = readFileSync(args.catalog, "utf8");
 const agenticSourceRaw = readFileSync(args["agentic-source"], "utf8");
 const agenticEvaluationsRaw = readFileSync(args["agentic-evaluations"], "utf8");
+const agenticBenchmarkRaw = readFileSync(args["agentic-benchmarks"], "utf8");
 const snapshot = JSON.parse(snapshotRaw);
 const catalog = JSON.parse(catalogRaw);
 const agenticSource = JSON.parse(agenticSourceRaw);
 const agenticEvaluations = JSON.parse(agenticEvaluationsRaw);
+const agenticBenchmark = JSON.parse(agenticBenchmarkRaw);
 const sourceRows = snapshot.queries.plugins.rows;
 const catalogRows = catalog.plugins || [];
 const VIBECODING_SHA = "d0a611e7d86939ba873af2bd5e686e64b07f85ea";
@@ -413,6 +415,7 @@ const AGENTIC_FORM_LABELS = {
   quarantined: "隔离观察",
 };
 const agenticProjectMap = new Map();
+const agenticBenchmarkMap = new Map(agenticBenchmark.results.map((item) => [item.candidateId, item]));
 const agenticProjects = agenticEvaluations.projects.map((project) => {
   const item = {
     ...project,
@@ -442,6 +445,7 @@ const agenticProjects = agenticEvaluations.projects.map((project) => {
 const agenticSkills = agenticEvaluations.curatedSkills.map((skill) => {
   const parent = agenticProjectMap.get(skill.repoFullName.toLowerCase());
   if (!parent) throw new Error("Agent Skill parent project is missing: " + skill.id);
+  const benchmark = agenticBenchmarkMap.get(skill.id) || null;
   return {
     ...skill,
     parentId: parent.id,
@@ -450,7 +454,7 @@ const agenticSkills = agenticEvaluations.curatedSkills.map((skill) => {
     shape: AGENTIC_FORM_LABELS[skill.capabilityForm] || skill.capabilityForm,
     installed: false,
     inventoryState: "GitHub 外部 Skill",
-    runtimeState: skill.verificationState === "docs-only" ? "待封装 · 未实测" : "结构已核对 · 未实测",
+    runtimeState: benchmark ? "A/B 校准 · 不可排名" : skill.verificationState === "docs-only" ? "待封装 · 未实测" : "结构已核对 · 未实测",
     authPolicy: "按 Skill 依赖另行核对",
     artifactRoles: [skill.effectClass === "read-only" ? "input/read" : "author"],
     gateEvidence: gatesFor(skill.primaryModule),
@@ -466,6 +470,7 @@ const agenticSkills = agenticEvaluations.curatedSkills.map((skill) => {
     githubUrl: skill.repoUrl,
     evidenceLevel: skill.verificationState,
     claimSource: skill.path ? "frozen-skill-path" : "repository-workflow",
+    benchmark,
   };
 });
 
@@ -500,6 +505,12 @@ const data = {
     reviewCount: plugins.filter((item) => item.matchNeedsReview).length,
     skillCoverage, sourceCommits: { vibecoding: VIBECODING_SHA, shuorenhua: SHUORENHUA_SHA },
     agenticCoverage: agenticEvaluations.coverage,
+    agenticBenchmark: {
+      suite: agenticBenchmark.suite,
+      coverage: agenticBenchmark.coverage,
+      calibrationReview: agenticBenchmark.calibrationReview,
+      boundary: agenticBenchmark.boundary,
+    },
     agenticSource: {
       listUrl: agenticEvaluations.source.listUrl,
       capturedAt: agenticEvaluations.source.capturedAt,
@@ -510,10 +521,18 @@ const data = {
     sourceHashes: {
       snapshot: sha256(snapshotRaw), catalog: sha256(catalogRaw),
       agenticSource: sha256(agenticSourceRaw), agenticEvaluations: sha256(agenticEvaluationsRaw),
+      agenticBenchmark: sha256(agenticBenchmarkRaw),
     },
     caveats: snapshot.queries.coverage.source.caveats,
   },
   modules: MODULES, moduleCounts, plugins, skills, agenticProjects, agenticSkills,
+  agenticBenchmark: {
+    suite: agenticBenchmark.suite,
+    coverage: agenticBenchmark.coverage,
+    calibrationReview: agenticBenchmark.calibrationReview,
+    boundary: agenticBenchmark.boundary,
+    results: agenticBenchmark.results,
+  },
 };
 
 function validateData() {
@@ -523,6 +542,10 @@ function validateData() {
   if (new Set(skills.map((item) => item.id)).size !== skills.length) errors.push("Skill IDs are not unique");
   if (agenticSource.repositories.length !== 81 || agenticProjects.length !== 81) errors.push("Expected 81 Agentic-Tools projects");
   if (agenticSkills.length !== 40) errors.push("Expected 40 curated Agent Skills");
+  if (agenticBenchmark.coverage.plannedCandidateCount !== 40) errors.push("Benchmark plan does not cover 40 candidates");
+  if (agenticBenchmark.coverage.completedRuns !== 16) errors.push("Expected 16 calibration runs");
+  if (agenticBenchmark.coverage.taskBenchmarked !== 0 || agenticBenchmark.coverage.promotedToDefault !== 0) errors.push("Calibration release must not promote candidates");
+  if (agenticBenchmark.suite.scorerQualification !== "failed-needs-v2") errors.push("Calibration scorer boundary changed unexpectedly");
   if (new Set(agenticProjects.map((item) => item.id)).size !== agenticProjects.length) errors.push("Agentic project IDs are not unique");
   if (new Set(agenticSkills.map((item) => item.id)).size !== agenticSkills.length) errors.push("Agent Skill IDs are not unique");
   if (agenticSource.membershipSha256 !== agenticEvaluations.source.membershipSha256) errors.push("Agentic-Tools membership hashes do not match");
@@ -544,6 +567,10 @@ function validateData() {
     if (!agenticProjectMap.has(item.repoFullName.toLowerCase())) errors.push("Missing Agent Skill parent for " + item.id);
     if (!item.coreThree?.does || !item.coreThree?.conditions || !item.coreThree?.proof) errors.push("Missing Agent Skill core-three for " + item.id);
     if (item.path && (!item.blobSha || !item.sourceUrl)) errors.push("Frozen Skill path lacks blob evidence: " + item.id);
+  }
+  for (const result of agenticBenchmark.results) {
+    if (!agenticSkills.some((item) => item.id === result.candidateId)) errors.push("Benchmark result references an unknown Agent Skill: " + result.candidateId);
+    if (result.scoreUsableForRanking !== false || result.benchmarkState !== "calibration-only") errors.push("Calibration result was upgraded into ranking evidence: " + result.candidateId);
   }
   for (const moduleId of MODULE_IDS) {
     const ranks = agenticSkills.filter((item) => item.primaryModule === moduleId).map((item) => item.featuredRank).sort((a, b) => a - b);
@@ -574,20 +601,23 @@ if (htmlErrors.length) throw new Error("HTML validation failed:\n" + htmlErrors.
 mkdirSync(dirname(outputPath), { recursive: true });
 writeFileSync(outputPath, html);
 const manifest = {
-  schemaVersion: 2, generatedAt: BUILD_AT, artifact: outputPath, artifactBytes: Buffer.byteLength(html),
+  schemaVersion: 3, generatedAt: BUILD_AT, artifact: outputPath, artifactBytes: Buffer.byteLength(html),
   artifactSha256: sha256(html), pluginCount: plugins.length, moduleCount: MODULES.length,
   agenticProjectCount: agenticProjects.length, agenticSkillCount: agenticSkills.length,
   embeddedData: {
     encoding: "gzip-base64", jsonBytes: Buffer.byteLength(serialized), gzipBytes: compressedData.length,
     encodedBytes: Buffer.byteLength(encodedData), sha256: sha256(serialized),
   },
-  skillCoverage, agenticCoverage: agenticEvaluations.coverage, agenticSource: data.meta.agenticSource,
+  skillCoverage, agenticCoverage: agenticEvaluations.coverage, agenticBenchmark: data.meta.agenticBenchmark, agenticSource: data.meta.agenticSource,
   moduleCounts, sourceCommits: data.meta.sourceCommits, sourceHashes: data.meta.sourceHashes,
   checks: {
     canonicalPluginIdsUnique: true, exactlyOnePrimaryModule: true, skillParentsResolved: true,
     coreThreePresent: true, cspBeforeStyleAndScript: true, noExternalRuntimeResources: true,
     noLocalAbsolutePaths: true, readyNowClaims: 0, agenticParentsResolved: true,
     agenticFeaturedRanksContiguous: true, agenticRuntimeVerifiedClaims: 0,
+    benchmarkCalibrationRuns: agenticBenchmark.coverage.completedRuns,
+    benchmarkTaskVerifiedClaims: agenticBenchmark.coverage.taskBenchmarked,
+    benchmarkPromotions: agenticBenchmark.coverage.promotedToDefault,
   },
 };
 mkdirSync(dirname(manifestPath), { recursive: true });

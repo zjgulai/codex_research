@@ -943,7 +943,7 @@
       <button type="button" data-view="catalog" aria-selected="false">完整目录</button>
       <button type="button" data-view="audit" aria-selected="false">研究方法</button>
     </nav>
-    <div class="top-status" id="top-status">冻结快照 · 未做 runtime 实测</div>
+    <div class="top-status" id="top-status">冻结快照 · 16 次 A/B 校准 · 0 晋级</div>
   </header>
 
   <noscript>这个离线目录需要浏览器启用 JavaScript 才能搜索和打开详情。它不会联网加载资源。</noscript>
@@ -1027,7 +1027,16 @@
             <li>81 个仓库全部进入审计；存在 SKILL.md 不等于可直接安装。</li>
             <li>直接 Skill、整包依赖、需封装工具和只作参考分开处理。</li>
             <li>许可证、归档、空仓库、重复和低相关是硬门槛；Stars 只占研究优先级的 8%。</li>
-            <li>本轮只做到静态证据核对，第三方代码安装、调用、benchmark 和生产验证均为 0。</li>
+            <li>40 条候选的正式 benchmark 和生产验证仍为 0；4 条只进入执行器校准。</li>
+          </ul>
+        </article>
+        <article class="audit-card warning full">
+          <h2>Benchmark 校准：执行器过了，评分器没过</h2>
+          <p id="audit-benchmark-copy"></p>
+          <ul class="audit-list">
+            <li>16 次运行都完成；8 个 Skill arm 读取固定 blob，8 个 baseline 没有串线，工作区前后哈希一致。</li>
+            <li>关键词评分受中英文和数字写法影响；两项方差过大，一项出现 baseline / Skill 同为 100 的天花板。</li>
+            <li>因此本轮不发布效果排名，不升级 smoke-tested / task-benchmarked，也不把任何候选放进默认栈。</li>
           </ul>
         </article>
         <article class="audit-card warning full">
@@ -1285,7 +1294,7 @@
           does: core.does || "静态资料没有给出清楚能力。",
           conditions: core.conditions || "需要先核对依赖、权限和适用范围。",
           proof: core.proof || "先在隔离环境用固定任务做最小验证。",
-          unverified: ["第三方代码安装", "真实任务调用", "对照 benchmark", "生产稳定性"],
+          unverified: item.benchmark ? ["自动触发", "多 fixture 正式 benchmark", "独立盲评", "生产稳定性"] : ["第三方代码安装", "真实任务调用", "对照 benchmark", "生产稳定性"],
         };
       }
       const module = APP_DATA.modules.find((entry) => entry.id === item.primaryModule);
@@ -1324,12 +1333,14 @@
       const meta = APP_DATA.meta;
       const coverage = meta.skillCoverage;
       const agentic = meta.agenticCoverage;
-      byId("overview-metrics").textContent = coverage.evidenceRows.toLocaleString("en-US") + " 条插件内 Skill 证据；81 个外部项目审出 40 个候选。均未做 runtime 实测。";
+      const benchmark = meta.agenticBenchmark;
+      byId("overview-metrics").textContent = coverage.evidenceRows.toLocaleString("en-US") + " 条插件内 Skill 证据；40 个外部候选中 4 个做了 16 次 A/B 校准，正式通过 0。";
       byId("footer-date").textContent = new Date(meta.generatedAt).toLocaleString("zh-CN", { hour12: false });
       byId("source-dates").textContent = "插件状态冻结：" + meta.frozenAt + "；研究快照：" + meta.researchAt + "；Skill catalog：" + meta.catalogFetchedAt + "；Agentic-Tools 列表冻结：" + meta.agenticSource.capturedAt + "。";
       byId("audit-plugin-copy").textContent = meta.pluginCount.toLocaleString("en-US") + " 个 canonical IDs；" + meta.installedCount + " 个在冻结快照中已安装；" + meta.reviewCount.toLocaleString("en-US") + " 个节点匹配需要人工复核。";
       byId("audit-skill-copy").textContent = coverage.evidenceRows.toLocaleString("en-US") + " 条可显示 Skill 证据，其中 " + coverage.frozenExact.toLocaleString("en-US") + " 条绑定冻结 remote 版本，" + coverage.localBundleExact + " 条绑定本地精确 bundle，" + coverage.currentVersionDrift + " 条只来自较新的漂移版本。";
       byId("audit-agentic-copy").textContent = agentic.repositoryCount + " 个仓库 → " + agentic.rawSkillPaths.toLocaleString("en-US") + " 条 SKILL.md 路径 → " + agentic.repoUniqueSkillBlobs.toLocaleString("en-US") + " 个仓库内唯一 blob → " + agentic.curatedSkillCount + " 个节点候选。路径数不是可安装 Skill 数。";
+      byId("audit-benchmark-copy").textContent = benchmark.coverage.calibrationCandidateCount + " 个候选进入校准，共 " + benchmark.coverage.completedRuns + " 次运行；执行器结论是 " + benchmark.suite.executorQualification + "，评分器结论是 " + benchmark.suite.scorerQualification + "。下一步先修评分口径，再扩到 12 个首批候选。";
     }
 
     function renderNodeList() {
@@ -1343,9 +1354,9 @@
       const core = coreTexts(item);
       if (isAgentic(item)) {
         const controlled = item.selection === "controlled";
-        const stateLabel = item.capabilityForm === "wrap-candidate" ? "需封装 · 未实测" : item.capabilityForm === "package-bound-skill" ? "整包依赖 · 未实测" : "结构已核对 · 未实测";
+        const stateLabel = item.benchmark ? "A/B 校准 · 不可排名" : item.capabilityForm === "wrap-candidate" ? "需封装 · 未实测" : item.capabilityForm === "package-bound-skill" ? "整包依赖 · 未实测" : "结构已核对 · 未实测";
         const reason = item.selectedReason + " 节点适配 " + score(item.fitScore) + "，父项目质量 " + score(item.functionalScore) + "，公开声量代理 " + score(item.publicProxyScore) + "。";
-        const evidence = "固定到 " + (item.path ? "HEAD + Skill blob" : "HEAD + 项目文档") + "；未验证：" + core.unverified.join("、") + "。";
+        const evidence = item.benchmark ? "已完成 4 次执行器校准，但评分器未过；诊断分不得用于排名或晋级。" : "固定到 " + (item.path ? "HEAD + Skill blob" : "HEAD + 项目文档") + "；未验证：" + core.unverified.join("、") + "。";
         return '<div class="candidate-row">' +
           '<div class="candidate-main"><button type="button" data-open-id="' + esc(item.id) + '">' + esc(item.name) + '</button><small>' + esc(item.repoFullName) + ' · #' + item.featuredRank + '</small></div>' +
           '<div class="candidate-capability">' + esc(short(core.does, 105)) + '</div>' +
@@ -1387,7 +1398,7 @@
         return '<label class="task-check"><input type="checkbox" data-task="' + taskId + '"' + (state.doneTasks.has(taskId) ? " checked" : "") + '><span>' + esc(task) + "</span></label>";
       }).join("");
       const gapNote = top.length < 3 ? '<div class="candidate-empty">本节点只保留 ' + top.length + ' 个过门槛候选，不为凑数补位。</div>' : "";
-      const footerCopy = state.workbench === "agentic" ? "这是静态审计后的节点候选；直接 Skill、整包依赖和需封装能力已分开，尚未安装或跑 benchmark。" : "结合站内排名、通用性和当前安装状态选出 3 个；原始排名仍在完整目录。";
+      const footerCopy = state.workbench === "agentic" ? "40 条全量候选仍未通过正式 benchmark；4 条做过 A/B 校准，但评分器未过，0 条晋级。" : "结合站内排名、通用性和当前安装状态选出 3 个；原始排名仍在完整目录。";
       byId("node-panel").innerHTML =
         '<div class="stage-tabs" aria-label="' + esc(phase.label) + '阶段节点"><span class="stage-path">' + esc(phase.label) + ' /</span>' + tabs + workbenchSwitch + '<label class="framework-toggle"><input type="checkbox" data-framework-toggle' + (state.showFramework ? ' checked' : '') + '>显示框架编号</label></div>' +
         '<div class="workspace-body"><div class="node-heading"><div>' + code + '<h2>' + esc(PLAIN_TITLES[module.id]) + '</h2><p>' + esc(PLAIN_SUBTITLES[module.id]) + '</p></div><a class="quiet-link" href="' + esc(module.sourceUrl) + '" target="_blank" rel="noreferrer">查看框架原文</a></div>' +
@@ -1463,11 +1474,12 @@
       const core = coreTexts(item);
       const project = item.kind === "agentic-project";
       const status = project ? item.decision + " · " + item.tier + " 档" : (item.selection === "primary" ? "节点主选" : "受控候选");
-      const evidence = item.verificationState === "structure-checked" ? "结构已核对，未安装、未调用" : "只核对项目文档，尚待封装";
+      const evidence = item.benchmark ? "完成执行器校准；评分器未通过，不能排名或晋级" : item.verificationState === "structure-checked" ? "结构已核对，未安装、未调用" : "只核对项目文档，尚待封装";
       const identity = project ? item.fullName : item.repoFullName + (item.path ? " / " + item.path : " / 待封装工作流");
       const sourceUrls = (project ? item.sourceEvidence : [item.sourceUrl, item.repoUrl]).filter(safeUrl);
       const sourceButtons = [...new Set(sourceUrls)].map((url, index) => '<a class="button" href="' + esc(url) + '" target="_blank" rel="noreferrer">' + (index ? "更多证据" : "打开冻结来源") + '</a>').join("");
       const parent = !project ? '<button class="button" type="button" data-open-id="' + esc(item.parentId) + '">查看父项目审计</button>' : "";
+      const benchmarkDetails = item.benchmark ? detailBlock("A/B 校准", "baseline " + item.benchmark.baselineMedian + " / Skill " + item.benchmark.skillMedian + " / Δ " + (item.benchmark.deterministicDelta >= 0 ? "+" : "") + item.benchmark.deterministicDelta + "；仅诊断，不可排名") + detailBlock("校准告警", (item.benchmark.diagnosticFlags || []).join("；") || "评分器本身仍未通过") : "";
       byId("detail-eyebrow").textContent = (project ? "GITHUB 项目审计" : "AGENT SKILL") + " · " + item.primaryModule + " · #" + (item.moduleRank || item.featuredRank || "—");
       byId("detail-title").textContent = item.name;
       byId("dialog-body").innerHTML =
@@ -1479,7 +1491,7 @@
         detailBlock("主 / 次节点", item.primaryModule + (item.secondaryModules.length ? " / " + item.secondaryModules.join(", ") : " / 无")) +
         detailBlock("能力形态", item.shape + " · " + item.capabilityForm) +
         detailBlock("许可证", (item.license?.label || "未确认") + (item.license?.scope ? " · " + item.license.scope : "")) +
-        detailBlock("证据状态", evidence) +
+        detailBlock("证据状态", evidence) + benchmarkDetails +
         detailBlock("选择理由", item.selectedReason) +
         detailBlock("运行要求", (item.requirements || []).join("；") || "按项目依赖另查") +
         detailBlock("限制", (item.limitations || []).join("；") || "未列出") +
@@ -1487,7 +1499,7 @@
         detailBlock("未验证", core.unverified.join("；")) +
         detailBlock("来源", sourceUrls.join("；")) + "</div>" +
         '<div class="cta-row">' + parent + sourceButtons + '<a class="button" href="' + esc(module.sourceUrl) + '" target="_blank" rel="noreferrer">查看节点原文</a></div>' +
-        '<p class="fineprint">这是一条静态研究结论。结构存在、许可证清楚和仓库活跃都不能证明 Skill 已接入 Codex，更不能证明它优于基线或可安全用于生产。</p>';
+        '<p class="fineprint">' + (item.benchmark ? "这条记录只证明固定 Skill 在受控只读任务中被实际读取并产出结果。评分器尚未合格，不能据此判断优于 baseline；真实账号、生产与长期稳定性也都未验证。" : "这是一条静态研究结论。结构存在、许可证清楚和仓库活跃都不能证明 Skill 已接入 Codex，更不能证明它优于基线或可安全用于生产。") + '</p>';
       const dialog = byId("detail-dialog");
       if (!dialog.open) dialog.showModal();
       if (updateHash !== false) history.replaceState(null, "", "#item=" + encodeURIComponent(item.id));

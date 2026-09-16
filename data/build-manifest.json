@@ -1,19 +1,19 @@
 {
-  "schemaVersion": 2,
-  "generatedAt": "2026-09-16T05:52:49.953Z",
+  "schemaVersion": 3,
+  "generatedAt": "2026-09-16T07:55:47.932Z",
   "artifact": "public/index.html",
-  "artifactBytes": 3109539,
-  "artifactSha256": "f3c86f12baf2e37e45ca967c20b49e3f5680628fe62cf01ad79d126dd09af86e",
+  "artifactBytes": 3116151,
+  "artifactSha256": "2d4ebdb06d04f4315df68d4fb1f001e22f5e5468ac0dbe28142a91052050780c",
   "pluginCount": 4184,
   "moduleCount": 14,
   "agenticProjectCount": 81,
   "agenticSkillCount": 40,
   "embeddedData": {
     "encoding": "gzip-base64",
-    "jsonBytes": 14864121,
-    "gzipBytes": 2261094,
-    "encodedBytes": 3014792,
-    "sha256": "bb5e65685e5026d6783ad181f7c1ef196ff8333815b6eb19091554d52b6080c1"
+    "jsonBytes": 14874877,
+    "gzipBytes": 2264476,
+    "encodedBytes": 3019304,
+    "sha256": "fb37397178fc14e9653cb10dd319e05bbb0891fe5613845530e10754a64b2d23"
   },
   "skillCoverage": {
     "frozenSkillCountClaims": 5405,
@@ -42,6 +42,45 @@
     "curatedSkillCount": 40,
     "featuredSkillCount": 40,
     "runtimeVerified": 0
+  },
+  "agenticBenchmark": {
+    "suite": {
+      "id": "opc-instruction-calibration-2026-09-16",
+      "status": "harness-calibration-only",
+      "suiteSha256": "41d34ac88e1835b303ead2e4d3a15c06d703f2c7ab4aa9598161dfa51a8780d6",
+      "protocolSha256": "4209c47641d2301ffd1f769b3099de0f31c5170337b093781d6dc09e003dc9c2",
+      "candidatesSha256": "d92a1fe8793c7312d17f356ec0ebf11b4d97064255f5dbccef36e5fc50e0929f",
+      "model": "gpt-5.6-luna",
+      "reasoningEffort": "low",
+      "codexVersion": "codex-cli 0.145.0",
+      "sandboxPolicy": "codex-read-only-network-disabled",
+      "fixtureCountPerCandidate": 1,
+      "replicatesPerArm": 2,
+      "semanticJudge": "not-run",
+      "promotionAllowed": false,
+      "executorQualification": "passed",
+      "scorerQualification": "failed-needs-v2"
+    },
+    "coverage": {
+      "plannedCandidateCount": 40,
+      "firstWaveCandidateCount": 12,
+      "calibrationCandidateCount": 4,
+      "completedRuns": 16,
+      "baselineRuns": 8,
+      "skillRuns": 8,
+      "isolatedMaterialized": 4,
+      "isolatedInstalled": 0,
+      "smokeTested": 0,
+      "taskBenchmarked": 0,
+      "promotedToDefault": 0
+    },
+    "calibrationReview": {
+      "executor": "All 16 runs completed, all eight Skill arms read the frozen SKILL.md, baseline arms did not, and all workspaces were unchanged.",
+      "scorer": "Not qualified. The term matcher was sensitive to language and numeric variants, two candidates showed high replicate variance, and one fixture saturated at 100 in both arms.",
+      "network": "Web search was disabled and no network command was observed; OS-level egress denial was not independently proven.",
+      "nextAction": "Freeze a v2 multilingual semantic assertion format, add adversarial fixtures, calibrate an independent blind judge, then rerun the 12-candidate first wave."
+    },
+    "boundary": "One deterministic calibration fixture per candidate is insufficient for ranking or promotion. Delta values are diagnostic only and must not be used to rank candidates."
   },
   "agenticSource": {
     "listUrl": "https://github.com/stars/zjgulai/lists/agentic-tools",
@@ -172,7 +211,8 @@
     "snapshot": "6493698e13c32a6cd37569740c1447e4317dda623c215cdbe7ca16d443c6823b",
     "catalog": "fdae6c4e546c62205b141ce87df1009a946ad6bebd69f5cbb1483d754767e1dd",
     "agenticSource": "0ad9a5508ba63223366392829140bc2c471b549e2c91aa20b089e197768a3c27",
-    "agenticEvaluations": "bb372cbd019eb8ec45cbf7f6a5e8c8e618b5472922cc6ab0bf572109532aaa90"
+    "agenticEvaluations": "bb372cbd019eb8ec45cbf7f6a5e8c8e618b5472922cc6ab0bf572109532aaa90",
+    "agenticBenchmark": "6ad81332f3eb8c8c798436adc3d72aace923bff54a95311b6be276c394647650"
   },
   "checks": {
     "canonicalPluginIdsUnique": true,
@@ -185,6 +225,9 @@
     "readyNowClaims": 0,
     "agenticParentsResolved": true,
     "agenticFeaturedRanksContiguous": true,
-    "agenticRuntimeVerifiedClaims": 0
+    "agenticRuntimeVerifiedClaims": 0,
+    "benchmarkCalibrationRuns": 16,
+    "benchmarkTaskVerifiedClaims": 0,
+    "benchmarkPromotions": 0
   }
 }
