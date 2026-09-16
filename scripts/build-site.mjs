@@ -453,8 +453,8 @@ const agenticSkills = agenticEvaluations.curatedSkills.map((skill) => {
     description: skill.coreThree.does,
     shape: AGENTIC_FORM_LABELS[skill.capabilityForm] || skill.capabilityForm,
     installed: false,
-    inventoryState: "GitHub 外部 Skill",
-    runtimeState: benchmark ? "A/B 校准 · 不可排名" : skill.verificationState === "docs-only" ? "待封装 · 未实测" : "结构已核对 · 未实测",
+    inventoryState: "GitHub 外部能力",
+    runtimeState: benchmark ? "A/B 校准 · 不可排名" : skill.admissionLevel === "static-reviewed" ? "静态已审阅 · 未试跑" : "来源已冻结 · 未试跑",
     authPolicy: "按 Skill 依赖另行核对",
     artifactRoles: [skill.effectClass === "read-only" ? "input/read" : "author"],
     gateEvidence: gatesFor(skill.primaryModule),
@@ -462,9 +462,9 @@ const agenticSkills = agenticEvaluations.curatedSkills.map((skill) => {
     functionalScore: skill.scores.qualityScore,
     publicProxyScore: skill.scores.publicSignalScore,
     priorityScore: skill.scores.researchPriority,
-    moduleRank: skill.featuredRank,
-    matchConfidence: skill.selection === "primary" ? "high" : "medium",
-    matchNeedsReview: skill.selection !== "primary",
+    moduleRank: null,
+    matchConfidence: skill.admissionLevel === "static-reviewed" ? "medium" : "review",
+    matchNeedsReview: true,
     matchReasons: unique([skill.selectedReason, skill.capabilityForm]).slice(0, 4),
     website: skill.sourceUrl,
     githubUrl: skill.repoUrl,
@@ -473,13 +473,24 @@ const agenticSkills = agenticEvaluations.curatedSkills.map((skill) => {
     benchmark,
   };
 });
+for (const moduleId of MODULE_IDS) {
+  agenticSkills.filter((item) => item.primaryModule === moduleId)
+    .sort((a, b) => b.priorityScore - a.priorityScore || b.fitScore - a.fitScore || a.name.localeCompare(b.name))
+    .forEach((item, index) => { item.moduleRank = index + 1; });
+}
+
+const agenticSkillsForModule = (moduleId) => agenticSkills.filter((item) => item.workbenchAssignments.some((assignment) => assignment.moduleId === moduleId));
 
 const moduleCounts = MODULES.map((module) => ({
   id: module.id,
   plugins: plugins.filter((item) => item.primaryModule === module.id).length,
   skills: skills.filter((item) => item.primaryModule === module.id).length,
   agenticProjects: agenticProjects.filter((item) => item.primaryModule === module.id).length,
-  agenticSkills: agenticSkills.filter((item) => item.primaryModule === module.id).length,
+  agenticSkills: agenticSkillsForModule(module.id).length,
+  agenticRoles: Object.fromEntries(agenticEvaluations.workbenchRoles.map((role) => [
+    role.id,
+    agenticSkills.filter((item) => item.workbenchAssignments.some((assignment) => assignment.moduleId === module.id && assignment.leadRole === role.id)).length,
+  ])),
   review: plugins.filter((item) => item.primaryModule === module.id && item.matchNeedsReview).length,
 }));
 const skillCoverage = {
@@ -521,11 +532,15 @@ const data = {
     sourceHashes: {
       snapshot: sha256(snapshotRaw), catalog: sha256(catalogRaw),
       agenticSource: sha256(agenticSourceRaw), agenticEvaluations: sha256(agenticEvaluationsRaw),
+      agenticRoleCuration: agenticEvaluations.source.roleCurationSha256,
       agenticBenchmark: sha256(agenticBenchmarkRaw),
     },
     caveats: snapshot.queries.coverage.source.caveats,
   },
   modules: MODULES, moduleCounts, plugins, skills, agenticProjects, agenticSkills,
+  workbenchRoles: agenticEvaluations.workbenchRoles,
+  coverageNotes: agenticEvaluations.coverageNotes,
+  capabilityChains: agenticEvaluations.capabilityChains,
   agenticBenchmark: {
     suite: agenticBenchmark.suite,
     coverage: agenticBenchmark.coverage,
@@ -541,7 +556,11 @@ function validateData() {
   if (new Set(plugins.map((item) => item.id)).size !== plugins.length) errors.push("Plugin IDs are not unique");
   if (new Set(skills.map((item) => item.id)).size !== skills.length) errors.push("Skill IDs are not unique");
   if (agenticSource.repositories.length !== 81 || agenticProjects.length !== 81) errors.push("Expected 81 Agentic-Tools projects");
-  if (agenticSkills.length !== 40) errors.push("Expected 40 curated Agent Skills");
+  if (agenticSkills.length !== 72) errors.push("Expected 72 curated Agent capabilities");
+  if (agenticSkills.filter((item) => item.benchmarkTrack?.cohort === "v1-40").length !== 40) errors.push("Expected the frozen 40-candidate benchmark cohort");
+  const expectedRoleIds = ["core", "review", "visualize", "summarize"];
+  const actualRoleIds = agenticEvaluations.workbenchRoles.map((role) => role.id);
+  if (new Set(actualRoleIds).size !== expectedRoleIds.length || expectedRoleIds.some((roleId) => !actualRoleIds.includes(roleId))) errors.push("Expected exactly four distinct Agent workbench roles");
   if (agenticBenchmark.coverage.plannedCandidateCount !== 40) errors.push("Benchmark plan does not cover 40 candidates");
   if (agenticBenchmark.coverage.completedRuns !== 16) errors.push("Expected 16 calibration runs");
   if (agenticBenchmark.coverage.taskBenchmarked !== 0 || agenticBenchmark.coverage.promotedToDefault !== 0) errors.push("Calibration release must not promote candidates");
@@ -567,14 +586,25 @@ function validateData() {
     if (!agenticProjectMap.has(item.repoFullName.toLowerCase())) errors.push("Missing Agent Skill parent for " + item.id);
     if (!item.coreThree?.does || !item.coreThree?.conditions || !item.coreThree?.proof) errors.push("Missing Agent Skill core-three for " + item.id);
     if (item.path && (!item.blobSha || !item.sourceUrl)) errors.push("Frozen Skill path lacks blob evidence: " + item.id);
+    if (!item.workbenchAssignments.length) errors.push("Agent capability lacks a workbench assignment: " + item.id);
+    if (!item.admissionLevel || item.claimCeiling !== "candidate-only") errors.push("Agent capability evidence boundary is missing: " + item.id);
   }
+  const assignmentCount = agenticSkills.reduce((sum, item) => sum + item.workbenchAssignments.length, 0);
+  if (assignmentCount !== 116 || assignmentCount !== agenticEvaluations.coverage.roleAssignmentCount) errors.push("Expected 116 recomputed Agent workbench assignments");
+  const expectedCoverageNoteKeys = ["M01.review", "M06.summarize", "M08.visualize", "M09.summarize", "M10.visualize", "M13.visualize"];
+  const coverageNoteKeys = Object.keys(agenticEvaluations.coverageNotes || {});
+  if (coverageNoteKeys.length !== expectedCoverageNoteKeys.length || expectedCoverageNoteKeys.some((key) => !coverageNoteKeys.includes(key))) errors.push("Expected the six explicit weak-coverage notes");
   for (const result of agenticBenchmark.results) {
     if (!agenticSkills.some((item) => item.id === result.candidateId)) errors.push("Benchmark result references an unknown Agent Skill: " + result.candidateId);
     if (result.scoreUsableForRanking !== false || result.benchmarkState !== "calibration-only") errors.push("Calibration result was upgraded into ranking evidence: " + result.candidateId);
   }
   for (const moduleId of MODULE_IDS) {
-    const ranks = agenticSkills.filter((item) => item.primaryModule === moduleId).map((item) => item.featuredRank).sort((a, b) => a - b);
+    const ranks = agenticSkills.filter((item) => item.benchmarkTrack?.cohort === "v1-40" && item.primaryModule === moduleId).map((item) => item.featuredRank).sort((a, b) => a - b);
     if (ranks.length > 3 || ranks.some((rank, index) => rank !== index + 1)) errors.push("Invalid Agent Skill featured ranks for " + moduleId);
+    for (const role of agenticEvaluations.workbenchRoles) {
+      const roleRanks = agenticSkills.flatMap((item) => item.workbenchAssignments.filter((assignment) => assignment.moduleId === moduleId && assignment.leadRole === role.id).map((assignment) => assignment.rank)).sort((a, b) => a - b);
+      if (!roleRanks.length || roleRanks.some((rank, index) => rank !== index + 1)) errors.push(`Invalid ${role.id} workbench ranks for ${moduleId}`);
+    }
   }
   if (agenticEvaluations.coverage.runtimeVerified !== 0) errors.push("Static release must not claim runtime verification");
   if (errors.length) throw new Error("Data validation failed:\n" + errors.slice(0, 30).join("\n"));
@@ -601,7 +631,7 @@ if (htmlErrors.length) throw new Error("HTML validation failed:\n" + htmlErrors.
 mkdirSync(dirname(outputPath), { recursive: true });
 writeFileSync(outputPath, html);
 const manifest = {
-  schemaVersion: 3, generatedAt: BUILD_AT, artifact: outputPath, artifactBytes: Buffer.byteLength(html),
+  schemaVersion: 4, generatedAt: BUILD_AT, artifact: outputPath, artifactBytes: Buffer.byteLength(html),
   artifactSha256: sha256(html), pluginCount: plugins.length, moduleCount: MODULES.length,
   agenticProjectCount: agenticProjects.length, agenticSkillCount: agenticSkills.length,
   embeddedData: {
@@ -614,7 +644,7 @@ const manifest = {
     canonicalPluginIdsUnique: true, exactlyOnePrimaryModule: true, skillParentsResolved: true,
     coreThreePresent: true, cspBeforeStyleAndScript: true, noExternalRuntimeResources: true,
     noLocalAbsolutePaths: true, readyNowClaims: 0, agenticParentsResolved: true,
-    agenticFeaturedRanksContiguous: true, agenticRuntimeVerifiedClaims: 0,
+    agenticFeaturedRanksContiguous: true, agenticRoleRanksContiguous: true, agenticRuntimeVerifiedClaims: 0,
     benchmarkCalibrationRuns: agenticBenchmark.coverage.completedRuns,
     benchmarkTaskVerifiedClaims: agenticBenchmark.coverage.taskBenchmarked,
     benchmarkPromotions: agenticBenchmark.coverage.promotedToDefault,

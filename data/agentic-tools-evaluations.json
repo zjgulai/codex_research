@@ -1,13 +1,14 @@
 {
-  "schemaVersion": 1,
-  "evaluatedAt": "2026-09-16T05:38:19.759Z",
+  "schemaVersion": 2,
+  "evaluatedAt": "2026-09-16T08:45:54.117Z",
   "source": {
     "listUrl": "https://github.com/stars/zjgulai/lists/agentic-tools",
     "capturedAt": "2026-09-16T05:19:10.149Z",
     "membershipSha256": "912d4f33a5e1cdf38e1312bd6687d6cf6f8d4331552dc732b7ba96eed57e5bc9",
     "repositoryCount": 81,
     "sourceSha256": "0ad9a5508ba63223366392829140bc2c471b549e2c91aa20b089e197768a3c27",
-    "curationSha256": "fefe1e7994c46c072c1cdd6bdff22ebfd72445ad51422ad96b2f11476ac19ef8"
+    "curationSha256": "fefe1e7994c46c072c1cdd6bdff22ebfd72445ad51422ad96b2f11476ac19ef8",
+    "roleCurationSha256": "8d675213ec81abaace9e9bfb2c84c27dd6955a7af65af86ec30b6abe345f0d3b"
   },
   "policy": {
     "unit": "Repository audit plus selected Skill or workflow recommendation",
@@ -17,7 +18,13 @@
     "popularityRule": "Public signal is a separate GitHub proxy and contributes at most 8% to research priority. It never crosses a hard gate.",
     "verificationRule": "This release is static research only: no third-party project was installed, invoked, benchmarked, or production-verified.",
     "sameRepoAcrossNodes": "Allowed only when each recommendation names a distinct Skill path or bounded workflow.",
-    "opcAssumption": "OPC means an Agent-driven one-person company."
+    "opcAssumption": "OPC means an Agent-driven one-person company.",
+    "roleWorkbench": {
+      "purpose": "把 Agent 能力按全栈节点和工作角色组织，不把发现、静态审阅、试跑和正式验证混为一谈。",
+      "candidateRule": "冻结来源、路径、版本和边界后即可进入候选库；只有完成受控试跑或任务 benchmark 后，才能提高验证结论。",
+      "workbenchRule": "每个节点分别给出主执行、Review、可视化、总结交接能力；同一能力可服务多个节点，但每个分配都必须说明覆盖方式。",
+      "benchmarkRule": "原始 40 条候选继续构成 v1-40 benchmark 队列；扩展候选不自动进入既有校准与排名。"
+    }
   },
   "opcDimensions": [
     "情报与研究",
@@ -28,6 +35,85 @@
     "发布与运营",
     "增长与客户",
     "记忆与治理"
+  ],
+  "workbenchRoles": [
+    {
+      "id": "core",
+      "label": "主执行",
+      "question": "谁来把这一步做出来？",
+      "validation": "结果正确、范围完整、时间与副作用可控"
+    },
+    {
+      "id": "review",
+      "label": "Review",
+      "question": "谁来找错、找漏、挑战假设？",
+      "validation": "缺陷召回、误报、严重度与建议可执行性"
+    },
+    {
+      "id": "visualize",
+      "label": "可视化",
+      "question": "谁来把关系、状态和差异画清楚？",
+      "validation": "结构保真、无虚构关系、可读性与移动端表现"
+    },
+    {
+      "id": "summarize",
+      "label": "总结交接",
+      "question": "谁来留下事实、决定、缺口和下一步？",
+      "validation": "事实、来源、决定、负责人和下一步不丢失"
+    }
+  ],
+  "coverageNotes": {
+    "M01.review": "组合覆盖：上下文卫生与风险预演，还不是专用的项目初始化治理验收。",
+    "M06.summarize": "通用补位：尚无专门的原型观察、证伪与删减决定交接 Skill。",
+    "M08.visualize": "组合覆盖：UI 可走截图链；后端与基础设施主要依赖通用制图或 wrapper。",
+    "M09.summarize": "组合覆盖：尚无把测试、安全、性能、a11y 与 AI Eval 合并成独立质量裁决的专用 Skill。",
+    "M10.visualize": "组合覆盖：缺少原生的发布 readiness、migration、rollback 与 owner 状态图。",
+    "M13.visualize": "wrapper / 通用补位：缺少原生的 Skill 谱系、benchmark lineage 与过期关系图。"
+  },
+  "capabilityChains": [
+    {
+      "name": "意图到验收",
+      "slugs": [
+        "shipping-artifacts",
+        "intended-vs-implemented",
+        "code-review",
+        "webapp-testing"
+      ]
+    },
+    {
+      "name": "视觉三段检",
+      "slugs": [
+        "preview-shots",
+        "compare-screenshots",
+        "screenshot-critique"
+      ]
+    },
+    {
+      "name": "数据到行动",
+      "slugs": [
+        "data-map",
+        "visualization-patterns",
+        "chart-to-drive",
+        "stakeholder-communication",
+        "close-the-loop"
+      ]
+    },
+    {
+      "name": "机会到实验",
+      "slugs": [
+        "opportunity-solution-tree",
+        "experiment-brief",
+        "ab-test-analysis"
+      ]
+    },
+    {
+      "name": "复盘到进化",
+      "slugs": [
+        "delivery-retro",
+        "eval-skills",
+        "close-spec"
+      ]
+    }
   ],
   "projects": [
     {
@@ -8194,7 +8280,50 @@
         "scope": "repository",
         "status": "clear"
       },
-      "verificationState": "structure-checked",
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "benchmark-v1",
+      "capabilityCluster": "core",
+      "benchmarkTrack": {
+        "cohort": "v1-40",
+        "order": 1
+      },
+      "workbenchAssignments": [
+        {
+          "moduleId": "M00",
+          "leadRole": "review",
+          "roles": [
+            "review"
+          ],
+          "rank": 2,
+          "coverageMode": "native",
+          "reason": "M00 的Review候选；按冻结说明评估角色适配，尚未据此晋级。"
+        },
+        {
+          "moduleId": "M03",
+          "leadRole": "review",
+          "roles": [
+            "review"
+          ],
+          "rank": 2,
+          "coverageMode": "native",
+          "reason": "M03 的Review候选；按冻结说明评估角色适配，尚未据此晋级。"
+        },
+        {
+          "moduleId": "M07",
+          "leadRole": "review",
+          "roles": [
+            "review"
+          ],
+          "rank": 2,
+          "coverageMode": "native",
+          "reason": "M07 的Review候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "review"
+      ],
       "parentDecision": "workbench",
       "scores": {
         "fitScore": 94,
@@ -8246,7 +8375,30 @@
         "scope": "repository",
         "status": "clear"
       },
-      "verificationState": "structure-checked",
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "benchmark-v1",
+      "capabilityCluster": "core",
+      "benchmarkTrack": {
+        "cohort": "v1-40",
+        "order": 2
+      },
+      "workbenchAssignments": [
+        {
+          "moduleId": "M00",
+          "leadRole": "core",
+          "roles": [
+            "core"
+          ],
+          "rank": 1,
+          "coverageMode": "native",
+          "reason": "M00 的主执行候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "core"
+      ],
       "parentDecision": "workbench",
       "scores": {
         "fitScore": 92,
@@ -8298,7 +8450,40 @@
         "scope": "repository",
         "status": "clear"
       },
-      "verificationState": "structure-checked",
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "benchmark-v1",
+      "capabilityCluster": "core",
+      "benchmarkTrack": {
+        "cohort": "v1-40",
+        "order": 3
+      },
+      "workbenchAssignments": [
+        {
+          "moduleId": "M00",
+          "leadRole": "review",
+          "roles": [
+            "review"
+          ],
+          "rank": 1,
+          "coverageMode": "native",
+          "reason": "M00 的Review候选；按冻结说明评估角色适配，尚未据此晋级。"
+        },
+        {
+          "moduleId": "M01",
+          "leadRole": "review",
+          "roles": [
+            "review"
+          ],
+          "rank": 1,
+          "coverageMode": "native",
+          "reason": "M01 的Review候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "review"
+      ],
       "parentDecision": "workbench",
       "scores": {
         "fitScore": 87,
@@ -8350,7 +8535,40 @@
         "scope": "repository",
         "status": "clear"
       },
-      "verificationState": "docs-only",
+      "verificationState": "source-confirmed",
+      "admissionLevel": "source-confirmed",
+      "claimCeiling": "candidate-only",
+      "origin": "benchmark-v1",
+      "capabilityCluster": "core",
+      "benchmarkTrack": {
+        "cohort": "v1-40",
+        "order": 4
+      },
+      "workbenchAssignments": [
+        {
+          "moduleId": "M00",
+          "leadRole": "core",
+          "roles": [
+            "core"
+          ],
+          "rank": 2,
+          "coverageMode": "native",
+          "reason": "M00 的主执行候选；按冻结说明评估角色适配，尚未据此晋级。"
+        },
+        {
+          "moduleId": "M01",
+          "leadRole": "core",
+          "roles": [
+            "core"
+          ],
+          "rank": 1,
+          "coverageMode": "native",
+          "reason": "M01 的主执行候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "core"
+      ],
       "parentDecision": "workbench",
       "scores": {
         "fitScore": 86,
@@ -8403,7 +8621,30 @@
         "scope": "repository",
         "status": "clear"
       },
-      "verificationState": "structure-checked",
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "benchmark-v1",
+      "capabilityCluster": "core",
+      "benchmarkTrack": {
+        "cohort": "v1-40",
+        "order": 5
+      },
+      "workbenchAssignments": [
+        {
+          "moduleId": "M01",
+          "leadRole": "core",
+          "roles": [
+            "core"
+          ],
+          "rank": 2,
+          "coverageMode": "native",
+          "reason": "M01 的主执行候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "core"
+      ],
       "parentDecision": "workbench",
       "scores": {
         "fitScore": 83,
@@ -8455,7 +8696,30 @@
         "scope": "repository",
         "status": "clear"
       },
-      "verificationState": "structure-checked",
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "benchmark-v1",
+      "capabilityCluster": "core",
+      "benchmarkTrack": {
+        "cohort": "v1-40",
+        "order": 6
+      },
+      "workbenchAssignments": [
+        {
+          "moduleId": "M02",
+          "leadRole": "core",
+          "roles": [
+            "core"
+          ],
+          "rank": 1,
+          "coverageMode": "native",
+          "reason": "M02 的主执行候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "core"
+      ],
       "parentDecision": "workbench",
       "scores": {
         "fitScore": 95,
@@ -8508,7 +8772,30 @@
         "scope": "repository",
         "status": "clear"
       },
-      "verificationState": "structure-checked",
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "benchmark-v1",
+      "capabilityCluster": "core",
+      "benchmarkTrack": {
+        "cohort": "v1-40",
+        "order": 7
+      },
+      "workbenchAssignments": [
+        {
+          "moduleId": "M02",
+          "leadRole": "core",
+          "roles": [
+            "core"
+          ],
+          "rank": 2,
+          "coverageMode": "native",
+          "reason": "M02 的主执行候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "core"
+      ],
       "parentDecision": "workbench",
       "scores": {
         "fitScore": 91,
@@ -8560,7 +8847,30 @@
         "scope": "repository",
         "status": "clear"
       },
-      "verificationState": "structure-checked",
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "benchmark-v1",
+      "capabilityCluster": "core",
+      "benchmarkTrack": {
+        "cohort": "v1-40",
+        "order": 8
+      },
+      "workbenchAssignments": [
+        {
+          "moduleId": "M02",
+          "leadRole": "core",
+          "roles": [
+            "core"
+          ],
+          "rank": 3,
+          "coverageMode": "native",
+          "reason": "M02 的主执行候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "core"
+      ],
       "parentDecision": "workbench",
       "scores": {
         "fitScore": 89,
@@ -8612,7 +8922,30 @@
         "scope": "repository",
         "status": "clear"
       },
-      "verificationState": "structure-checked",
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "benchmark-v1",
+      "capabilityCluster": "core",
+      "benchmarkTrack": {
+        "cohort": "v1-40",
+        "order": 9
+      },
+      "workbenchAssignments": [
+        {
+          "moduleId": "M03",
+          "leadRole": "core",
+          "roles": [
+            "core"
+          ],
+          "rank": 1,
+          "coverageMode": "native",
+          "reason": "M03 的主执行候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "core"
+      ],
       "parentDecision": "workbench",
       "scores": {
         "fitScore": 94,
@@ -8665,7 +8998,30 @@
         "scope": "repository",
         "status": "clear"
       },
-      "verificationState": "structure-checked",
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "benchmark-v1",
+      "capabilityCluster": "core",
+      "benchmarkTrack": {
+        "cohort": "v1-40",
+        "order": 10
+      },
+      "workbenchAssignments": [
+        {
+          "moduleId": "M03",
+          "leadRole": "summarize",
+          "roles": [
+            "summarize"
+          ],
+          "rank": 1,
+          "coverageMode": "native",
+          "reason": "M03 的总结交接候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "summarize"
+      ],
       "parentDecision": "workbench",
       "scores": {
         "fitScore": 93,
@@ -8717,7 +9073,30 @@
         "scope": "repository",
         "status": "clear"
       },
-      "verificationState": "structure-checked",
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "benchmark-v1",
+      "capabilityCluster": "core",
+      "benchmarkTrack": {
+        "cohort": "v1-40",
+        "order": 11
+      },
+      "workbenchAssignments": [
+        {
+          "moduleId": "M03",
+          "leadRole": "visualize",
+          "roles": [
+            "visualize"
+          ],
+          "rank": 1,
+          "coverageMode": "native",
+          "reason": "M03 的可视化候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "visualize"
+      ],
       "parentDecision": "workbench",
       "scores": {
         "fitScore": 90,
@@ -8769,7 +9148,40 @@
         "scope": "repository",
         "status": "clear"
       },
-      "verificationState": "structure-checked",
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "benchmark-v1",
+      "capabilityCluster": "core",
+      "benchmarkTrack": {
+        "cohort": "v1-40",
+        "order": 12
+      },
+      "workbenchAssignments": [
+        {
+          "moduleId": "M02",
+          "leadRole": "review",
+          "roles": [
+            "review"
+          ],
+          "rank": 2,
+          "coverageMode": "native",
+          "reason": "M02 的Review候选；按冻结说明评估角色适配，尚未据此晋级。"
+        },
+        {
+          "moduleId": "M04",
+          "leadRole": "review",
+          "roles": [
+            "review"
+          ],
+          "rank": 1,
+          "coverageMode": "native",
+          "reason": "M04 的Review候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "review"
+      ],
       "parentDecision": "workbench",
       "scores": {
         "fitScore": 95,
@@ -8821,7 +9233,50 @@
         "scope": "repository",
         "status": "clear"
       },
-      "verificationState": "structure-checked",
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "benchmark-v1",
+      "capabilityCluster": "core",
+      "benchmarkTrack": {
+        "cohort": "v1-40",
+        "order": 13
+      },
+      "workbenchAssignments": [
+        {
+          "moduleId": "M01",
+          "leadRole": "review",
+          "roles": [
+            "review"
+          ],
+          "rank": 2,
+          "coverageMode": "native",
+          "reason": "M01 的Review候选；按冻结说明评估角色适配，尚未据此晋级。"
+        },
+        {
+          "moduleId": "M04",
+          "leadRole": "review",
+          "roles": [
+            "review"
+          ],
+          "rank": 2,
+          "coverageMode": "native",
+          "reason": "M04 的Review候选；按冻结说明评估角色适配，尚未据此晋级。"
+        },
+        {
+          "moduleId": "M10",
+          "leadRole": "review",
+          "roles": [
+            "review"
+          ],
+          "rank": 2,
+          "coverageMode": "native",
+          "reason": "M10 的Review候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "review"
+      ],
       "parentDecision": "workbench",
       "scores": {
         "fitScore": 92,
@@ -8873,7 +9328,30 @@
         "scope": "repository",
         "status": "clear"
       },
-      "verificationState": "structure-checked",
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "benchmark-v1",
+      "capabilityCluster": "core",
+      "benchmarkTrack": {
+        "cohort": "v1-40",
+        "order": 14
+      },
+      "workbenchAssignments": [
+        {
+          "moduleId": "M04",
+          "leadRole": "core",
+          "roles": [
+            "core"
+          ],
+          "rank": 1,
+          "coverageMode": "native",
+          "reason": "M04 的主执行候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "core"
+      ],
       "parentDecision": "workbench",
       "scores": {
         "fitScore": 91,
@@ -8925,7 +9403,30 @@
         "scope": "repository",
         "status": "clear"
       },
-      "verificationState": "structure-checked",
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "benchmark-v1",
+      "capabilityCluster": "core",
+      "benchmarkTrack": {
+        "cohort": "v1-40",
+        "order": 15
+      },
+      "workbenchAssignments": [
+        {
+          "moduleId": "M05",
+          "leadRole": "core",
+          "roles": [
+            "core"
+          ],
+          "rank": 1,
+          "coverageMode": "native",
+          "reason": "M05 的主执行候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "core"
+      ],
       "parentDecision": "workbench",
       "scores": {
         "fitScore": 94,
@@ -8977,7 +9478,30 @@
         "scope": "repository",
         "status": "clear"
       },
-      "verificationState": "structure-checked",
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "benchmark-v1",
+      "capabilityCluster": "core",
+      "benchmarkTrack": {
+        "cohort": "v1-40",
+        "order": 16
+      },
+      "workbenchAssignments": [
+        {
+          "moduleId": "M05",
+          "leadRole": "core",
+          "roles": [
+            "core"
+          ],
+          "rank": 2,
+          "coverageMode": "native",
+          "reason": "M05 的主执行候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "core"
+      ],
       "parentDecision": "workbench",
       "scores": {
         "fitScore": 93,
@@ -9029,7 +9553,30 @@
         "scope": "repository",
         "status": "clear"
       },
-      "verificationState": "structure-checked",
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "benchmark-v1",
+      "capabilityCluster": "core",
+      "benchmarkTrack": {
+        "cohort": "v1-40",
+        "order": 17
+      },
+      "workbenchAssignments": [
+        {
+          "moduleId": "M05",
+          "leadRole": "review",
+          "roles": [
+            "review"
+          ],
+          "rank": 1,
+          "coverageMode": "native",
+          "reason": "M05 的Review候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "review"
+      ],
       "parentDecision": "workbench",
       "scores": {
         "fitScore": 91,
@@ -9081,7 +9628,30 @@
         "scope": "repository",
         "status": "clear"
       },
-      "verificationState": "structure-checked",
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "benchmark-v1",
+      "capabilityCluster": "core",
+      "benchmarkTrack": {
+        "cohort": "v1-40",
+        "order": 18
+      },
+      "workbenchAssignments": [
+        {
+          "moduleId": "M06",
+          "leadRole": "core",
+          "roles": [
+            "core"
+          ],
+          "rank": 1,
+          "coverageMode": "native",
+          "reason": "M06 的主执行候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "core"
+      ],
       "parentDecision": "workbench",
       "scores": {
         "fitScore": 92,
@@ -9133,7 +9703,30 @@
         "scope": "repository",
         "status": "clear"
       },
-      "verificationState": "structure-checked",
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "benchmark-v1",
+      "capabilityCluster": "core",
+      "benchmarkTrack": {
+        "cohort": "v1-40",
+        "order": 19
+      },
+      "workbenchAssignments": [
+        {
+          "moduleId": "M06",
+          "leadRole": "core",
+          "roles": [
+            "core"
+          ],
+          "rank": 2,
+          "coverageMode": "native",
+          "reason": "M06 的主执行候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "core"
+      ],
       "parentDecision": "workbench",
       "scores": {
         "fitScore": 88,
@@ -9185,7 +9778,30 @@
         "scope": "skill",
         "status": "clear"
       },
-      "verificationState": "structure-checked",
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "benchmark-v1",
+      "capabilityCluster": "core",
+      "benchmarkTrack": {
+        "cohort": "v1-40",
+        "order": 20
+      },
+      "workbenchAssignments": [
+        {
+          "moduleId": "M06",
+          "leadRole": "visualize",
+          "roles": [
+            "visualize"
+          ],
+          "rank": 1,
+          "coverageMode": "native",
+          "reason": "M06 的可视化候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "visualize"
+      ],
       "parentDecision": "workbench",
       "scores": {
         "fitScore": 87,
@@ -9237,7 +9853,30 @@
         "scope": "repository",
         "status": "clear"
       },
-      "verificationState": "structure-checked",
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "benchmark-v1",
+      "capabilityCluster": "core",
+      "benchmarkTrack": {
+        "cohort": "v1-40",
+        "order": 21
+      },
+      "workbenchAssignments": [
+        {
+          "moduleId": "M07",
+          "leadRole": "core",
+          "roles": [
+            "core"
+          ],
+          "rank": 1,
+          "coverageMode": "native",
+          "reason": "M07 的主执行候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "core"
+      ],
       "parentDecision": "workbench",
       "scores": {
         "fitScore": 94,
@@ -9289,7 +9928,30 @@
         "scope": "repository",
         "status": "clear"
       },
-      "verificationState": "structure-checked",
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "benchmark-v1",
+      "capabilityCluster": "core",
+      "benchmarkTrack": {
+        "cohort": "v1-40",
+        "order": 22
+      },
+      "workbenchAssignments": [
+        {
+          "moduleId": "M07",
+          "leadRole": "summarize",
+          "roles": [
+            "summarize"
+          ],
+          "rank": 1,
+          "coverageMode": "native",
+          "reason": "M07 的总结交接候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "summarize"
+      ],
       "parentDecision": "workbench",
       "scores": {
         "fitScore": 92,
@@ -9341,7 +10003,50 @@
         "scope": "repository",
         "status": "clear"
       },
-      "verificationState": "structure-checked",
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "benchmark-v1",
+      "capabilityCluster": "core",
+      "benchmarkTrack": {
+        "cohort": "v1-40",
+        "order": 23
+      },
+      "workbenchAssignments": [
+        {
+          "moduleId": "M07",
+          "leadRole": "review",
+          "roles": [
+            "review"
+          ],
+          "rank": 1,
+          "coverageMode": "native",
+          "reason": "M07 的Review候选；按冻结说明评估角色适配，尚未据此晋级。"
+        },
+        {
+          "moduleId": "M08",
+          "leadRole": "review",
+          "roles": [
+            "review"
+          ],
+          "rank": 3,
+          "coverageMode": "native",
+          "reason": "M08 的Review候选；按冻结说明评估角色适配，尚未据此晋级。"
+        },
+        {
+          "moduleId": "M10",
+          "leadRole": "review",
+          "roles": [
+            "review"
+          ],
+          "rank": 3,
+          "coverageMode": "native",
+          "reason": "M10 的Review候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "review"
+      ],
       "parentDecision": "workbench",
       "scores": {
         "fitScore": 91,
@@ -9393,7 +10098,30 @@
         "scope": "repository",
         "status": "clear"
       },
-      "verificationState": "structure-checked",
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "benchmark-v1",
+      "capabilityCluster": "core",
+      "benchmarkTrack": {
+        "cohort": "v1-40",
+        "order": 24
+      },
+      "workbenchAssignments": [
+        {
+          "moduleId": "M08",
+          "leadRole": "core",
+          "roles": [
+            "core"
+          ],
+          "rank": 1,
+          "coverageMode": "native",
+          "reason": "M08 的主执行候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "core"
+      ],
       "parentDecision": "workbench",
       "scores": {
         "fitScore": 95,
@@ -9446,7 +10174,30 @@
         "scope": "repository",
         "status": "clear"
       },
-      "verificationState": "structure-checked",
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "benchmark-v1",
+      "capabilityCluster": "core",
+      "benchmarkTrack": {
+        "cohort": "v1-40",
+        "order": 25
+      },
+      "workbenchAssignments": [
+        {
+          "moduleId": "M08",
+          "leadRole": "core",
+          "roles": [
+            "core"
+          ],
+          "rank": 2,
+          "coverageMode": "native",
+          "reason": "M08 的主执行候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "core"
+      ],
       "parentDecision": "workbench",
       "scores": {
         "fitScore": 93,
@@ -9498,7 +10249,30 @@
         "scope": "repository",
         "status": "clear"
       },
-      "verificationState": "structure-checked",
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "benchmark-v1",
+      "capabilityCluster": "core",
+      "benchmarkTrack": {
+        "cohort": "v1-40",
+        "order": 26
+      },
+      "workbenchAssignments": [
+        {
+          "moduleId": "M08",
+          "leadRole": "review",
+          "roles": [
+            "review"
+          ],
+          "rank": 1,
+          "coverageMode": "native",
+          "reason": "M08 的Review候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "review"
+      ],
       "parentDecision": "workbench",
       "scores": {
         "fitScore": 90,
@@ -9550,7 +10324,40 @@
         "scope": "repository",
         "status": "clear"
       },
-      "verificationState": "structure-checked",
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "benchmark-v1",
+      "capabilityCluster": "core",
+      "benchmarkTrack": {
+        "cohort": "v1-40",
+        "order": 27
+      },
+      "workbenchAssignments": [
+        {
+          "moduleId": "M08",
+          "leadRole": "review",
+          "roles": [
+            "review"
+          ],
+          "rank": 2,
+          "coverageMode": "native",
+          "reason": "M08 的Review候选；按冻结说明评估角色适配，尚未据此晋级。"
+        },
+        {
+          "moduleId": "M09",
+          "leadRole": "review",
+          "roles": [
+            "review"
+          ],
+          "rank": 1,
+          "coverageMode": "native",
+          "reason": "M09 的Review候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "review"
+      ],
       "parentDecision": "workbench",
       "scores": {
         "fitScore": 94,
@@ -9604,7 +10411,30 @@
         "scope": "repository",
         "status": "clear"
       },
-      "verificationState": "structure-checked",
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "benchmark-v1",
+      "capabilityCluster": "core",
+      "benchmarkTrack": {
+        "cohort": "v1-40",
+        "order": 28
+      },
+      "workbenchAssignments": [
+        {
+          "moduleId": "M09",
+          "leadRole": "core",
+          "roles": [
+            "core"
+          ],
+          "rank": 1,
+          "coverageMode": "native",
+          "reason": "M09 的主执行候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "core"
+      ],
       "parentDecision": "workbench",
       "scores": {
         "fitScore": 91,
@@ -9656,7 +10486,40 @@
         "scope": "repository",
         "status": "clear"
       },
-      "verificationState": "structure-checked",
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "benchmark-v1",
+      "capabilityCluster": "core",
+      "benchmarkTrack": {
+        "cohort": "v1-40",
+        "order": 29
+      },
+      "workbenchAssignments": [
+        {
+          "moduleId": "M06",
+          "leadRole": "visualize",
+          "roles": [
+            "visualize"
+          ],
+          "rank": 3,
+          "coverageMode": "native",
+          "reason": "M06 的可视化候选；按冻结说明评估角色适配，尚未据此晋级。"
+        },
+        {
+          "moduleId": "M09",
+          "leadRole": "visualize",
+          "roles": [
+            "visualize"
+          ],
+          "rank": 1,
+          "coverageMode": "native",
+          "reason": "M09 的可视化候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "visualize"
+      ],
       "parentDecision": "workbench",
       "scores": {
         "fitScore": 89,
@@ -9708,7 +10571,40 @@
         "scope": "repository",
         "status": "clear"
       },
-      "verificationState": "structure-checked",
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "benchmark-v1",
+      "capabilityCluster": "core",
+      "benchmarkTrack": {
+        "cohort": "v1-40",
+        "order": 30
+      },
+      "workbenchAssignments": [
+        {
+          "moduleId": "M09",
+          "leadRole": "summarize",
+          "roles": [
+            "summarize"
+          ],
+          "rank": 1,
+          "coverageMode": "combined",
+          "reason": "M09 的总结交接候选；按冻结说明评估角色适配，尚未据此晋级。"
+        },
+        {
+          "moduleId": "M10",
+          "leadRole": "summarize",
+          "roles": [
+            "summarize"
+          ],
+          "rank": 1,
+          "coverageMode": "native",
+          "reason": "M10 的总结交接候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "summarize"
+      ],
       "parentDecision": "workbench",
       "scores": {
         "fitScore": 94,
@@ -9760,7 +10656,30 @@
         "scope": "repository",
         "status": "clear"
       },
-      "verificationState": "structure-checked",
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "benchmark-v1",
+      "capabilityCluster": "core",
+      "benchmarkTrack": {
+        "cohort": "v1-40",
+        "order": 31
+      },
+      "workbenchAssignments": [
+        {
+          "moduleId": "M10",
+          "leadRole": "core",
+          "roles": [
+            "core"
+          ],
+          "rank": 1,
+          "coverageMode": "native",
+          "reason": "M10 的主执行候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "core"
+      ],
       "parentDecision": "workbench",
       "scores": {
         "fitScore": 84,
@@ -9812,7 +10731,30 @@
         "scope": "repository",
         "status": "clear"
       },
-      "verificationState": "structure-checked",
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "benchmark-v1",
+      "capabilityCluster": "core",
+      "benchmarkTrack": {
+        "cohort": "v1-40",
+        "order": 32
+      },
+      "workbenchAssignments": [
+        {
+          "moduleId": "M11",
+          "leadRole": "review",
+          "roles": [
+            "review"
+          ],
+          "rank": 1,
+          "coverageMode": "native",
+          "reason": "M11 的Review候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "review"
+      ],
       "parentDecision": "workbench",
       "scores": {
         "fitScore": 93,
@@ -9864,7 +10806,50 @@
         "scope": "repository",
         "status": "clear"
       },
-      "verificationState": "structure-checked",
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "benchmark-v1",
+      "capabilityCluster": "core",
+      "benchmarkTrack": {
+        "cohort": "v1-40",
+        "order": 33
+      },
+      "workbenchAssignments": [
+        {
+          "moduleId": "M04",
+          "leadRole": "visualize",
+          "roles": [
+            "visualize"
+          ],
+          "rank": 2,
+          "coverageMode": "native",
+          "reason": "M04 的可视化候选；按冻结说明评估角色适配，尚未据此晋级。"
+        },
+        {
+          "moduleId": "M11",
+          "leadRole": "visualize",
+          "roles": [
+            "visualize"
+          ],
+          "rank": 1,
+          "coverageMode": "native",
+          "reason": "M11 的可视化候选；按冻结说明评估角色适配，尚未据此晋级。"
+        },
+        {
+          "moduleId": "M12",
+          "leadRole": "visualize",
+          "roles": [
+            "visualize"
+          ],
+          "rank": 1,
+          "coverageMode": "native",
+          "reason": "M12 的可视化候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "visualize"
+      ],
       "parentDecision": "workbench",
       "scores": {
         "fitScore": 90,
@@ -9918,7 +10903,30 @@
         "scope": "repository",
         "status": "clear"
       },
-      "verificationState": "docs-only",
+      "verificationState": "source-confirmed",
+      "admissionLevel": "source-confirmed",
+      "claimCeiling": "candidate-only",
+      "origin": "benchmark-v1",
+      "capabilityCluster": "core",
+      "benchmarkTrack": {
+        "cohort": "v1-40",
+        "order": 34
+      },
+      "workbenchAssignments": [
+        {
+          "moduleId": "M11",
+          "leadRole": "core",
+          "roles": [
+            "core"
+          ],
+          "rank": 1,
+          "coverageMode": "native",
+          "reason": "M11 的主执行候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "core"
+      ],
       "parentDecision": "workbench",
       "scores": {
         "fitScore": 83,
@@ -9970,7 +10978,30 @@
         "scope": "repository",
         "status": "clear"
       },
-      "verificationState": "structure-checked",
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "benchmark-v1",
+      "capabilityCluster": "core",
+      "benchmarkTrack": {
+        "cohort": "v1-40",
+        "order": 35
+      },
+      "workbenchAssignments": [
+        {
+          "moduleId": "M12",
+          "leadRole": "core",
+          "roles": [
+            "core"
+          ],
+          "rank": 1,
+          "coverageMode": "native",
+          "reason": "M12 的主执行候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "core"
+      ],
       "parentDecision": "workbench",
       "scores": {
         "fitScore": 92,
@@ -10022,7 +11053,30 @@
         "scope": "repository",
         "status": "clear"
       },
-      "verificationState": "structure-checked",
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "benchmark-v1",
+      "capabilityCluster": "core",
+      "benchmarkTrack": {
+        "cohort": "v1-40",
+        "order": 36
+      },
+      "workbenchAssignments": [
+        {
+          "moduleId": "M12",
+          "leadRole": "review",
+          "roles": [
+            "review"
+          ],
+          "rank": 1,
+          "coverageMode": "native",
+          "reason": "M12 的Review候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "review"
+      ],
       "parentDecision": "workbench",
       "scores": {
         "fitScore": 91,
@@ -10075,7 +11129,30 @@
         "scope": "repository",
         "status": "clear"
       },
-      "verificationState": "structure-checked",
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "benchmark-v1",
+      "capabilityCluster": "core",
+      "benchmarkTrack": {
+        "cohort": "v1-40",
+        "order": 37
+      },
+      "workbenchAssignments": [
+        {
+          "moduleId": "M12",
+          "leadRole": "core",
+          "roles": [
+            "core"
+          ],
+          "rank": 2,
+          "coverageMode": "native",
+          "reason": "M12 的主执行候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "core"
+      ],
       "parentDecision": "workbench",
       "scores": {
         "fitScore": 88,
@@ -10128,7 +11205,30 @@
         "scope": "repository",
         "status": "clear"
       },
-      "verificationState": "structure-checked",
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "benchmark-v1",
+      "capabilityCluster": "core",
+      "benchmarkTrack": {
+        "cohort": "v1-40",
+        "order": 38
+      },
+      "workbenchAssignments": [
+        {
+          "moduleId": "M13",
+          "leadRole": "core",
+          "roles": [
+            "core"
+          ],
+          "rank": 1,
+          "coverageMode": "native",
+          "reason": "M13 的主执行候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "core"
+      ],
       "parentDecision": "workbench",
       "scores": {
         "fitScore": 96,
@@ -10180,7 +11280,30 @@
         "scope": "skill",
         "status": "clear"
       },
-      "verificationState": "structure-checked",
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "benchmark-v1",
+      "capabilityCluster": "core",
+      "benchmarkTrack": {
+        "cohort": "v1-40",
+        "order": 39
+      },
+      "workbenchAssignments": [
+        {
+          "moduleId": "M13",
+          "leadRole": "core",
+          "roles": [
+            "core"
+          ],
+          "rank": 2,
+          "coverageMode": "native",
+          "reason": "M13 的主执行候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "core"
+      ],
       "parentDecision": "workbench",
       "scores": {
         "fitScore": 90,
@@ -10232,7 +11355,30 @@
         "scope": "repository",
         "status": "clear"
       },
-      "verificationState": "structure-checked",
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "benchmark-v1",
+      "capabilityCluster": "core",
+      "benchmarkTrack": {
+        "cohort": "v1-40",
+        "order": 40
+      },
+      "workbenchAssignments": [
+        {
+          "moduleId": "M13",
+          "leadRole": "summarize",
+          "roles": [
+            "summarize"
+          ],
+          "rank": 1,
+          "coverageMode": "native",
+          "reason": "M13 的总结交接候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "summarize"
+      ],
       "parentDecision": "workbench",
       "scores": {
         "fitScore": 89,
@@ -10240,6 +11386,2671 @@
         "evidenceCoverage": 0.86,
         "publicSignalScore": 82.7,
         "researchPriority": 87.2
+      }
+    },
+    {
+      "id": "github:k-dense-ai/scientific-agent-skills@330c8e764435a731eff571e3efdda70b363d0792#skills/peer-review/SKILL.md",
+      "kind": "agentic-skill",
+      "name": "证据边界同行评审",
+      "slug": "peer-review",
+      "repoFullName": "K-Dense-AI/scientific-agent-skills",
+      "repoName": "scientific-agent-skills",
+      "repoUrl": "https://github.com/K-Dense-AI/scientific-agent-skills",
+      "headSha": "330c8e764435a731eff571e3efdda70b363d0792",
+      "path": "skills/peer-review/SKILL.md",
+      "sourceUrl": "https://github.com/K-Dense-AI/scientific-agent-skills/blob/330c8e764435a731eff571e3efdda70b363d0792/skills/peer-review/SKILL.md",
+      "blobSha": "ea0ca64ff7f90784ddc61a5aed95fb6e9ce53a44",
+      "primaryModule": "M02",
+      "secondaryModules": [
+        "M12",
+        "M13"
+      ],
+      "opcDimensions": [
+        "情报与研究"
+      ],
+      "capabilityForm": "direct-skill",
+      "selection": "expanded",
+      "featuredRank": null,
+      "effectClass": "local-artifact",
+      "coreThree": {
+        "does": "按证据强弱检查研究主张、方法、报告规范和未披露限制，产出可追溯的审查意见。",
+        "conditions": "只处理获授权材料；科研审查必须保留人类责任，不能把模型意见写成正式裁决。",
+        "proof": "用一份带已知缺陷的材料盲审，核对关键缺陷召回、误报、证据引用和严重度排序。"
+      },
+      "limitations": [
+        "偏科研语境",
+        "同目录 references、assets 与 scripts 需要一起核对"
+      ],
+      "selectedReason": "Review 结构完整，明确区分证据、推断与人类责任。",
+      "requirements": [
+        "授权的论文、方案或研究材料",
+        "研究类型、证据范围和审查标准"
+      ],
+      "license": {
+        "status": "clear",
+        "label": "MIT",
+        "clear": true,
+        "scope": "repository"
+      },
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "role-expansion-v1",
+      "capabilityCluster": "review",
+      "benchmarkTrack": null,
+      "workbenchAssignments": [
+        {
+          "moduleId": "M02",
+          "leadRole": "review",
+          "roles": [
+            "review"
+          ],
+          "rank": 1,
+          "coverageMode": "native",
+          "reason": "M02 的Review候选；按冻结说明评估角色适配，尚未据此晋级。"
+        },
+        {
+          "moduleId": "M11",
+          "leadRole": "review",
+          "roles": [
+            "review"
+          ],
+          "rank": 2,
+          "coverageMode": "native",
+          "reason": "M11 的Review候选；按冻结说明评估角色适配，尚未据此晋级。"
+        },
+        {
+          "moduleId": "M12",
+          "leadRole": "review",
+          "roles": [
+            "review"
+          ],
+          "rank": 2,
+          "coverageMode": "native",
+          "reason": "M12 的Review候选；按冻结说明评估角色适配，尚未据此晋级。"
+        },
+        {
+          "moduleId": "M13",
+          "leadRole": "review",
+          "roles": [
+            "review"
+          ],
+          "rank": 2,
+          "coverageMode": "native",
+          "reason": "M13 的Review候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "review"
+      ],
+      "parentDecision": "workbench",
+      "scores": {
+        "fitScore": 91,
+        "qualityScore": 85.3,
+        "evidenceCoverage": 0.86,
+        "publicSignalScore": 88.6,
+        "researchPriority": 88.7
+      }
+    },
+    {
+      "id": "github:phuryn/pm-skills@8607e3b077817f89bf4a9b623246219734ac3be0#pm-product-discovery/skills/analyze-feature-requests/SKILL.md",
+      "kind": "agentic-skill",
+      "name": "功能请求审查",
+      "slug": "analyze-feature-requests",
+      "repoFullName": "phuryn/pm-skills",
+      "repoName": "pm-skills",
+      "repoUrl": "https://github.com/phuryn/pm-skills",
+      "headSha": "8607e3b077817f89bf4a9b623246219734ac3be0",
+      "path": "pm-product-discovery/skills/analyze-feature-requests/SKILL.md",
+      "sourceUrl": "https://github.com/phuryn/pm-skills/blob/8607e3b077817f89bf4a9b623246219734ac3be0/pm-product-discovery/skills/analyze-feature-requests/SKILL.md",
+      "blobSha": "755b5cae934fb0fb8c334fdef10bbb358ed1492d",
+      "primaryModule": "M03",
+      "secondaryModules": [
+        "M04"
+      ],
+      "opcDimensions": [
+        "增长与客户"
+      ],
+      "capabilityForm": "direct-skill",
+      "selection": "expanded",
+      "featuredRank": null,
+      "effectClass": "local-artifact",
+      "coreThree": {
+        "does": "把零散功能请求按主题、战略一致性、影响、工作量和风险拆开审查。",
+        "conditions": "必须保留原始样本和反例；归类结果不能替代真实用户研究。",
+        "proof": "用一组含重复、冲突和低价值请求的样本复核主题归并、优先级依据和遗漏率。"
+      },
+      "limitations": [
+        "提示框架不是用户证据",
+        "优先级仍需业务负责人确认"
+      ],
+      "selectedReason": "补齐需求发现节点的专用 Review，而不是泛用代码审查。",
+      "requirements": [
+        "原始功能请求与用户来源",
+        "战略目标、成本和风险口径"
+      ],
+      "license": {
+        "status": "clear",
+        "label": "MIT",
+        "clear": true,
+        "scope": "repository"
+      },
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "role-expansion-v1",
+      "capabilityCluster": "review",
+      "benchmarkTrack": null,
+      "workbenchAssignments": [
+        {
+          "moduleId": "M03",
+          "leadRole": "review",
+          "roles": [
+            "review"
+          ],
+          "rank": 1,
+          "coverageMode": "native",
+          "reason": "M03 的Review候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "review"
+      ],
+      "parentDecision": "workbench",
+      "scores": {
+        "fitScore": 88,
+        "qualityScore": 85.5,
+        "evidenceCoverage": 0.86,
+        "publicSignalScore": 82.7,
+        "researchPriority": 86.7
+      }
+    },
+    {
+      "id": "github:phuryn/pm-skills@8607e3b077817f89bf4a9b623246219734ac3be0#pm-ai-shipping/skills/intended-vs-implemented/SKILL.md",
+      "kind": "agentic-skill",
+      "name": "意图与实现差距审计",
+      "slug": "intended-vs-implemented",
+      "repoFullName": "phuryn/pm-skills",
+      "repoName": "pm-skills",
+      "repoUrl": "https://github.com/phuryn/pm-skills",
+      "headSha": "8607e3b077817f89bf4a9b623246219734ac3be0",
+      "path": "pm-ai-shipping/skills/intended-vs-implemented/SKILL.md",
+      "sourceUrl": "https://github.com/phuryn/pm-skills/blob/8607e3b077817f89bf4a9b623246219734ac3be0/pm-ai-shipping/skills/intended-vs-implemented/SKILL.md",
+      "blobSha": "fd52d028afd1de556725e74e5b78280d1a6f0fe6",
+      "primaryModule": "M09",
+      "secondaryModules": [
+        "M05",
+        "M10"
+      ],
+      "opcDimensions": [
+        "质量与安全"
+      ],
+      "capabilityForm": "direct-skill",
+      "selection": "expanded",
+      "featuredRank": null,
+      "effectClass": "read-only",
+      "coreThree": {
+        "does": "逐条对照系统本来应该做什么与代码实际做了什么，找出通用扫描器看不到的语义缺口。",
+        "conditions": "上游意图文档必须可信且版本明确；没有证据时只能标记未知。",
+        "proof": "在含已知意图偏差的 fixture 上运行，核对定位、证据链、误报和未决项。"
+      },
+      "limitations": [
+        "错误 intent 会放大错误结论",
+        "只读审计不等于已经修复"
+      ],
+      "selectedReason": "连接需求、质量与发布，是端到端验收最缺的一类审查。",
+      "requirements": [
+        "可信的 intent / spec",
+        "固定代码、配置和测试证据"
+      ],
+      "license": {
+        "status": "clear",
+        "label": "MIT",
+        "clear": true,
+        "scope": "repository"
+      },
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "role-expansion-v1",
+      "capabilityCluster": "review",
+      "benchmarkTrack": null,
+      "workbenchAssignments": [
+        {
+          "moduleId": "M05",
+          "leadRole": "review",
+          "roles": [
+            "review"
+          ],
+          "rank": 2,
+          "coverageMode": "native",
+          "reason": "M05 的Review候选；按冻结说明评估角色适配，尚未据此晋级。"
+        },
+        {
+          "moduleId": "M10",
+          "leadRole": "review",
+          "roles": [
+            "review"
+          ],
+          "rank": 1,
+          "coverageMode": "native",
+          "reason": "M10 的Review候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "review"
+      ],
+      "parentDecision": "workbench",
+      "scores": {
+        "fitScore": 94,
+        "qualityScore": 85.5,
+        "evidenceCoverage": 0.86,
+        "publicSignalScore": 82.7,
+        "researchPriority": 90
+      }
+    },
+    {
+      "id": "github:dzhng/skills@c7957020f9fcb7321dbc339428b41cdff67c9637#skills/visual/screenshot-critique/SKILL.md",
+      "kind": "agentic-skill",
+      "name": "截图盲审",
+      "slug": "screenshot-critique",
+      "repoFullName": "dzhng/skills",
+      "repoName": "skills",
+      "repoUrl": "https://github.com/dzhng/skills",
+      "headSha": "c7957020f9fcb7321dbc339428b41cdff67c9637",
+      "path": "skills/visual/screenshot-critique/SKILL.md",
+      "sourceUrl": "https://github.com/dzhng/skills/blob/c7957020f9fcb7321dbc339428b41cdff67c9637/skills/visual/screenshot-critique/SKILL.md",
+      "blobSha": "525336e32d44c6251cced51e7109f60a8c30dd66",
+      "primaryModule": "M06",
+      "secondaryModules": [
+        "M09"
+      ],
+      "opcDimensions": [
+        "设计与内容"
+      ],
+      "capabilityForm": "direct-skill",
+      "selection": "expanded",
+      "featuredRank": null,
+      "effectClass": "read-only",
+      "coreThree": {
+        "does": "让未被上下文带偏的第二视角审查界面层级、错位、溢出和视觉异常。",
+        "conditions": "必须给真实截图；盲审结果要和交互、语义及可访问性验证分开。",
+        "proof": "用带已知视觉缺陷的截图测试召回与误报，再由浏览器复现确认。"
+      },
+      "limitations": [
+        "依赖 sub-agent",
+        "静态截图看不到完整交互"
+      ],
+      "selectedReason": "把设计后的视觉复核从作者自检中独立出来。",
+      "requirements": [
+        "新鲜截图或基准图",
+        "不被修复过程预设结论的独立审查者"
+      ],
+      "license": {
+        "status": "clear",
+        "label": "MIT",
+        "clear": true,
+        "scope": "repository"
+      },
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "role-expansion-v1",
+      "capabilityCluster": "review",
+      "benchmarkTrack": null,
+      "workbenchAssignments": [
+        {
+          "moduleId": "M06",
+          "leadRole": "review",
+          "roles": [
+            "review"
+          ],
+          "rank": 1,
+          "coverageMode": "native",
+          "reason": "M06 的Review候选；按冻结说明评估角色适配，尚未据此晋级。"
+        },
+        {
+          "moduleId": "M09",
+          "leadRole": "review",
+          "roles": [
+            "review"
+          ],
+          "rank": 3,
+          "coverageMode": "native",
+          "reason": "M09 的Review候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "review"
+      ],
+      "parentDecision": "workbench",
+      "scores": {
+        "fitScore": 90,
+        "qualityScore": 77.5,
+        "evidenceCoverage": 0.65,
+        "publicSignalScore": 39.1,
+        "researchPriority": 81.3
+      }
+    },
+    {
+      "id": "github:anthropics/skills@34040c9c568585f6929bedeaad110ad08f079624#skills/webapp-testing/SKILL.md",
+      "kind": "agentic-skill",
+      "name": "Web 应用实测",
+      "slug": "webapp-testing",
+      "repoFullName": "anthropics/skills",
+      "repoName": "skills",
+      "repoUrl": "https://github.com/anthropics/skills",
+      "headSha": "34040c9c568585f6929bedeaad110ad08f079624",
+      "path": "skills/webapp-testing/SKILL.md",
+      "sourceUrl": "https://github.com/anthropics/skills/blob/34040c9c568585f6929bedeaad110ad08f079624/skills/webapp-testing/SKILL.md",
+      "blobSha": "4726215301db64a0cc4d41fc3219c61f37a30f4a",
+      "primaryModule": "M09",
+      "secondaryModules": [
+        "M06"
+      ],
+      "opcDimensions": [
+        "质量与安全"
+      ],
+      "capabilityForm": "direct-skill",
+      "selection": "expanded",
+      "featuredRank": null,
+      "effectClass": "workspace",
+      "coreThree": {
+        "does": "启动本地服务，用浏览器完成真实交互、截图和控制台检查。",
+        "conditions": "需整目录物化 scripts/with_server.py；测试账号、写入范围和清理方式先说清。",
+        "proof": "对一条关键路径执行成功、失败与移动端场景，核对可见结果、日志和残留状态。"
+      },
+      "limitations": [
+        "单个 SKILL.md 不够",
+        "浏览器通过不等于后端和权限安全"
+      ],
+      "selectedReason": "提供从视觉检查走到可复现交互验证的桥梁。",
+      "requirements": [
+        "可启动的本地 Web 应用",
+        "完整 Skill 目录、Playwright 与 Python helper"
+      ],
+      "license": {
+        "status": "per-skill",
+        "label": "目标 Skill 独立 Apache-2.0",
+        "clear": true,
+        "scope": "skill-directory"
+      },
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "role-expansion-v1",
+      "capabilityCluster": "review",
+      "benchmarkTrack": null,
+      "workbenchAssignments": [
+        {
+          "moduleId": "M06",
+          "leadRole": "review",
+          "roles": [
+            "review"
+          ],
+          "rank": 2,
+          "coverageMode": "native",
+          "reason": "M06 的Review候选；按冻结说明评估角色适配，尚未据此晋级。"
+        },
+        {
+          "moduleId": "M09",
+          "leadRole": "review",
+          "roles": [
+            "review"
+          ],
+          "rank": 2,
+          "coverageMode": "native",
+          "reason": "M09 的Review候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "review"
+      ],
+      "parentDecision": "workbench",
+      "scores": {
+        "fitScore": 92,
+        "qualityScore": 78.3,
+        "evidenceCoverage": 0.65,
+        "publicSignalScore": 88.7,
+        "researchPriority": 86.7
+      }
+    },
+    {
+      "id": "github:dzhng/skills@c7957020f9fcb7321dbc339428b41cdff67c9637#skills/authoring/eval-skills/SKILL.md",
+      "kind": "agentic-skill",
+      "name": "Skill 金标准评测",
+      "slug": "eval-skills",
+      "repoFullName": "dzhng/skills",
+      "repoName": "skills",
+      "repoUrl": "https://github.com/dzhng/skills",
+      "headSha": "c7957020f9fcb7321dbc339428b41cdff67c9637",
+      "path": "skills/authoring/eval-skills/SKILL.md",
+      "sourceUrl": "https://github.com/dzhng/skills/blob/c7957020f9fcb7321dbc339428b41cdff67c9637/skills/authoring/eval-skills/SKILL.md",
+      "blobSha": "505e36edfb962e3a1e8ed6115e0597ded5674334",
+      "primaryModule": "M13",
+      "secondaryModules": [
+        "M09"
+      ],
+      "opcDimensions": [
+        "记忆与治理"
+      ],
+      "capabilityForm": "direct-skill",
+      "selection": "expanded",
+      "featuredRank": null,
+      "effectClass": "workspace",
+      "coreThree": {
+        "does": "让 Skill 在无上下文执行者上盲跑，再按金标准评分，用缺口驱动修改。",
+        "conditions": "没有 golden cases、盲跑和独立评分时拒绝把结果叫评测。",
+        "proof": "对已知好坏两个 Skill 重复运行，检查区分度、方差、judge 泄漏和可重现性。"
+      },
+      "limitations": [
+        "依赖 sub-agent 与 judge 设计",
+        "不合格评分器不能用于晋级"
+      ],
+      "selectedReason": "直接补齐能力库自身的 Review 与淘汰机制。",
+      "requirements": [
+        "golden cases 与期望结果",
+        "新鲜上下文执行者、独立 judge 和重复运行预算"
+      ],
+      "license": {
+        "status": "clear",
+        "label": "MIT",
+        "clear": true,
+        "scope": "repository"
+      },
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "role-expansion-v1",
+      "capabilityCluster": "review",
+      "benchmarkTrack": null,
+      "workbenchAssignments": [
+        {
+          "moduleId": "M13",
+          "leadRole": "review",
+          "roles": [
+            "review"
+          ],
+          "rank": 1,
+          "coverageMode": "native",
+          "reason": "M13 的Review候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "review"
+      ],
+      "parentDecision": "workbench",
+      "scores": {
+        "fitScore": 95,
+        "qualityScore": 77.5,
+        "evidenceCoverage": 0.65,
+        "publicSignalScore": 39.1,
+        "researchPriority": 84.1
+      }
+    },
+    {
+      "id": "github:ai-analyst-lab/ai-analyst@3cfebe3d4d6e192d26bb816134b47f606bb14944#.claude/skills/data-map/SKILL.md",
+      "kind": "agentic-skill",
+      "name": "数据地图",
+      "slug": "data-map",
+      "repoFullName": "ai-analyst-lab/ai-analyst",
+      "repoName": "ai-analyst",
+      "repoUrl": "https://github.com/ai-analyst-lab/ai-analyst",
+      "headSha": "3cfebe3d4d6e192d26bb816134b47f606bb14944",
+      "path": ".claude/skills/data-map/SKILL.md",
+      "sourceUrl": "https://github.com/ai-analyst-lab/ai-analyst/blob/3cfebe3d4d6e192d26bb816134b47f606bb14944/.claude/skills/data-map/SKILL.md",
+      "blobSha": "1a04631f702b986a24cde0b04c064a3594a1937f",
+      "primaryModule": "M11",
+      "secondaryModules": [
+        "M00",
+        "M01"
+      ],
+      "opcDimensions": [
+        "发布与运营"
+      ],
+      "capabilityForm": "package-bound-skill",
+      "selection": "expanded",
+      "featuredRank": null,
+      "effectClass": "external",
+      "coreThree": {
+        "does": "盘点表、主键、日期范围、完整度和可连接关系，画出可分析的数据边界。",
+        "conditions": "绑定 AI Analyst 数据上下文；必须先确认只读权限、口径和敏感字段。",
+        "proof": "用已知 schema 检查表数、主键、日期和空值率，再核对关系图是否虚构连接。"
+      },
+      "limitations": [
+        "整包依赖",
+        "需要 scripts/log_query.py",
+        "只适合数据集上下文"
+      ],
+      "selectedReason": "把数据源和可用边界画清楚，防止分析在错误表上开始。",
+      "requirements": [
+        "可访问的数据集与表结构",
+        "AI Analyst runtime 和查询日志 helper"
+      ],
+      "license": {
+        "status": "clear",
+        "label": "MIT",
+        "clear": true,
+        "scope": "repository"
+      },
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "role-expansion-v1",
+      "capabilityCluster": "visualize",
+      "benchmarkTrack": null,
+      "workbenchAssignments": [
+        {
+          "moduleId": "M11",
+          "leadRole": "core",
+          "roles": [
+            "core"
+          ],
+          "rank": 2,
+          "coverageMode": "native",
+          "reason": "M11 的主执行候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "core"
+      ],
+      "parentDecision": "workbench",
+      "scores": {
+        "fitScore": 90,
+        "qualityScore": 84.2,
+        "evidenceCoverage": 0.86,
+        "publicSignalScore": 45.1,
+        "researchPriority": 84.3
+      }
+    },
+    {
+      "id": "github:phuryn/pm-skills@8607e3b077817f89bf4a9b623246219734ac3be0#pm-execution/skills/stakeholder-map/SKILL.md",
+      "kind": "agentic-skill",
+      "name": "干系人地图",
+      "slug": "stakeholder-map",
+      "repoFullName": "phuryn/pm-skills",
+      "repoName": "pm-skills",
+      "repoUrl": "https://github.com/phuryn/pm-skills",
+      "headSha": "8607e3b077817f89bf4a9b623246219734ac3be0",
+      "path": "pm-execution/skills/stakeholder-map/SKILL.md",
+      "sourceUrl": "https://github.com/phuryn/pm-skills/blob/8607e3b077817f89bf4a9b623246219734ac3be0/pm-execution/skills/stakeholder-map/SKILL.md",
+      "blobSha": "08e5ad24a830a8faef9942a6fd9acdd274261835",
+      "primaryModule": "M00",
+      "secondaryModules": [
+        "M01",
+        "M03",
+        "M04"
+      ],
+      "opcDimensions": [
+        "记忆与治理"
+      ],
+      "capabilityForm": "direct-skill",
+      "selection": "expanded",
+      "featuredRank": null,
+      "effectClass": "local-artifact",
+      "coreThree": {
+        "does": "用权力与关注度矩阵画清角色关系，并给出分层沟通计划。",
+        "conditions": "事实关系与推测关系必须分开；涉及个人影响力时要人工复核。",
+        "proof": "让项目负责人逐项核对角色、权力、关注点、遗漏者和沟通责任。"
+      },
+      "limitations": [
+        "关系快速变化",
+        "不能根据职位自动推断真实影响力"
+      ],
+      "selectedReason": "适合在启动、访谈和路线决策前暴露责任与沟通缺口。",
+      "requirements": [
+        "真实角色、职责和决策权信息",
+        "沟通目标与节奏"
+      ],
+      "license": {
+        "status": "clear",
+        "label": "MIT",
+        "clear": true,
+        "scope": "repository"
+      },
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "role-expansion-v1",
+      "capabilityCluster": "visualize",
+      "benchmarkTrack": null,
+      "workbenchAssignments": [
+        {
+          "moduleId": "M00",
+          "leadRole": "visualize",
+          "roles": [
+            "visualize"
+          ],
+          "rank": 1,
+          "coverageMode": "native",
+          "reason": "M00 的可视化候选；按冻结说明评估角色适配，尚未据此晋级。"
+        },
+        {
+          "moduleId": "M01",
+          "leadRole": "visualize",
+          "roles": [
+            "visualize"
+          ],
+          "rank": 1,
+          "coverageMode": "native",
+          "reason": "M01 的可视化候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "visualize"
+      ],
+      "parentDecision": "workbench",
+      "scores": {
+        "fitScore": 89,
+        "qualityScore": 85.5,
+        "evidenceCoverage": 0.86,
+        "publicSignalScore": 82.7,
+        "researchPriority": 87.2
+      }
+    },
+    {
+      "id": "github:phuryn/pm-skills@8607e3b077817f89bf4a9b623246219734ac3be0#pm-product-discovery/skills/opportunity-solution-tree/SKILL.md",
+      "kind": "agentic-skill",
+      "name": "机会方案树",
+      "slug": "opportunity-solution-tree",
+      "repoFullName": "phuryn/pm-skills",
+      "repoName": "pm-skills",
+      "repoUrl": "https://github.com/phuryn/pm-skills",
+      "headSha": "8607e3b077817f89bf4a9b623246219734ac3be0",
+      "path": "pm-product-discovery/skills/opportunity-solution-tree/SKILL.md",
+      "sourceUrl": "https://github.com/phuryn/pm-skills/blob/8607e3b077817f89bf4a9b623246219734ac3be0/pm-product-discovery/skills/opportunity-solution-tree/SKILL.md",
+      "blobSha": "d62668118be00de5626e08488673ec22e7f83491",
+      "primaryModule": "M04",
+      "secondaryModules": [
+        "M02",
+        "M03",
+        "M12"
+      ],
+      "opcDimensions": [
+        "产品与策略"
+      ],
+      "capabilityForm": "direct-skill",
+      "selection": "expanded",
+      "featuredRank": null,
+      "effectClass": "local-artifact",
+      "coreThree": {
+        "does": "把目标结果、用户机会、候选方案和验证实验放进一棵可追踪的决策树。",
+        "conditions": "没有真实研究时，机会节点只能标成假设，不能写成用户事实。",
+        "proof": "从树上随机抽取节点，核对其证据、父子关系、取舍理由和实验出口。"
+      },
+      "limitations": [
+        "结构清楚不等于证据充分",
+        "树过大时需要人工收敛"
+      ],
+      "selectedReason": "把研究、产品取舍和实验连接为同一张图。",
+      "requirements": [
+        "明确目标结果",
+        "真实机会证据、候选方案和实验"
+      ],
+      "license": {
+        "status": "clear",
+        "label": "MIT",
+        "clear": true,
+        "scope": "repository"
+      },
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "role-expansion-v1",
+      "capabilityCluster": "visualize",
+      "benchmarkTrack": null,
+      "workbenchAssignments": [
+        {
+          "moduleId": "M02",
+          "leadRole": "visualize",
+          "roles": [
+            "visualize"
+          ],
+          "rank": 1,
+          "coverageMode": "native",
+          "reason": "M02 的可视化候选；按冻结说明评估角色适配，尚未据此晋级。"
+        },
+        {
+          "moduleId": "M03",
+          "leadRole": "visualize",
+          "roles": [
+            "visualize"
+          ],
+          "rank": 2,
+          "coverageMode": "native",
+          "reason": "M03 的可视化候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "visualize"
+      ],
+      "parentDecision": "workbench",
+      "scores": {
+        "fitScore": 92,
+        "qualityScore": 85.5,
+        "evidenceCoverage": 0.86,
+        "publicSignalScore": 82.7,
+        "researchPriority": 88.9
+      }
+    },
+    {
+      "id": "github:phuryn/pm-skills@8607e3b077817f89bf4a9b623246219734ac3be0#pm-execution/skills/outcome-roadmap/SKILL.md",
+      "kind": "agentic-skill",
+      "name": "结果导向路线图",
+      "slug": "outcome-roadmap",
+      "repoFullName": "phuryn/pm-skills",
+      "repoName": "pm-skills",
+      "repoUrl": "https://github.com/phuryn/pm-skills",
+      "headSha": "8607e3b077817f89bf4a9b623246219734ac3be0",
+      "path": "pm-execution/skills/outcome-roadmap/SKILL.md",
+      "sourceUrl": "https://github.com/phuryn/pm-skills/blob/8607e3b077817f89bf4a9b623246219734ac3be0/pm-execution/skills/outcome-roadmap/SKILL.md",
+      "blobSha": "c51cfa226a50ab9f14367adc4c54af14b2562da9",
+      "primaryModule": "M04",
+      "secondaryModules": [
+        "M07",
+        "M10"
+      ],
+      "opcDimensions": [
+        "产品与策略"
+      ],
+      "capabilityForm": "direct-skill",
+      "selection": "expanded",
+      "featuredRank": null,
+      "effectClass": "local-artifact",
+      "coreThree": {
+        "does": "把功能清单改写成结果、假设和检查点，让路线图表达为什么做。",
+        "conditions": "它是决策地图，不是确定承诺；日期、依赖和容量要另行验证。",
+        "proof": "逐条检查结果是否可观察、工作是否与结果相连、依赖和不确定性是否显式。"
+      },
+      "limitations": [
+        "不能替代排期",
+        "容易把模糊愿望包装成结果"
+      ],
+      "selectedReason": "让规划和发布节点看到目标链，而不只是一排功能。",
+      "requirements": [
+        "现有路线图或候选工作",
+        "用户与业务结果口径"
+      ],
+      "license": {
+        "status": "clear",
+        "label": "MIT",
+        "clear": true,
+        "scope": "repository"
+      },
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "role-expansion-v1",
+      "capabilityCluster": "visualize",
+      "benchmarkTrack": null,
+      "workbenchAssignments": [
+        {
+          "moduleId": "M04",
+          "leadRole": "visualize",
+          "roles": [
+            "visualize"
+          ],
+          "rank": 1,
+          "coverageMode": "native",
+          "reason": "M04 的可视化候选；按冻结说明评估角色适配，尚未据此晋级。"
+        },
+        {
+          "moduleId": "M10",
+          "leadRole": "visualize",
+          "roles": [
+            "visualize"
+          ],
+          "rank": 1,
+          "coverageMode": "combined",
+          "reason": "M10 的可视化候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "visualize"
+      ],
+      "parentDecision": "workbench",
+      "scores": {
+        "fitScore": 88,
+        "qualityScore": 85.5,
+        "evidenceCoverage": 0.86,
+        "publicSignalScore": 82.7,
+        "researchPriority": 86.7
+      }
+    },
+    {
+      "id": "github:iflytek/skillhub@36de54157bff59c18c5eff255d2c158df45a3e2a#builtin-skills/skills/diagram-maker/SKILL.md",
+      "kind": "agentic-skill",
+      "name": "架构与流程制图",
+      "slug": "diagram-maker",
+      "repoFullName": "iflytek/skillhub",
+      "repoName": "skillhub",
+      "repoUrl": "https://github.com/iflytek/skillhub",
+      "headSha": "36de54157bff59c18c5eff255d2c158df45a3e2a",
+      "path": "builtin-skills/skills/diagram-maker/SKILL.md",
+      "sourceUrl": "https://github.com/iflytek/skillhub/blob/36de54157bff59c18c5eff255d2c158df45a3e2a/builtin-skills/skills/diagram-maker/SKILL.md",
+      "blobSha": "6edc0c6c63fad6d90ef6f7a1d0810dea51095d60",
+      "primaryModule": "M07",
+      "secondaryModules": [
+        "M01",
+        "M05",
+        "M08"
+      ],
+      "opcDimensions": [
+        "工程与自动化"
+      ],
+      "capabilityForm": "package-bound-skill",
+      "selection": "expanded",
+      "featuredRank": null,
+      "effectClass": "local-artifact",
+      "coreThree": {
+        "does": "生成独立 SVG/HTML 或可编辑 Excalidraw 图，表达架构、流程和关系。",
+        "conditions": "需要一起读取 svg-template 与 excalidraw-patterns；敏感架构只在授权范围内处理。",
+        "proof": "把图中每个节点和连线回查到来源，再做移动端、缩放和可编辑性检查。"
+      },
+      "limitations": [
+        "平台内嵌能力",
+        "不能把推测关系画成事实"
+      ],
+      "selectedReason": "提供跨节点通用、可编辑的结构表达能力。",
+      "requirements": [
+        "明确的实体、关系和读者",
+        "完整 Skill 目录与 references"
+      ],
+      "license": {
+        "status": "clear",
+        "label": "Apache-2.0",
+        "clear": true,
+        "scope": "repository"
+      },
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "role-expansion-v1",
+      "capabilityCluster": "visualize",
+      "benchmarkTrack": null,
+      "workbenchAssignments": [
+        {
+          "moduleId": "M01",
+          "leadRole": "visualize",
+          "roles": [
+            "visualize"
+          ],
+          "rank": 2,
+          "coverageMode": "native",
+          "reason": "M01 的可视化候选；按冻结说明评估角色适配，尚未据此晋级。"
+        },
+        {
+          "moduleId": "M05",
+          "leadRole": "visualize",
+          "roles": [
+            "visualize"
+          ],
+          "rank": 1,
+          "coverageMode": "native",
+          "reason": "M05 的可视化候选；按冻结说明评估角色适配，尚未据此晋级。"
+        },
+        {
+          "moduleId": "M07",
+          "leadRole": "visualize",
+          "roles": [
+            "visualize"
+          ],
+          "rank": 1,
+          "coverageMode": "native",
+          "reason": "M07 的可视化候选；按冻结说明评估角色适配，尚未据此晋级。"
+        },
+        {
+          "moduleId": "M08",
+          "leadRole": "visualize",
+          "roles": [
+            "visualize"
+          ],
+          "rank": 1,
+          "coverageMode": "generalist",
+          "reason": "M08 的可视化候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "visualize"
+      ],
+      "parentDecision": "workbench",
+      "scores": {
+        "fitScore": 89,
+        "qualityScore": 81.1,
+        "evidenceCoverage": 0.86,
+        "publicSignalScore": 70.4,
+        "researchPriority": 84.6
+      }
+    },
+    {
+      "id": "github:dzhng/skills@c7957020f9fcb7321dbc339428b41cdff67c9637#skills/visual/preview-shots/SKILL.md",
+      "kind": "agentic-skill",
+      "name": "界面截图预览",
+      "slug": "preview-shots",
+      "repoFullName": "dzhng/skills",
+      "repoName": "skills",
+      "repoUrl": "https://github.com/dzhng/skills",
+      "headSha": "c7957020f9fcb7321dbc339428b41cdff67c9637",
+      "path": "skills/visual/preview-shots/SKILL.md",
+      "sourceUrl": "https://github.com/dzhng/skills/blob/c7957020f9fcb7321dbc339428b41cdff67c9637/skills/visual/preview-shots/SKILL.md",
+      "blobSha": "9081fa474d48cc752feef58e7ca1d6e30c0206cc",
+      "primaryModule": "M06",
+      "secondaryModules": [
+        "M08",
+        "M09"
+      ],
+      "opcDimensions": [
+        "设计与内容"
+      ],
+      "capabilityForm": "direct-skill",
+      "selection": "expanded",
+      "featuredRank": null,
+      "effectClass": "external",
+      "coreThree": {
+        "does": "把相关截图集中到一个 Preview 窗口，方便人工并排看变化。",
+        "conditions": "只覆盖可视产物；打开文件前要确认路径和敏感内容。",
+        "proof": "核对所有目标图都被打开、顺序正确且没有夹带无关文件。"
+      },
+      "limitations": [
+        "macOS 专用",
+        "是查看入口，不是视觉正确性证明"
+      ],
+      "selectedReason": "让视觉对照成为固定步骤，而不是在文件夹里来回找图。",
+      "requirements": [
+        "可渲染的截图、基准图或 montage",
+        "macOS Preview"
+      ],
+      "license": {
+        "status": "clear",
+        "label": "MIT",
+        "clear": true,
+        "scope": "repository"
+      },
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "role-expansion-v1",
+      "capabilityCluster": "visualize",
+      "benchmarkTrack": null,
+      "workbenchAssignments": [
+        {
+          "moduleId": "M06",
+          "leadRole": "visualize",
+          "roles": [
+            "visualize"
+          ],
+          "rank": 2,
+          "coverageMode": "native",
+          "reason": "M06 的可视化候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "visualize"
+      ],
+      "parentDecision": "workbench",
+      "scores": {
+        "fitScore": 80,
+        "qualityScore": 77.5,
+        "evidenceCoverage": 0.65,
+        "publicSignalScore": 39.1,
+        "researchPriority": 75.8
+      }
+    },
+    {
+      "id": "github:ai-analyst-lab/ai-analyst@3cfebe3d4d6e192d26bb816134b47f606bb14944#.claude/skills/visualization-patterns/SKILL.md",
+      "kind": "agentic-skill",
+      "name": "数据可视化模式",
+      "slug": "visualization-patterns",
+      "repoFullName": "ai-analyst-lab/ai-analyst",
+      "repoName": "ai-analyst",
+      "repoUrl": "https://github.com/ai-analyst-lab/ai-analyst",
+      "headSha": "3cfebe3d4d6e192d26bb816134b47f606bb14944",
+      "path": ".claude/skills/visualization-patterns/SKILL.md",
+      "sourceUrl": "https://github.com/ai-analyst-lab/ai-analyst/blob/3cfebe3d4d6e192d26bb816134b47f606bb14944/.claude/skills/visualization-patterns/SKILL.md",
+      "blobSha": "ca8996acc236c62e40aa2165efdf6074997fb1fb",
+      "primaryModule": "M11",
+      "secondaryModules": [
+        "M09",
+        "M12"
+      ],
+      "opcDimensions": [
+        "发布与运营"
+      ],
+      "capabilityForm": "package-bound-skill",
+      "selection": "expanded",
+      "featuredRank": null,
+      "effectClass": "workspace",
+      "coreThree": {
+        "does": "按问题类型选择图表、标注重点并统一视觉语法，避免默认图形误导读者。",
+        "conditions": "绑定 chart helper；数据口径、缺失和不确定性必须在画图前解决。",
+        "proof": "用已知结论数据检查图形选择、轴、单位、颜色、注释和误导风险。"
+      },
+      "limitations": [
+        "整包依赖",
+        "图表设计不能修复错误数据"
+      ],
+      "selectedReason": "比通用制图更适合监控、实验和质量数据。",
+      "requirements": [
+        "已核对的数据与图表问题",
+        "AI Analyst chart helper 与绘图库"
+      ],
+      "license": {
+        "status": "clear",
+        "label": "MIT",
+        "clear": true,
+        "scope": "repository"
+      },
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "role-expansion-v1",
+      "capabilityCluster": "visualize",
+      "benchmarkTrack": null,
+      "workbenchAssignments": [
+        {
+          "moduleId": "M09",
+          "leadRole": "visualize",
+          "roles": [
+            "visualize"
+          ],
+          "rank": 2,
+          "coverageMode": "native",
+          "reason": "M09 的可视化候选；按冻结说明评估角色适配，尚未据此晋级。"
+        },
+        {
+          "moduleId": "M11",
+          "leadRole": "visualize",
+          "roles": [
+            "visualize"
+          ],
+          "rank": 2,
+          "coverageMode": "native",
+          "reason": "M11 的可视化候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "visualize"
+      ],
+      "parentDecision": "workbench",
+      "scores": {
+        "fitScore": 91,
+        "qualityScore": 84.2,
+        "evidenceCoverage": 0.86,
+        "publicSignalScore": 45.1,
+        "researchPriority": 84.8
+      }
+    },
+    {
+      "id": "github:ai-analyst-lab/ai-analyst@3cfebe3d4d6e192d26bb816134b47f606bb14944#.claude/skills/chart-to-drive/SKILL.md",
+      "kind": "agentic-skill",
+      "name": "图表发布与引用",
+      "slug": "chart-to-drive",
+      "repoFullName": "ai-analyst-lab/ai-analyst",
+      "repoName": "ai-analyst",
+      "repoUrl": "https://github.com/ai-analyst-lab/ai-analyst",
+      "headSha": "3cfebe3d4d6e192d26bb816134b47f606bb14944",
+      "path": ".claude/skills/chart-to-drive/SKILL.md",
+      "sourceUrl": "https://github.com/ai-analyst-lab/ai-analyst/blob/3cfebe3d4d6e192d26bb816134b47f606bb14944/.claude/skills/chart-to-drive/SKILL.md",
+      "blobSha": "2bfb6fc6a948830695fbd778533f3c5fe50af3cf",
+      "primaryModule": "M12",
+      "secondaryModules": [
+        "M11"
+      ],
+      "opcDimensions": [
+        "增长与客户"
+      ],
+      "capabilityForm": "package-bound-skill",
+      "selection": "expanded",
+      "featuredRank": null,
+      "effectClass": "external",
+      "coreThree": {
+        "does": "把已完成的图表上传到 Drive，并生成可用于报告的稳定链接映射。",
+        "conditions": "它只负责发布，不负责分析；敏感图表上传前必须确认权限和保留策略。",
+        "proof": "在测试目录上传、回读权限和内容，再确认链接映射与源文件一一对应。"
+      },
+      "limitations": [
+        "外部写入",
+        "需要 AI Analyst / Drive 集成"
+      ],
+      "selectedReason": "补齐从分析图到可交付决策材料的最后一公里。",
+      "requirements": [
+        "已核对的图表文件",
+        "Google Drive 凭据与目标位置"
+      ],
+      "license": {
+        "status": "clear",
+        "label": "MIT",
+        "clear": true,
+        "scope": "repository"
+      },
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "role-expansion-v1",
+      "capabilityCluster": "visualize",
+      "benchmarkTrack": null,
+      "workbenchAssignments": [
+        {
+          "moduleId": "M12",
+          "leadRole": "visualize",
+          "roles": [
+            "visualize"
+          ],
+          "rank": 2,
+          "coverageMode": "native",
+          "reason": "M12 的可视化候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "visualize"
+      ],
+      "parentDecision": "workbench",
+      "scores": {
+        "fitScore": 76,
+        "qualityScore": 84.2,
+        "evidenceCoverage": 0.86,
+        "publicSignalScore": 45.1,
+        "researchPriority": 76.6
+      }
+    },
+    {
+      "id": "github:1weiho/open-slide@067f748d861e8f685b4141a9bdbf0bbd89697279#packages/core/skills/slide-authoring/SKILL.md",
+      "kind": "agentic-skill",
+      "name": "可编辑演示文稿",
+      "slug": "slide-authoring",
+      "repoFullName": "1weiho/open-slide",
+      "repoName": "open-slide",
+      "repoUrl": "https://github.com/1weiho/open-slide",
+      "headSha": "067f748d861e8f685b4141a9bdbf0bbd89697279",
+      "path": "packages/core/skills/slide-authoring/SKILL.md",
+      "sourceUrl": "https://github.com/1weiho/open-slide/blob/067f748d861e8f685b4141a9bdbf0bbd89697279/packages/core/skills/slide-authoring/SKILL.md",
+      "blobSha": "759e22e2df76d7ca026ddd4c90714432694bdc41",
+      "primaryModule": "M10",
+      "secondaryModules": [
+        "M13"
+      ],
+      "opcDimensions": [
+        "发布与运营"
+      ],
+      "capabilityForm": "package-bound-skill",
+      "selection": "expanded",
+      "featuredRank": null,
+      "effectClass": "workspace",
+      "coreThree": {
+        "does": "用 React/open-slide 生成可编辑页面、讲稿、逐步出现和转场。",
+        "conditions": "不能单拷 SKILL.md；内容事实、视觉层级和演示节奏要分别复核。",
+        "proof": "构建样例演示，检查溢出、字体、资源、讲稿、动画和导出结果。"
+      },
+      "limitations": [
+        "整包依赖",
+        "不负责验证内容结论"
+      ],
+      "selectedReason": "适合把发布状态或能力复盘变成可讲、可改的视觉产物。",
+      "requirements": [
+        "open-slide package runtime",
+        "完整 references、assets 与 1920×1080 页面约定"
+      ],
+      "license": {
+        "status": "clear",
+        "label": "MIT",
+        "clear": true,
+        "scope": "repository"
+      },
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "role-expansion-v1",
+      "capabilityCluster": "visualize",
+      "benchmarkTrack": null,
+      "workbenchAssignments": [
+        {
+          "moduleId": "M10",
+          "leadRole": "visualize",
+          "roles": [
+            "visualize"
+          ],
+          "rank": 2,
+          "coverageMode": "package-bound",
+          "reason": "M10 的可视化候选；按冻结说明评估角色适配，尚未据此晋级。"
+        },
+        {
+          "moduleId": "M13",
+          "leadRole": "visualize",
+          "roles": [
+            "visualize"
+          ],
+          "rank": 2,
+          "coverageMode": "generalist",
+          "reason": "M13 的可视化候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "visualize"
+      ],
+      "parentDecision": "watchlist",
+      "scores": {
+        "fitScore": 84,
+        "qualityScore": 73.7,
+        "evidenceCoverage": 0.86,
+        "publicSignalScore": 68,
+        "researchPriority": 78.9
+      }
+    },
+    {
+      "id": "github:anthropics/skills@34040c9c568585f6929bedeaad110ad08f079624#skills/doc-coauthoring/SKILL.md",
+      "kind": "agentic-skill",
+      "name": "文档共同编写",
+      "slug": "doc-coauthoring",
+      "repoFullName": "anthropics/skills",
+      "repoName": "skills",
+      "repoUrl": "https://github.com/anthropics/skills",
+      "headSha": "34040c9c568585f6929bedeaad110ad08f079624",
+      "path": "skills/doc-coauthoring/SKILL.md",
+      "sourceUrl": "https://github.com/anthropics/skills/blob/34040c9c568585f6929bedeaad110ad08f079624/skills/doc-coauthoring/SKILL.md",
+      "blobSha": "a5a69839ef4a161131d80b6daef10037a9686f4a",
+      "primaryModule": "M05",
+      "secondaryModules": [
+        "M00",
+        "M01",
+        "M02",
+        "M03",
+        "M04",
+        "M06",
+        "M09"
+      ],
+      "opcDimensions": [
+        "产品与策略"
+      ],
+      "capabilityForm": "direct-skill",
+      "selection": "expanded",
+      "featuredRank": null,
+      "effectClass": "local-artifact",
+      "coreThree": {
+        "does": "先收集上下文，再分段写作、迭代和无上下文读者测试，形成可交接文档。",
+        "conditions": "必须保留来源和未知项；协作流程不能把模型补写当成事实。",
+        "proof": "让未参与写作的人阅读，检查能否复述目标、决定、限制和下一步。"
+      },
+      "limitations": [
+        "通用能力，不是所有节点的专用总结",
+        "目标 Skill 需按目录许可使用"
+      ],
+      "selectedReason": "跨节点总结最成熟的通用工作流，且自带 reader test。",
+      "requirements": [
+        "目标读者、文档类型和已有材料",
+        "愿意回答澄清问题并做 reader test"
+      ],
+      "license": {
+        "status": "per-skill",
+        "label": "目标 Skill 独立 Apache-2.0",
+        "clear": true,
+        "scope": "skill-directory"
+      },
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "role-expansion-v1",
+      "capabilityCluster": "summarize",
+      "benchmarkTrack": null,
+      "workbenchAssignments": [
+        {
+          "moduleId": "M01",
+          "leadRole": "summarize",
+          "roles": [
+            "summarize"
+          ],
+          "rank": 2,
+          "coverageMode": "native",
+          "reason": "M01 的总结交接候选；按冻结说明评估角色适配，尚未据此晋级。"
+        },
+        {
+          "moduleId": "M04",
+          "leadRole": "summarize",
+          "roles": [
+            "summarize"
+          ],
+          "rank": 2,
+          "coverageMode": "native",
+          "reason": "M04 的总结交接候选；按冻结说明评估角色适配，尚未据此晋级。"
+        },
+        {
+          "moduleId": "M06",
+          "leadRole": "summarize",
+          "roles": [
+            "summarize"
+          ],
+          "rank": 1,
+          "coverageMode": "generalist",
+          "reason": "M06 的总结交接候选；按冻结说明评估角色适配，尚未据此晋级。"
+        },
+        {
+          "moduleId": "M09",
+          "leadRole": "summarize",
+          "roles": [
+            "summarize"
+          ],
+          "rank": 2,
+          "coverageMode": "generalist",
+          "reason": "M09 的总结交接候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "summarize"
+      ],
+      "parentDecision": "workbench",
+      "scores": {
+        "fitScore": 90,
+        "qualityScore": 78.3,
+        "evidenceCoverage": 0.65,
+        "publicSignalScore": 88.7,
+        "researchPriority": 85.6
+      }
+    },
+    {
+      "id": "github:anthropics/skills@34040c9c568585f6929bedeaad110ad08f079624#skills/internal-comms/SKILL.md",
+      "kind": "agentic-skill",
+      "name": "内部沟通稿",
+      "slug": "internal-comms",
+      "repoFullName": "anthropics/skills",
+      "repoName": "skills",
+      "repoUrl": "https://github.com/anthropics/skills",
+      "headSha": "34040c9c568585f6929bedeaad110ad08f079624",
+      "path": "skills/internal-comms/SKILL.md",
+      "sourceUrl": "https://github.com/anthropics/skills/blob/34040c9c568585f6929bedeaad110ad08f079624/skills/internal-comms/SKILL.md",
+      "blobSha": "56ea935b74f371bfeb4c7d3c19d5139df866e73b",
+      "primaryModule": "M10",
+      "secondaryModules": [
+        "M01",
+        "M11"
+      ],
+      "opcDimensions": [
+        "发布与运营"
+      ],
+      "capabilityForm": "direct-skill",
+      "selection": "expanded",
+      "featuredRank": null,
+      "effectClass": "local-artifact",
+      "coreThree": {
+        "does": "把状态、变化、风险和行动写成适合内部读者的沟通材料。",
+        "conditions": "模板不能替代事实核验；坏消息、风险和未知项不能被语气优化掉。",
+        "proof": "让目标读者核对是否能快速找到变化、影响、负责人、时间和所需行动。"
+      },
+      "limitations": [
+        "内容模板较轻",
+        "需要目标组织自己的格式"
+      ],
+      "selectedReason": "适合启动说明、发布通知和运行周报的最后交接。",
+      "requirements": [
+        "受众、沟通目的与公司格式",
+        "已核对的事实和限制"
+      ],
+      "license": {
+        "status": "per-skill",
+        "label": "目标 Skill 独立 Apache-2.0",
+        "clear": true,
+        "scope": "skill-directory"
+      },
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "role-expansion-v1",
+      "capabilityCluster": "summarize",
+      "benchmarkTrack": null,
+      "workbenchAssignments": [
+        {
+          "moduleId": "M01",
+          "leadRole": "summarize",
+          "roles": [
+            "summarize"
+          ],
+          "rank": 1,
+          "coverageMode": "native",
+          "reason": "M01 的总结交接候选；按冻结说明评估角色适配，尚未据此晋级。"
+        },
+        {
+          "moduleId": "M06",
+          "leadRole": "summarize",
+          "roles": [
+            "summarize"
+          ],
+          "rank": 2,
+          "coverageMode": "generalist",
+          "reason": "M06 的总结交接候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "summarize"
+      ],
+      "parentDecision": "workbench",
+      "scores": {
+        "fitScore": 79,
+        "qualityScore": 78.3,
+        "evidenceCoverage": 0.65,
+        "publicSignalScore": 88.7,
+        "researchPriority": 79.5
+      }
+    },
+    {
+      "id": "github:k-dense-ai/scientific-agent-skills@330c8e764435a731eff571e3efdda70b363d0792#skills/market-research-reports/SKILL.md",
+      "kind": "agentic-skill",
+      "name": "可追溯市场研究报告",
+      "slug": "market-research-reports",
+      "repoFullName": "K-Dense-AI/scientific-agent-skills",
+      "repoName": "scientific-agent-skills",
+      "repoUrl": "https://github.com/K-Dense-AI/scientific-agent-skills",
+      "headSha": "330c8e764435a731eff571e3efdda70b363d0792",
+      "path": "skills/market-research-reports/SKILL.md",
+      "sourceUrl": "https://github.com/K-Dense-AI/scientific-agent-skills/blob/330c8e764435a731eff571e3efdda70b363d0792/skills/market-research-reports/SKILL.md",
+      "blobSha": "51ec0a55eae260516cbb975c62154d6f829bff85",
+      "primaryModule": "M02",
+      "secondaryModules": [
+        "M04"
+      ],
+      "opcDimensions": [
+        "情报与研究"
+      ],
+      "capabilityForm": "direct-skill",
+      "selection": "expanded",
+      "featuredRank": null,
+      "effectClass": "external",
+      "coreThree": {
+        "does": "用来源账本、主张账本和假设场景写市场研究与 TAM/SAM/SOM 报告。",
+        "conditions": "外部资料要核对日期、许可和一手来源；估算必须显式展示假设。",
+        "proof": "运行证据账本与引用审计脚本，抽查每个关键数字和主张能否回到来源。"
+      },
+      "limitations": [
+        "流程偏重",
+        "外部研究有时效与许可风险"
+      ],
+      "selectedReason": "不是把搜索结果压缩成摘要，而是留下可追溯研究账本。",
+      "requirements": [
+        "研究合同、来源账本和时效要求",
+        "完整 Skill 目录、模板与审计脚本"
+      ],
+      "license": {
+        "status": "clear",
+        "label": "MIT",
+        "clear": true,
+        "scope": "repository"
+      },
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "role-expansion-v1",
+      "capabilityCluster": "summarize",
+      "benchmarkTrack": null,
+      "workbenchAssignments": [
+        {
+          "moduleId": "M02",
+          "leadRole": "summarize",
+          "roles": [
+            "summarize"
+          ],
+          "rank": 1,
+          "coverageMode": "native",
+          "reason": "M02 的总结交接候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "summarize"
+      ],
+      "parentDecision": "workbench",
+      "scores": {
+        "fitScore": 93,
+        "qualityScore": 85.3,
+        "evidenceCoverage": 0.86,
+        "publicSignalScore": 88.6,
+        "researchPriority": 89.8
+      }
+    },
+    {
+      "id": "github:phuryn/pm-skills@8607e3b077817f89bf4a9b623246219734ac3be0#pm-execution/skills/summarize-meeting/SKILL.md",
+      "kind": "agentic-skill",
+      "name": "会议决定与行动项",
+      "slug": "summarize-meeting",
+      "repoFullName": "phuryn/pm-skills",
+      "repoName": "pm-skills",
+      "repoUrl": "https://github.com/phuryn/pm-skills",
+      "headSha": "8607e3b077817f89bf4a9b623246219734ac3be0",
+      "path": "pm-execution/skills/summarize-meeting/SKILL.md",
+      "sourceUrl": "https://github.com/phuryn/pm-skills/blob/8607e3b077817f89bf4a9b623246219734ac3be0/pm-execution/skills/summarize-meeting/SKILL.md",
+      "blobSha": "a103503d8002be02efaff273dcad1777b55f3fd7",
+      "primaryModule": "M00",
+      "secondaryModules": [
+        "M04"
+      ],
+      "opcDimensions": [
+        "记忆与治理"
+      ],
+      "capabilityForm": "direct-skill",
+      "selection": "expanded",
+      "featuredRank": null,
+      "effectClass": "local-artifact",
+      "coreThree": {
+        "does": "把会议记录整理成议题、关键决定、摘要和带负责人的行动项。",
+        "conditions": "会议里说过不等于正式批准；决定状态和负责人要会后确认。",
+        "proof": "对照原始记录抽查关键决定、异议、截止时间和遗漏行动项。"
+      },
+      "limitations": [
+        "转录错误会传导",
+        "不能自动升级为组织承诺"
+      ],
+      "selectedReason": "让启动与规划会议真正留下可继续执行的状态。",
+      "requirements": [
+        "完整会议记录、日期和参与者",
+        "决定与行动项确认人"
+      ],
+      "license": {
+        "status": "clear",
+        "label": "MIT",
+        "clear": true,
+        "scope": "repository"
+      },
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "role-expansion-v1",
+      "capabilityCluster": "summarize",
+      "benchmarkTrack": null,
+      "workbenchAssignments": [
+        {
+          "moduleId": "M00",
+          "leadRole": "summarize",
+          "roles": [
+            "summarize"
+          ],
+          "rank": 1,
+          "coverageMode": "native",
+          "reason": "M00 的总结交接候选；按冻结说明评估角色适配，尚未据此晋级。"
+        },
+        {
+          "moduleId": "M04",
+          "leadRole": "summarize",
+          "roles": [
+            "summarize"
+          ],
+          "rank": 1,
+          "coverageMode": "native",
+          "reason": "M04 的总结交接候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "summarize"
+      ],
+      "parentDecision": "workbench",
+      "scores": {
+        "fitScore": 86,
+        "qualityScore": 85.5,
+        "evidenceCoverage": 0.86,
+        "publicSignalScore": 82.7,
+        "researchPriority": 85.6
+      }
+    },
+    {
+      "id": "github:phuryn/pm-skills@8607e3b077817f89bf4a9b623246219734ac3be0#pm-execution/skills/create-prd/SKILL.md",
+      "kind": "agentic-skill",
+      "name": "PRD 交接文档",
+      "slug": "create-prd",
+      "repoFullName": "phuryn/pm-skills",
+      "repoName": "pm-skills",
+      "repoUrl": "https://github.com/phuryn/pm-skills",
+      "headSha": "8607e3b077817f89bf4a9b623246219734ac3be0",
+      "path": "pm-execution/skills/create-prd/SKILL.md",
+      "sourceUrl": "https://github.com/phuryn/pm-skills/blob/8607e3b077817f89bf4a9b623246219734ac3be0/pm-execution/skills/create-prd/SKILL.md",
+      "blobSha": "68c8b26690db8e826782f3029c24b88340ec570e",
+      "primaryModule": "M05",
+      "secondaryModules": [
+        "M04"
+      ],
+      "opcDimensions": [
+        "产品与策略"
+      ],
+      "capabilityForm": "direct-skill",
+      "selection": "expanded",
+      "featuredRank": null,
+      "effectClass": "local-artifact",
+      "coreThree": {
+        "does": "用八段结构把问题、目标、用户、价值、方案和发布计划写成 PRD。",
+        "conditions": "上游证据和非目标必须先明确；模板不能替代取舍决定。",
+        "proof": "由设计、工程和 QA 各自检查是否能从文档得到边界、接口和验收条件。"
+      },
+      "limitations": [
+        "模板可能制造虚假完整感",
+        "需要跨职能复核"
+      ],
+      "selectedReason": "让需求节点的输出能直接交给设计、工程和质量。",
+      "requirements": [
+        "问题证据、目标用户和业务目标",
+        "非目标、成功标准与发布边界"
+      ],
+      "license": {
+        "status": "clear",
+        "label": "MIT",
+        "clear": true,
+        "scope": "repository"
+      },
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "role-expansion-v1",
+      "capabilityCluster": "summarize",
+      "benchmarkTrack": null,
+      "workbenchAssignments": [
+        {
+          "moduleId": "M05",
+          "leadRole": "summarize",
+          "roles": [
+            "summarize"
+          ],
+          "rank": 1,
+          "coverageMode": "native",
+          "reason": "M05 的总结交接候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "summarize"
+      ],
+      "parentDecision": "workbench",
+      "scores": {
+        "fitScore": 88,
+        "qualityScore": 85.5,
+        "evidenceCoverage": 0.86,
+        "publicSignalScore": 82.7,
+        "researchPriority": 86.7
+      }
+    },
+    {
+      "id": "github:dzhng/skills@c7957020f9fcb7321dbc339428b41cdff67c9637#skills/engineering/close-spec/SKILL.md",
+      "kind": "agentic-skill",
+      "name": "规格收口与归档",
+      "slug": "close-spec",
+      "repoFullName": "dzhng/skills",
+      "repoName": "skills",
+      "repoUrl": "https://github.com/dzhng/skills",
+      "headSha": "c7957020f9fcb7321dbc339428b41cdff67c9637",
+      "path": "skills/engineering/close-spec/SKILL.md",
+      "sourceUrl": "https://github.com/dzhng/skills/blob/c7957020f9fcb7321dbc339428b41cdff67c9637/skills/engineering/close-spec/SKILL.md",
+      "blobSha": "79d2725ea39f96ba8e29acfa433f6478ee18dd40",
+      "primaryModule": "M13",
+      "secondaryModules": [
+        "M05",
+        "M10"
+      ],
+      "opcDimensions": [
+        "记忆与治理"
+      ],
+      "capabilityForm": "direct-skill",
+      "selection": "expanded",
+      "featuredRank": null,
+      "effectClass": "workspace",
+      "coreThree": {
+        "does": "把完成的构建计划改写成耐久的设计理由，并归档到 done。",
+        "conditions": "会移动和重写 spec；必须先确认交付完成、工作区边界和恢复方式。",
+        "proof": "检查归档前后 diff、链接、历史理由、未完成项和测试入口是否完整。"
+      },
+      "limitations": [
+        "有写入与移动副作用",
+        "未完成项目不能提前归档"
+      ],
+      "selectedReason": "把一次性计划压缩成下一位 Agent 可复用的长期知识。",
+      "requirements": [
+        "确认已经交付的 spec",
+        "代码、测试与最终取舍证据"
+      ],
+      "license": {
+        "status": "clear",
+        "label": "MIT",
+        "clear": true,
+        "scope": "repository"
+      },
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "role-expansion-v1",
+      "capabilityCluster": "summarize",
+      "benchmarkTrack": null,
+      "workbenchAssignments": [
+        {
+          "moduleId": "M10",
+          "leadRole": "summarize",
+          "roles": [
+            "summarize"
+          ],
+          "rank": 3,
+          "coverageMode": "native",
+          "reason": "M10 的总结交接候选；按冻结说明评估角色适配，尚未据此晋级。"
+        },
+        {
+          "moduleId": "M13",
+          "leadRole": "summarize",
+          "roles": [
+            "summarize"
+          ],
+          "rank": 2,
+          "coverageMode": "native",
+          "reason": "M13 的总结交接候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "summarize"
+      ],
+      "parentDecision": "workbench",
+      "scores": {
+        "fitScore": 87,
+        "qualityScore": 77.5,
+        "evidenceCoverage": 0.65,
+        "publicSignalScore": 39.1,
+        "researchPriority": 79.7
+      }
+    },
+    {
+      "id": "github:mattpocock/skills@959a8e9f1edc3adbe2f7e3054bb6fbefa6696260#skills/in-progress/claude-handoff/SKILL.md",
+      "kind": "agentic-skill",
+      "name": "后台 Agent 交接",
+      "slug": "claude-handoff",
+      "repoFullName": "mattpocock/skills",
+      "repoName": "skills",
+      "repoUrl": "https://github.com/mattpocock/skills",
+      "headSha": "959a8e9f1edc3adbe2f7e3054bb6fbefa6696260",
+      "path": "skills/in-progress/claude-handoff/SKILL.md",
+      "sourceUrl": "https://github.com/mattpocock/skills/blob/959a8e9f1edc3adbe2f7e3054bb6fbefa6696260/skills/in-progress/claude-handoff/SKILL.md",
+      "blobSha": "9ab14e312a0d5cffe926eeeab12cef7dc8f84d54",
+      "primaryModule": "M08",
+      "secondaryModules": [
+        "M00"
+      ],
+      "opcDimensions": [
+        "工程与自动化"
+      ],
+      "capabilityForm": "direct-skill",
+      "selection": "expanded",
+      "featuredRank": null,
+      "effectClass": "external",
+      "coreThree": {
+        "does": "把当前对话压缩后交给新的后台 Agent，并让它从断点继续。",
+        "conditions": "路径标为 in-progress 且绑定 Claude CLI；Codex 使用前需要重写 adapter。",
+        "proof": "让接手 Agent 先复述目标、已完成、未决和下一步，再检查是否从正确断点行动。"
+      },
+      "limitations": [
+        "未成熟",
+        "Claude 专用调用",
+        "上下文压缩可能丢失事实"
+      ],
+      "selectedReason": "交接目标很直接，但当前只能作为 adapter 设计参考。",
+      "requirements": [
+        "可调用 Claude CLI 的环境",
+        "明确的当前状态、范围与继续指令"
+      ],
+      "license": {
+        "status": "clear",
+        "label": "MIT",
+        "clear": true,
+        "scope": "repository"
+      },
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "role-expansion-v1",
+      "capabilityCluster": "summarize",
+      "benchmarkTrack": null,
+      "workbenchAssignments": [
+        {
+          "moduleId": "M00",
+          "leadRole": "summarize",
+          "roles": [
+            "summarize"
+          ],
+          "rank": 2,
+          "coverageMode": "adapter-required",
+          "reason": "M00 的总结交接候选；按冻结说明评估角色适配，尚未据此晋级。"
+        },
+        {
+          "moduleId": "M08",
+          "leadRole": "summarize",
+          "roles": [
+            "summarize"
+          ],
+          "rank": 1,
+          "coverageMode": "adapter-required",
+          "reason": "M08 的总结交接候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "summarize"
+      ],
+      "parentDecision": "workbench",
+      "scores": {
+        "fitScore": 70,
+        "qualityScore": 83,
+        "evidenceCoverage": 0.78,
+        "publicSignalScore": 98,
+        "researchPriority": 77.1
+      }
+    },
+    {
+      "id": "github:dzhng/skills@c7957020f9fcb7321dbc339428b41cdff67c9637#skills/engineering/write-docs/SKILL.md",
+      "kind": "agentic-skill",
+      "name": "工程文档沉淀",
+      "slug": "write-docs",
+      "repoFullName": "dzhng/skills",
+      "repoName": "skills",
+      "repoUrl": "https://github.com/dzhng/skills",
+      "headSha": "c7957020f9fcb7321dbc339428b41cdff67c9637",
+      "path": "skills/engineering/write-docs/SKILL.md",
+      "sourceUrl": "https://github.com/dzhng/skills/blob/c7957020f9fcb7321dbc339428b41cdff67c9637/skills/engineering/write-docs/SKILL.md",
+      "blobSha": "9c9fce1e0cab0b1a74d32e6eee2eca2403b53e04",
+      "primaryModule": "M08",
+      "secondaryModules": [
+        "M09",
+        "M13"
+      ],
+      "opcDimensions": [
+        "工程与自动化"
+      ],
+      "capabilityForm": "direct-skill",
+      "selection": "expanded",
+      "featuredRank": null,
+      "effectClass": "workspace",
+      "coreThree": {
+        "does": "把工程原则、入口和理由写进 README / Markdown，避免照抄易腐烂的代码细节。",
+        "conditions": "文档必须指向真实实现和测试；同一事实只保留一个权威位置。",
+        "proof": "从文档链接走到代码和测试，检查新贡献者能否完成一次真实任务。"
+      },
+      "limitations": [
+        "会修改项目文件",
+        "不能替代 API 或运行时自动文档"
+      ],
+      "selectedReason": "把实现、质量结论和能力经验沉淀为可维护入口。",
+      "requirements": [
+        "真实代码、测试和现有文档",
+        "明确唯一事实来源"
+      ],
+      "license": {
+        "status": "clear",
+        "label": "MIT",
+        "clear": true,
+        "scope": "repository"
+      },
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "role-expansion-v1",
+      "capabilityCluster": "summarize",
+      "benchmarkTrack": null,
+      "workbenchAssignments": [
+        {
+          "moduleId": "M08",
+          "leadRole": "summarize",
+          "roles": [
+            "summarize"
+          ],
+          "rank": 2,
+          "coverageMode": "native",
+          "reason": "M08 的总结交接候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "summarize"
+      ],
+      "parentDecision": "workbench",
+      "scores": {
+        "fitScore": 88,
+        "qualityScore": 77.5,
+        "evidenceCoverage": 0.65,
+        "publicSignalScore": 39.1,
+        "researchPriority": 80.2
+      }
+    },
+    {
+      "id": "github:phuryn/pm-skills@8607e3b077817f89bf4a9b623246219734ac3be0#pm-execution/skills/release-notes/SKILL.md",
+      "kind": "agentic-skill",
+      "name": "发布说明",
+      "slug": "release-notes",
+      "repoFullName": "phuryn/pm-skills",
+      "repoName": "pm-skills",
+      "repoUrl": "https://github.com/phuryn/pm-skills",
+      "headSha": "8607e3b077817f89bf4a9b623246219734ac3be0",
+      "path": "pm-execution/skills/release-notes/SKILL.md",
+      "sourceUrl": "https://github.com/phuryn/pm-skills/blob/8607e3b077817f89bf4a9b623246219734ac3be0/pm-execution/skills/release-notes/SKILL.md",
+      "blobSha": "148bf1cb176851d13531a54facc207824b22f493",
+      "primaryModule": "M10",
+      "secondaryModules": [],
+      "opcDimensions": [
+        "发布与运营"
+      ],
+      "capabilityForm": "direct-skill",
+      "selection": "expanded",
+      "featuredRank": null,
+      "effectClass": "local-artifact",
+      "coreThree": {
+        "does": "把已确认的功能、改进和修复写成面向用户的发布说明。",
+        "conditions": "只能从真实交付证据生成；未发布、实验性和破坏性变化必须明确。",
+        "proof": "逐条回查到 diff 或 issue，并让发布负责人确认版本、范围和已知限制。"
+      },
+      "limitations": [
+        "不验证发布是否成功",
+        "输入不全会漏掉破坏性变化"
+      ],
+      "selectedReason": "补齐发布节点的对外总结，而不是只留内部工程记录。",
+      "requirements": [
+        "已确认的 diff、issue、PRD 与版本",
+        "目标用户和发布时间"
+      ],
+      "license": {
+        "status": "clear",
+        "label": "MIT",
+        "clear": true,
+        "scope": "repository"
+      },
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "role-expansion-v1",
+      "capabilityCluster": "summarize",
+      "benchmarkTrack": null,
+      "workbenchAssignments": [
+        {
+          "moduleId": "M10",
+          "leadRole": "summarize",
+          "roles": [
+            "summarize"
+          ],
+          "rank": 2,
+          "coverageMode": "native",
+          "reason": "M10 的总结交接候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "summarize"
+      ],
+      "parentDecision": "workbench",
+      "scores": {
+        "fitScore": 85,
+        "qualityScore": 85.5,
+        "evidenceCoverage": 0.86,
+        "publicSignalScore": 82.7,
+        "researchPriority": 85
+      }
+    },
+    {
+      "id": "github:ai-analyst-lab/ai-analyst@3cfebe3d4d6e192d26bb816134b47f606bb14944#.claude/skills/stakeholder-communication/SKILL.md",
+      "kind": "agentic-skill",
+      "name": "分析结论分众沟通",
+      "slug": "stakeholder-communication",
+      "repoFullName": "ai-analyst-lab/ai-analyst",
+      "repoName": "ai-analyst",
+      "repoUrl": "https://github.com/ai-analyst-lab/ai-analyst",
+      "headSha": "3cfebe3d4d6e192d26bb816134b47f606bb14944",
+      "path": ".claude/skills/stakeholder-communication/SKILL.md",
+      "sourceUrl": "https://github.com/ai-analyst-lab/ai-analyst/blob/3cfebe3d4d6e192d26bb816134b47f606bb14944/.claude/skills/stakeholder-communication/SKILL.md",
+      "blobSha": "707205096ae4e2bcd5962f3bef99fb9d46ab739e",
+      "primaryModule": "M11",
+      "secondaryModules": [
+        "M02",
+        "M12"
+      ],
+      "opcDimensions": [
+        "发布与运营"
+      ],
+      "capabilityForm": "package-bound-skill",
+      "selection": "expanded",
+      "featuredRank": null,
+      "effectClass": "local-artifact",
+      "coreThree": {
+        "does": "保持同一结论不变，按高管、产品、工程等受众调整重点、细节和格式。",
+        "conditions": "不同受众的压缩不能删掉关键限制、样本和不确定性。",
+        "proof": "比较多受众版本，确认数字、结论、风险和行动保持一致。"
+      },
+      "limitations": [
+        "整包工作流的一部分",
+        "不能挽救证据不足的分析"
+      ],
+      "selectedReason": "让研究和运行结论不止停在分析师自己的语言里。",
+      "requirements": [
+        "已完成且可追溯的分析",
+        "受众、决策和所需行动"
+      ],
+      "license": {
+        "status": "clear",
+        "label": "MIT",
+        "clear": true,
+        "scope": "repository"
+      },
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "role-expansion-v1",
+      "capabilityCluster": "summarize",
+      "benchmarkTrack": null,
+      "workbenchAssignments": [
+        {
+          "moduleId": "M02",
+          "leadRole": "summarize",
+          "roles": [
+            "summarize"
+          ],
+          "rank": 2,
+          "coverageMode": "native",
+          "reason": "M02 的总结交接候选；按冻结说明评估角色适配，尚未据此晋级。"
+        },
+        {
+          "moduleId": "M11",
+          "leadRole": "summarize",
+          "roles": [
+            "summarize"
+          ],
+          "rank": 1,
+          "coverageMode": "native",
+          "reason": "M11 的总结交接候选；按冻结说明评估角色适配，尚未据此晋级。"
+        },
+        {
+          "moduleId": "M12",
+          "leadRole": "summarize",
+          "roles": [
+            "summarize"
+          ],
+          "rank": 2,
+          "coverageMode": "native",
+          "reason": "M12 的总结交接候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "summarize"
+      ],
+      "parentDecision": "workbench",
+      "scores": {
+        "fitScore": 89,
+        "qualityScore": 84.2,
+        "evidenceCoverage": 0.86,
+        "publicSignalScore": 45.1,
+        "researchPriority": 83.7
+      }
+    },
+    {
+      "id": "github:ai-analyst-lab/ai-analyst@3cfebe3d4d6e192d26bb816134b47f606bb14944#.claude/skills/experiment-brief/SKILL.md",
+      "kind": "agentic-skill",
+      "name": "实验预注册简报",
+      "slug": "experiment-brief",
+      "repoFullName": "ai-analyst-lab/ai-analyst",
+      "repoName": "ai-analyst",
+      "repoUrl": "https://github.com/ai-analyst-lab/ai-analyst",
+      "headSha": "3cfebe3d4d6e192d26bb816134b47f606bb14944",
+      "path": ".claude/skills/experiment-brief/SKILL.md",
+      "sourceUrl": "https://github.com/ai-analyst-lab/ai-analyst/blob/3cfebe3d4d6e192d26bb816134b47f606bb14944/.claude/skills/experiment-brief/SKILL.md",
+      "blobSha": "a2b4f86f22c14fa023dbaecccc35949ffa5c44bd",
+      "primaryModule": "M12",
+      "secondaryModules": [
+        "M04"
+      ],
+      "opcDimensions": [
+        "增长与客户"
+      ],
+      "capabilityForm": "package-bound-skill",
+      "selection": "expanded",
+      "featuredRank": null,
+      "effectClass": "local-artifact",
+      "coreThree": {
+        "does": "在实验开始前写清假设、处理、指标、护栏、样本和停止规则。",
+        "conditions": "绑定 AI Analyst 语境；没有预注册就不能把事后解释包装成原计划。",
+        "proof": "实验执行者在不问作者的情况下，能按简报重建分流、计算和决策规则。"
+      },
+      "limitations": [
+        "不会自动保证统计功效",
+        "仍需数据与伦理审查"
+      ],
+      "selectedReason": "把实验节点的输入标准化，减少事后改口径。",
+      "requirements": [
+        "可检验假设、样本与分流方案",
+        "主指标、护栏、停止条件和决策规则"
+      ],
+      "license": {
+        "status": "clear",
+        "label": "MIT",
+        "clear": true,
+        "scope": "repository"
+      },
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "role-expansion-v1",
+      "capabilityCluster": "summarize",
+      "benchmarkTrack": null,
+      "workbenchAssignments": [
+        {
+          "moduleId": "M12",
+          "leadRole": "summarize",
+          "roles": [
+            "summarize"
+          ],
+          "rank": 1,
+          "coverageMode": "native",
+          "reason": "M12 的总结交接候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "summarize"
+      ],
+      "parentDecision": "workbench",
+      "scores": {
+        "fitScore": 92,
+        "qualityScore": 84.2,
+        "evidenceCoverage": 0.86,
+        "publicSignalScore": 45.1,
+        "researchPriority": 85.4
+      }
+    },
+    {
+      "id": "github:ai-analyst-lab/ai-analyst@3cfebe3d4d6e192d26bb816134b47f606bb14944#.claude/skills/close-the-loop/SKILL.md",
+      "kind": "agentic-skill",
+      "name": "结论闭环",
+      "slug": "close-the-loop",
+      "repoFullName": "ai-analyst-lab/ai-analyst",
+      "repoName": "ai-analyst",
+      "repoUrl": "https://github.com/ai-analyst-lab/ai-analyst",
+      "headSha": "3cfebe3d4d6e192d26bb816134b47f606bb14944",
+      "path": ".claude/skills/close-the-loop/SKILL.md",
+      "sourceUrl": "https://github.com/ai-analyst-lab/ai-analyst/blob/3cfebe3d4d6e192d26bb816134b47f606bb14944/.claude/skills/close-the-loop/SKILL.md",
+      "blobSha": "0c3498d47c585a2534f73f1c5835b1d023e50910",
+      "primaryModule": "M12",
+      "secondaryModules": [
+        "M11",
+        "M13"
+      ],
+      "opcDimensions": [
+        "增长与客户"
+      ],
+      "capabilityForm": "package-bound-skill",
+      "selection": "expanded",
+      "featuredRank": null,
+      "effectClass": "local-artifact",
+      "coreThree": {
+        "does": "把分析建议收束成行动、负责人、时间、成功信号和复查方式。",
+        "conditions": "只有在已有具体建议后触发；不能为没有证据的分析强行生成行动。",
+        "proof": "回读行动项，确认每条都能追到建议、有人负责、可检查且有停止条件。"
+      },
+      "limitations": [
+        "整包工作流的一部分",
+        "行动闭环不代表建议正确"
+      ],
+      "selectedReason": "让监控和实验结论真正进入下一轮决策。",
+      "requirements": [
+        "已经形成的具体建议",
+        "负责人、时间、跟踪指标和复查节点"
+      ],
+      "license": {
+        "status": "clear",
+        "label": "MIT",
+        "clear": true,
+        "scope": "repository"
+      },
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "role-expansion-v1",
+      "capabilityCluster": "summarize",
+      "benchmarkTrack": null,
+      "workbenchAssignments": [
+        {
+          "moduleId": "M11",
+          "leadRole": "summarize",
+          "roles": [
+            "summarize"
+          ],
+          "rank": 2,
+          "coverageMode": "native",
+          "reason": "M11 的总结交接候选；按冻结说明评估角色适配，尚未据此晋级。"
+        },
+        {
+          "moduleId": "M12",
+          "leadRole": "summarize",
+          "roles": [
+            "summarize"
+          ],
+          "rank": 3,
+          "coverageMode": "native",
+          "reason": "M12 的总结交接候选；按冻结说明评估角色适配，尚未据此晋级。"
+        },
+        {
+          "moduleId": "M13",
+          "leadRole": "summarize",
+          "roles": [
+            "summarize"
+          ],
+          "rank": 3,
+          "coverageMode": "native",
+          "reason": "M13 的总结交接候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "summarize"
+      ],
+      "parentDecision": "workbench",
+      "scores": {
+        "fitScore": 86,
+        "qualityScore": 84.2,
+        "evidenceCoverage": 0.86,
+        "publicSignalScore": 45.1,
+        "researchPriority": 82.1
+      }
+    },
+    {
+      "id": "github:phuryn/pm-skills@8607e3b077817f89bf4a9b623246219734ac3be0#pm-execution/skills/sprint-plan/SKILL.md",
+      "kind": "agentic-skill",
+      "name": "冲刺计划交接",
+      "slug": "sprint-plan",
+      "repoFullName": "phuryn/pm-skills",
+      "repoName": "pm-skills",
+      "repoUrl": "https://github.com/phuryn/pm-skills",
+      "headSha": "8607e3b077817f89bf4a9b623246219734ac3be0",
+      "path": "pm-execution/skills/sprint-plan/SKILL.md",
+      "sourceUrl": "https://github.com/phuryn/pm-skills/blob/8607e3b077817f89bf4a9b623246219734ac3be0/pm-execution/skills/sprint-plan/SKILL.md",
+      "blobSha": "05c49f8c1806e95c3681536cd0e48ca3f2c4d07c",
+      "primaryModule": "M07",
+      "secondaryModules": [
+        "M08"
+      ],
+      "opcDimensions": [
+        "工程与自动化"
+      ],
+      "capabilityForm": "direct-skill",
+      "selection": "expanded",
+      "featuredRank": null,
+      "effectClass": "local-artifact",
+      "coreThree": {
+        "does": "把容量、故事选择、依赖和风险压成可执行的冲刺计划。",
+        "conditions": "计划不能越过真实容量、授权和外部依赖；估算要保留不确定性。",
+        "proof": "检查容量守恒、依赖顺序、每项完成定义和中途失败的调整规则。"
+      },
+      "limitations": [
+        "不能代替团队承诺",
+        "估算质量取决于输入"
+      ],
+      "selectedReason": "把架构与实现工作切成下一位执行者可以接手的批次。",
+      "requirements": [
+        "团队容量、候选故事和依赖",
+        "风险、优先级与完成定义"
+      ],
+      "license": {
+        "status": "clear",
+        "label": "MIT",
+        "clear": true,
+        "scope": "repository"
+      },
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "role-expansion-v1",
+      "capabilityCluster": "summarize",
+      "benchmarkTrack": null,
+      "workbenchAssignments": [
+        {
+          "moduleId": "M07",
+          "leadRole": "summarize",
+          "roles": [
+            "summarize"
+          ],
+          "rank": 2,
+          "coverageMode": "native",
+          "reason": "M07 的总结交接候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "summarize"
+      ],
+      "parentDecision": "workbench",
+      "scores": {
+        "fitScore": 84,
+        "qualityScore": 85.5,
+        "evidenceCoverage": 0.86,
+        "publicSignalScore": 82.7,
+        "researchPriority": 84.5
+      }
+    },
+    {
+      "id": "github:phuryn/pm-skills@8607e3b077817f89bf4a9b623246219734ac3be0#pm-execution/skills/user-stories/SKILL.md",
+      "kind": "agentic-skill",
+      "name": "用户故事交接",
+      "slug": "user-stories",
+      "repoFullName": "phuryn/pm-skills",
+      "repoName": "pm-skills",
+      "repoUrl": "https://github.com/phuryn/pm-skills",
+      "headSha": "8607e3b077817f89bf4a9b623246219734ac3be0",
+      "path": "pm-execution/skills/user-stories/SKILL.md",
+      "sourceUrl": "https://github.com/phuryn/pm-skills/blob/8607e3b077817f89bf4a9b623246219734ac3be0/pm-execution/skills/user-stories/SKILL.md",
+      "blobSha": "325d74bbe166460bab9f5e5dbfb01f200649a409",
+      "primaryModule": "M05",
+      "secondaryModules": [
+        "M03"
+      ],
+      "opcDimensions": [
+        "产品与策略"
+      ],
+      "capabilityForm": "direct-skill",
+      "selection": "expanded",
+      "featuredRank": null,
+      "effectClass": "local-artifact",
+      "coreThree": {
+        "does": "用 Card、Conversation、Confirmation 把用户目标写成可讨论、可验收的故事。",
+        "conditions": "故事不能取代问题证据和接口合同；过大的故事要继续拆分。",
+        "proof": "让工程与 QA 分别复述行为、失败路径和验收边界，检查是否产生不同理解。"
+      },
+      "limitations": [
+        "容易把方案伪装成用户需求",
+        "不适合替代系统级规格"
+      ],
+      "selectedReason": "把访谈发现和 PRD 继续压成实现与测试都能接住的单位。",
+      "requirements": [
+        "真实用户、问题证据和场景",
+        "验收条件与接口边界"
+      ],
+      "license": {
+        "status": "clear",
+        "label": "MIT",
+        "clear": true,
+        "scope": "repository"
+      },
+      "verificationState": "static-reviewed",
+      "admissionLevel": "static-reviewed",
+      "claimCeiling": "candidate-only",
+      "origin": "role-expansion-v1",
+      "capabilityCluster": "summarize",
+      "benchmarkTrack": null,
+      "workbenchAssignments": [
+        {
+          "moduleId": "M03",
+          "leadRole": "summarize",
+          "roles": [
+            "summarize"
+          ],
+          "rank": 2,
+          "coverageMode": "native",
+          "reason": "M03 的总结交接候选；按冻结说明评估角色适配，尚未据此晋级。"
+        },
+        {
+          "moduleId": "M05",
+          "leadRole": "summarize",
+          "roles": [
+            "summarize"
+          ],
+          "rank": 2,
+          "coverageMode": "native",
+          "reason": "M05 的总结交接候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "summarize"
+      ],
+      "parentDecision": "workbench",
+      "scores": {
+        "fitScore": 83,
+        "qualityScore": 85.5,
+        "evidenceCoverage": 0.86,
+        "publicSignalScore": 82.7,
+        "researchPriority": 83.9
+      }
+    },
+    {
+      "id": "github:antvis/mcp-server-chart@e2a8fb7c185e17c75c067817ff1a2acfddf49aa1#workflow:antv-chart-wrapper",
+      "kind": "agentic-skill",
+      "name": "AntV Chart MCP 封装候选",
+      "slug": "antv-chart-wrapper",
+      "repoFullName": "antvis/mcp-server-chart",
+      "repoName": "mcp-server-chart",
+      "repoUrl": "https://github.com/antvis/mcp-server-chart",
+      "headSha": "e2a8fb7c185e17c75c067817ff1a2acfddf49aa1",
+      "path": null,
+      "sourceUrl": "https://github.com/antvis/mcp-server-chart",
+      "blobSha": null,
+      "primaryModule": "M11",
+      "secondaryModules": [
+        "M02",
+        "M12"
+      ],
+      "opcDimensions": [
+        "发布与运营"
+      ],
+      "capabilityForm": "wrap-candidate",
+      "selection": "expanded",
+      "featuredRank": null,
+      "effectClass": "external",
+      "coreThree": {
+        "does": "通过 MCP 把结构化数据转成 AntV 图表，适合作为可视化工具底座。",
+        "conditions": "它不是原生 Codex Skill；敏感数据、网络调用和输出保存位置必须先约束。",
+        "proof": "完成薄封装后，用固定数据核对数值、轴、标签、文件和失败恢复。"
+      },
+      "limitations": [
+        "需要封装",
+        "可能把数据发送到外部运行路径"
+      ],
+      "selectedReason": "图表覆盖广，但当前只适合作为待封装工具，不冒充已安装 Skill。",
+      "requirements": [
+        "另行设计 Codex Skill wrapper",
+        "明确数据出境、图表类型和输出文件合同"
+      ],
+      "license": {
+        "status": "clear",
+        "label": "MIT",
+        "clear": true,
+        "scope": "repository"
+      },
+      "verificationState": "source-confirmed",
+      "admissionLevel": "source-confirmed",
+      "claimCeiling": "candidate-only",
+      "origin": "role-expansion-v1",
+      "capabilityCluster": "visualize",
+      "benchmarkTrack": null,
+      "workbenchAssignments": [
+        {
+          "moduleId": "M02",
+          "leadRole": "visualize",
+          "roles": [
+            "visualize"
+          ],
+          "rank": 2,
+          "coverageMode": "wrapper",
+          "reason": "M02 的可视化候选；按冻结说明评估角色适配，尚未据此晋级。"
+        },
+        {
+          "moduleId": "M12",
+          "leadRole": "visualize",
+          "roles": [
+            "visualize"
+          ],
+          "rank": 3,
+          "coverageMode": "wrapper",
+          "reason": "M12 的可视化候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "visualize"
+      ],
+      "parentDecision": "watchlist",
+      "scores": {
+        "fitScore": 78,
+        "qualityScore": 73.7,
+        "evidenceCoverage": 0.78,
+        "publicSignalScore": 53.1,
+        "researchPriority": 74.4
+      }
+    },
+    {
+      "id": "github:drawdb-io/drawdb@ca7ba9a9a107bffb28adbf3e007138db3701a6aa#workflow:drawdb-wrapper",
+      "kind": "agentic-skill",
+      "name": "DrawDB 数据模型封装候选",
+      "slug": "drawdb-wrapper",
+      "repoFullName": "drawdb-io/drawdb",
+      "repoName": "drawdb",
+      "repoUrl": "https://github.com/drawdb-io/drawdb",
+      "headSha": "ca7ba9a9a107bffb28adbf3e007138db3701a6aa",
+      "path": null,
+      "sourceUrl": "https://github.com/drawdb-io/drawdb",
+      "blobSha": null,
+      "primaryModule": "M05",
+      "secondaryModules": [
+        "M07"
+      ],
+      "opcDimensions": [
+        "产品与策略"
+      ],
+      "capabilityForm": "wrap-candidate",
+      "selection": "expanded",
+      "featuredRank": null,
+      "effectClass": "local-artifact",
+      "coreThree": {
+        "does": "把数据库实体和关系做成可编辑图，并可导出 SQL 草案。",
+        "conditions": "不是原生 Skill；生成 SQL 只能当草案，不能直接当 migration。",
+        "proof": "用已知 schema 检查表、键、关系与导出 SQL，再在临时数据库验证。"
+      },
+      "limitations": [
+        "需要封装",
+        "AGPL-3.0",
+        "SQL 输出有高风险"
+      ],
+      "selectedReason": "能补齐数据模型可视化，但必须和迁移执行彻底分开。",
+      "requirements": [
+        "另行设计输入输出 wrapper",
+        "接受 AGPL-3.0 边界并人工审查 SQL"
+      ],
+      "license": {
+        "status": "clear",
+        "label": "AGPL-3.0",
+        "clear": true,
+        "scope": "repository"
+      },
+      "verificationState": "source-confirmed",
+      "admissionLevel": "source-confirmed",
+      "claimCeiling": "candidate-only",
+      "origin": "role-expansion-v1",
+      "capabilityCluster": "visualize",
+      "benchmarkTrack": null,
+      "workbenchAssignments": [
+        {
+          "moduleId": "M05",
+          "leadRole": "visualize",
+          "roles": [
+            "visualize"
+          ],
+          "rank": 2,
+          "coverageMode": "wrapper",
+          "reason": "M05 的可视化候选；按冻结说明评估角色适配，尚未据此晋级。"
+        },
+        {
+          "moduleId": "M07",
+          "leadRole": "visualize",
+          "roles": [
+            "visualize"
+          ],
+          "rank": 2,
+          "coverageMode": "wrapper",
+          "reason": "M07 的可视化候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "visualize"
+      ],
+      "parentDecision": "watchlist",
+      "scores": {
+        "fitScore": 77,
+        "qualityScore": 64.7,
+        "evidenceCoverage": 0.64,
+        "publicSignalScore": 72.7,
+        "researchPriority": 72.1
+      }
+    },
+    {
+      "id": "github:lyon-industries/graphrag-workbench@066727de7457f2226eb93b2c8ccbff9a498b2e12#workflow:graphrag-workbench",
+      "kind": "agentic-skill",
+      "name": "GraphRAG Workbench 参考",
+      "slug": "graphrag-workbench",
+      "repoFullName": "lyon-industries/graphrag-workbench",
+      "repoName": "graphrag-workbench",
+      "repoUrl": "https://github.com/lyon-industries/graphrag-workbench",
+      "headSha": "066727de7457f2226eb93b2c8ccbff9a498b2e12",
+      "path": null,
+      "sourceUrl": "https://github.com/lyon-industries/graphrag-workbench",
+      "blobSha": null,
+      "primaryModule": "M11",
+      "secondaryModules": [
+        "M00",
+        "M07",
+        "M08",
+        "M13"
+      ],
+      "opcDimensions": [
+        "发布与运营"
+      ],
+      "capabilityForm": "wrap-candidate",
+      "selection": "expanded",
+      "featuredRank": null,
+      "effectClass": "local-artifact",
+      "coreThree": {
+        "does": "以 3D 工作台浏览 GraphRAG 实体、关系和社区，可作为知识图谱可视化参考。",
+        "conditions": "不是原生 Skill；图谱错误会被视觉权威感放大，每条关系必须能回到来源。",
+        "proof": "用小型已知图谱核对节点、边、过滤、来源回链和错误关系呈现。"
+      },
+      "limitations": [
+        "需要封装",
+        "依赖可信图谱",
+        "3D 视图可能降低信息密度"
+      ],
+      "selectedReason": "用于补位跨节点关系图，只标参考或 wrapper，不标专用能力。",
+      "requirements": [
+        "已有可信 GraphRAG 图谱",
+        "另行定义查询、渲染与来源回链 wrapper"
+      ],
+      "license": {
+        "status": "clear",
+        "label": "MIT",
+        "clear": true,
+        "scope": "repository"
+      },
+      "verificationState": "source-confirmed",
+      "admissionLevel": "source-confirmed",
+      "claimCeiling": "candidate-only",
+      "origin": "role-expansion-v1",
+      "capabilityCluster": "visualize",
+      "benchmarkTrack": null,
+      "workbenchAssignments": [
+        {
+          "moduleId": "M00",
+          "leadRole": "visualize",
+          "roles": [
+            "visualize"
+          ],
+          "rank": 2,
+          "coverageMode": "wrapper",
+          "reason": "M00 的可视化候选；按冻结说明评估角色适配，尚未据此晋级。"
+        },
+        {
+          "moduleId": "M08",
+          "leadRole": "visualize",
+          "roles": [
+            "visualize"
+          ],
+          "rank": 2,
+          "coverageMode": "wrapper",
+          "reason": "M08 的可视化候选；按冻结说明评估角色适配，尚未据此晋级。"
+        },
+        {
+          "moduleId": "M13",
+          "leadRole": "visualize",
+          "roles": [
+            "visualize"
+          ],
+          "rank": 1,
+          "coverageMode": "wrapper",
+          "reason": "M13 的可视化候选；按冻结说明评估角色适配，尚未据此晋级。"
+        }
+      ],
+      "roleTags": [
+        "visualize"
+      ],
+      "parentDecision": "watchlist",
+      "scores": {
+        "fitScore": 69,
+        "qualityScore": 61.9,
+        "evidenceCoverage": 0.57,
+        "publicSignalScore": 37.9,
+        "researchPriority": 63.9
       }
     }
   ],
@@ -10255,8 +14066,101 @@
     "quarantined": 0,
     "rawSkillPaths": 8779,
     "repoUniqueSkillBlobs": 4326,
-    "curatedSkillCount": 40,
+    "curatedSkillCount": 72,
     "featuredSkillCount": 40,
+    "benchmarkCohortCount": 40,
+    "expandedCapabilityCount": 32,
+    "expandedNativeSkillPathCount": 29,
+    "expandedWorkflowCandidateCount": 3,
+    "nativeSkillPathCount": 67,
+    "workflowCandidateCount": 5,
+    "roleAssignmentCount": 116,
+    "roleCoverageByModule": {
+      "M00": {
+        "core": 2,
+        "review": 2,
+        "visualize": 2,
+        "summarize": 2
+      },
+      "M01": {
+        "core": 2,
+        "review": 2,
+        "visualize": 2,
+        "summarize": 2
+      },
+      "M02": {
+        "core": 3,
+        "review": 2,
+        "visualize": 2,
+        "summarize": 2
+      },
+      "M03": {
+        "core": 1,
+        "review": 2,
+        "visualize": 2,
+        "summarize": 2
+      },
+      "M04": {
+        "core": 1,
+        "review": 2,
+        "visualize": 2,
+        "summarize": 2
+      },
+      "M05": {
+        "core": 2,
+        "review": 2,
+        "visualize": 2,
+        "summarize": 2
+      },
+      "M06": {
+        "core": 2,
+        "review": 2,
+        "visualize": 3,
+        "summarize": 2
+      },
+      "M07": {
+        "core": 1,
+        "review": 2,
+        "visualize": 2,
+        "summarize": 2
+      },
+      "M08": {
+        "core": 2,
+        "review": 3,
+        "visualize": 2,
+        "summarize": 2
+      },
+      "M09": {
+        "core": 1,
+        "review": 3,
+        "visualize": 2,
+        "summarize": 2
+      },
+      "M10": {
+        "core": 1,
+        "review": 3,
+        "visualize": 2,
+        "summarize": 3
+      },
+      "M11": {
+        "core": 2,
+        "review": 2,
+        "visualize": 2,
+        "summarize": 2
+      },
+      "M12": {
+        "core": 2,
+        "review": 2,
+        "visualize": 3,
+        "summarize": 3
+      },
+      "M13": {
+        "core": 2,
+        "review": 2,
+        "visualize": 2,
+        "summarize": 3
+      }
+    },
     "runtimeVerified": 0
   }
 }

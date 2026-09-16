@@ -1,13 +1,14 @@
 #!/usr/bin/env node
 
 import { createHash } from "node:crypto";
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
 
 const inputPath = process.argv[2] || "data/agentic-tools-evaluations.json";
 const outputPath = process.argv[3] || "benchmarks/candidates.json";
 const raw = readFileSync(inputPath, "utf8");
 const source = JSON.parse(raw);
+const previous = existsSync(outputPath) ? JSON.parse(readFileSync(outputPath, "utf8")) : null;
 
 const matrix = {
   "grill-with-docs": ["B1", "R1", "multi-turn", "skill-chain", false],
@@ -62,7 +63,11 @@ const batchMeaning = {
   S0: "Not a runnable Skill yet; a separately reviewed wrapper must be created first."
 };
 
-const candidates = source.curatedSkills.map((item, index) => {
+const benchmarkCohort = source.curatedSkills
+  .filter((item) => item.benchmarkTrack?.cohort === "v1-40")
+  .sort((a, b) => a.benchmarkTrack.order - b.benchmarkTrack.order);
+
+const candidates = benchmarkCohort.map((item, index) => {
   const entry = matrix[item.slug];
   if (!entry) throw new Error(`Missing benchmark matrix entry for ${item.slug}`);
   const [batch, risk, testMode, materialization, firstWave, calibrationSelected = false] = entry;
@@ -90,12 +95,22 @@ const candidates = source.curatedSkills.map((item, index) => {
   };
 });
 
-if (candidates.length !== 40) throw new Error(`Expected 40 candidates, got ${candidates.length}`);
+if (candidates.length !== 40) throw new Error(`Expected 40 v1-40 candidates, got ${candidates.length}`);
+if (candidates.some((item, index) => benchmarkCohort[index].benchmarkTrack.order !== index + 1)) throw new Error("v1-40 benchmark order must be contiguous from 1");
 if (Object.keys(matrix).length !== candidates.length) throw new Error("Matrix contains an unused or duplicate entry");
+const previousById = new Map((previous?.candidates || []).map((item) => [item.id, item]));
+const sameFrozenPlan = previous?.schemaVersion === "agent-skill-benchmark-candidates.v1" && candidates.every((item) => {
+  const old = previousById.get(item.id);
+  return old && ["candidateNumber", "slug", "primaryModule", "repoFullName", "headSha", "path", "blobSha", "capabilityForm", "effectClass", "batch", "risk", "testMode", "materialization", "firstWave", "calibrationSelected", "runtimeStatus"]
+    .every((key) => JSON.stringify(old[key]) === JSON.stringify(item[key]));
+});
+if (sameFrozenPlan) {
+  for (const item of candidates) item.staticVerificationState = previousById.get(item.id).staticVerificationState;
+}
 const countBy = (key) => Object.fromEntries([...new Set(candidates.map((item) => item[key]))].sort().map((value) => [value, candidates.filter((item) => item[key] === value).length]));
 const output = {
   schemaVersion: "agent-skill-benchmark-candidates.v1",
-  generatedFrom: {
+  generatedFrom: sameFrozenPlan ? previous.generatedFrom : {
     path: inputPath,
     sha256: createHash("sha256").update(raw).digest("hex"),
     evaluatedAt: source.evaluatedAt

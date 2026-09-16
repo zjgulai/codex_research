@@ -38,6 +38,19 @@
 - 约 390 CSS px 窄屏复核通过：document 无横向溢出；Agent Skill 切换可用；详情 dialog 宽约 352px，左右边界均在视口内，关闭按钮可见。
 - 浏览器控制台 `warning/error` 为 0。
 
+### Round 5 — 四角色能力工作包
+
+- 桌面 1910 × 1075 通过：Agent 侧不再显示一张 Top 3 表，而是在同一节点并列展示主执行、Review、可视化、总结交接；每张卡只保留能力、证据入口、仓库、角色名次与覆盖方式。
+- M06 复核通过：Review 有截图盲审与 Web 应用实测；可视化有前端设计、预览和截图差异；总结明确标为“通用补位”，没有冒充专用 Skill。
+- M13 复核通过：GraphRAG Workbench 显示“来源已冻结 / 待封装”，open-slide 显示“通用补位”，并保留“缺少原生 Skill 谱系图”的缺口说明。
+- 完整目录联合筛选通过：`M13 + 可视化` 只返回同一 workbench assignment 下的 GraphRAG Workbench 与 open-slide，不按研究主节点和角色做错误笛卡尔匹配。
+- 跨节点详情上下文通过：从 `M13 · 可视化` 打开 GraphRAG Workbench 后，标题、badge、当前工作位与节点原文都保持 M13；刷新带 assignment 的详情深链仍保持 M13，研究主节点另列，不再偷换当前任务语境。
+- wrapper 详情通过：清楚显示工作位分配、能力形态、许可证、证据状态、`candidate-only` 结论上限、依赖与未验证项。
+- 证据链复核通过：artifact verifier 重算 116 条分配与 14 × 4 覆盖矩阵，并将页面内 `v1-40` 队列逐行、逐字段绑定到冻结 candidate plan。
+- 窄屏断点通过：`scrollWidth === innerWidth`，四角色从双列降为单列，阶段和节点页签仍在自身容器内滚动。
+- 深色模式通过：背景、任务卡、角色卡、状态 badge、缺口提示与链接保持可读；页面无横向溢出。
+- 浏览器控制台 `warning/error` 为 0。
+
 ## 最终判定
 
 - P0：0

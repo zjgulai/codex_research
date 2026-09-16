@@ -10,11 +10,14 @@ const args = Object.fromEntries(process.argv.slice(2).map((arg) => {
 }));
 const sourcePath = args.source || "data/agentic-tools-source.json";
 const curationPath = args.curation || "data/agentic-tools-curation.json";
+const roleCurationPath = args.roles || "data/agentic-role-curation.json";
 const outputPath = args.output || "data/agentic-tools-evaluations.json";
 const sourceRaw = readFileSync(sourcePath, "utf8");
 const curationRaw = readFileSync(curationPath, "utf8");
+const roleCurationRaw = readFileSync(roleCurationPath, "utf8");
 const source = JSON.parse(sourceRaw);
 const curation = JSON.parse(curationRaw);
+const roleCuration = JSON.parse(roleCurationRaw);
 const evaluatedAt = new Date().toISOString();
 
 const clamp = (value, min = 0, max = 100) => Math.max(min, Math.min(max, value));
@@ -32,6 +35,10 @@ const FORMS = new Set(["direct-skill", "package-bound-skill", "wrap-candidate", 
 const DECISIONS = new Set(["workbench", "watchlist", "excluded"]);
 const EFFECTS = new Set(["read-only", "local-artifact", "workspace", "git", "external", "secrets", "production"]);
 const HIGH_RISK = new Set(["git", "external", "secrets", "production"]);
+const ROLE_IDS = new Set(["core", "review", "visualize", "summarize"]);
+const COVERAGE_NOTE_KEYS = new Set(["M01.review", "M06.summarize", "M08.visualize", "M09.summarize", "M10.visualize", "M13.visualize"]);
+const ADMISSION_LEVELS = new Set(["source-confirmed", "static-reviewed", "controlled-smoke", "task-benchmarked"]);
+const COVERAGE_MODES = new Set(["native", "generalist", "combined", "package-bound", "adapter-required", "wrapper"]);
 
 function percentile(values, ratio) {
   const sorted = values.slice().sort((a, b) => a - b);
@@ -262,6 +269,31 @@ function validateInputs() {
     if (!EFFECTS.has(profile.effectClass)) errors.push(`Invalid effect class for ${profile.fullName}`);
     if (!profile.does || !profile.conditions || !profile.selectedReason) errors.push(`Incomplete plain-language curation for ${profile.fullName}`);
   }
+  if (roleCuration.roles.length !== ROLE_IDS.size) errors.push("Role curation must define four workbench roles");
+  const roleIds = roleCuration.roles.map((role) => role.id);
+  if (new Set(roleIds).size !== ROLE_IDS.size || [...ROLE_IDS].some((roleId) => !roleIds.includes(roleId))) errors.push("Role curation must define each required workbench role exactly once");
+  for (const role of roleCuration.roles) {
+    if (!ROLE_IDS.has(role.id) || !role.label || !role.question || !role.validation) errors.push(`Invalid workbench role ${role.id}`);
+  }
+  const coverageNoteKeys = Object.keys(roleCuration.coverageNotes || {});
+  if (coverageNoteKeys.length !== COVERAGE_NOTE_KEYS.size || [...COVERAGE_NOTE_KEYS].some((key) => !coverageNoteKeys.includes(key))) errors.push("Role curation weak-coverage note set changed");
+  for (const key of coverageNoteKeys) {
+    const [moduleId, roleId] = key.split(".");
+    if (!MODULE_IDS.includes(moduleId) || !ROLE_IDS.has(roleId) || !roleCuration.coverageNotes[key]?.trim()) errors.push(`Invalid weak-coverage note ${key}`);
+  }
+  for (const skill of roleCuration.additionalCapabilities) {
+    if (!repoByName.has(skill.repo.toLowerCase())) errors.push(`Expanded capability has unknown repository ${skill.repo}`);
+    if (!MODULE_IDS.includes(skill.primaryModule)) errors.push(`Expanded capability has invalid module ${skill.slug}`);
+    if (!ADMISSION_LEVELS.has(skill.admissionLevel)) errors.push(`Expanded capability has invalid admission level ${skill.slug}`);
+    if (!skill.coreThree?.does || !skill.coreThree?.conditions || !skill.coreThree?.proof) errors.push(`Expanded capability is missing coreThree ${skill.slug}`);
+  }
+  for (const moduleId of MODULE_IDS) {
+    const moduleRoles = roleCuration.moduleRoleAssignments[moduleId];
+    if (!moduleRoles) errors.push(`Missing role assignments for ${moduleId}`);
+    for (const roleId of ROLE_IDS) {
+      if (!Array.isArray(moduleRoles?.[roleId]) || moduleRoles[roleId].length === 0) errors.push(`Missing ${roleId} role candidates for ${moduleId}`);
+    }
+  }
   if (errors.length) throw new Error(errors.slice(0, 40).join("\n"));
 }
 validateInputs();
@@ -274,7 +306,64 @@ function skillEvidence(repo, path) {
   return repo.files.skillFiles.find((entry) => entry.path === path) || null;
 }
 
-const curatedSkills = curation.curatedSkills.map((skill) => {
+const skillDefinitions = [
+  ...curation.curatedSkills.map((skill, index) => ({
+    ...skill,
+    origin: "benchmark-v1",
+    admissionLevel: skill.path ? "static-reviewed" : "source-confirmed",
+    benchmarkTrack: { cohort: "v1-40", order: index + 1 },
+  })),
+  ...roleCuration.additionalCapabilities.map((skill) => ({
+    ...skill,
+    origin: "role-expansion-v1",
+    selection: skill.selection || "expanded",
+    featuredRank: null,
+    benchmarkTrack: null,
+  })),
+];
+const slugSet = new Set();
+const pathSet = new Set();
+for (const skill of skillDefinitions) {
+  if (slugSet.has(skill.slug)) throw new Error(`Duplicate capability slug: ${skill.slug}`);
+  slugSet.add(skill.slug);
+  if (skill.path) {
+    const key = `${skill.repo.toLowerCase()}#${skill.path}`;
+    if (pathSet.has(key)) throw new Error(`Duplicate capability path: ${key}`);
+    pathSet.add(key);
+  }
+}
+
+const roleLabelById = new Map(roleCuration.roles.map((role) => [role.id, role.label]));
+const assignmentsBySlug = new Map(skillDefinitions.map((skill) => [skill.slug, []]));
+const moduleRoleCoverage = {};
+const assignmentPairs = new Set();
+for (const moduleId of MODULE_IDS) {
+  moduleRoleCoverage[moduleId] = {};
+  const moduleRoles = roleCuration.moduleRoleAssignments[moduleId];
+  for (const roleId of ROLE_IDS) {
+    const entries = moduleRoles[roleId];
+    moduleRoleCoverage[moduleId][roleId] = entries.length;
+    entries.forEach((rawEntry, index) => {
+      const entry = typeof rawEntry === "string" ? { slug: rawEntry } : rawEntry;
+      if (!assignmentsBySlug.has(entry.slug)) throw new Error(`Unknown role capability ${moduleId}.${roleId}: ${entry.slug}`);
+      const coverageMode = entry.coverageMode || "native";
+      if (!COVERAGE_MODES.has(coverageMode)) throw new Error(`Invalid coverage mode ${moduleId}.${roleId}: ${coverageMode}`);
+      const pairKey = `${entry.slug}#${moduleId}`;
+      if (assignmentPairs.has(pairKey)) throw new Error(`Capability assigned twice inside ${moduleId}: ${entry.slug}`);
+      assignmentPairs.add(pairKey);
+      assignmentsBySlug.get(entry.slug).push({
+        moduleId,
+        leadRole: roleId,
+        roles: [roleId],
+        rank: index + 1,
+        coverageMode,
+        reason: `${moduleId} 的${roleLabelById.get(roleId)}候选；按冻结说明评估角色适配，尚未据此晋级。`,
+      });
+    });
+  }
+}
+
+const curatedSkills = skillDefinitions.map((skill) => {
   const repo = repoByName.get(skill.repo.toLowerCase());
   const parent = projectMap.get(skill.repo.toLowerCase());
   if (!repo || !parent) throw new Error(`Curated Skill has unknown repo: ${skill.repo}`);
@@ -298,16 +387,23 @@ const curatedSkills = curation.curatedSkills.map((skill) => {
     primaryModule: skill.primaryModule,
     secondaryModules: skill.secondaryModules || [],
     opcDimensions: unique(skill.opcDimensions || [OPC_BY_MODULE[skill.primaryModule]]),
-    capabilityForm: skill.capabilityForm,
-    selection: skill.selection,
-    featuredRank: skill.featuredRank,
-    effectClass: skill.effectClass,
+    capabilityForm: skill.capabilityForm || parent.capabilityForm,
+    selection: skill.selection || "expanded",
+    featuredRank: Number.isInteger(skill.featuredRank) ? skill.featuredRank : null,
+    effectClass: skill.effectClass || parent.effectClass,
     coreThree: skill.coreThree,
     limitations: unique(skill.limitations || []),
     selectedReason: skill.selectedReason,
     requirements: unique(skill.requirements || []),
-    license: skill.license,
-    verificationState: file ? "structure-checked" : "docs-only",
+    license: skill.license || { ...parent.license, scope: parent.license.status === "per-skill" ? "skill-directory" : "repository" },
+    verificationState: skill.admissionLevel || (file ? "static-reviewed" : "source-confirmed"),
+    admissionLevel: skill.admissionLevel || (file ? "static-reviewed" : "source-confirmed"),
+    claimCeiling: "candidate-only",
+    origin: skill.origin,
+    capabilityCluster: skill.capabilityCluster || "core",
+    benchmarkTrack: skill.benchmarkTrack,
+    workbenchAssignments: assignmentsBySlug.get(skill.slug),
+    roleTags: unique(assignmentsBySlug.get(skill.slug).flatMap((assignment) => assignment.roles)),
     parentDecision: parent.decision,
     scores: {
       fitScore: skill.fitScore,
@@ -319,8 +415,11 @@ const curatedSkills = curation.curatedSkills.map((skill) => {
   };
 });
 
+const benchmarkCohort = curatedSkills.filter((skill) => skill.benchmarkTrack?.cohort === "v1-40")
+  .sort((a, b) => a.benchmarkTrack.order - b.benchmarkTrack.order);
+if (benchmarkCohort.length !== 40) throw new Error(`Expected 40 benchmark-v1 candidates, got ${benchmarkCohort.length}`);
 for (const moduleId of MODULE_IDS) {
-  const featured = curatedSkills.filter((skill) => skill.primaryModule === moduleId && Number.isInteger(skill.featuredRank));
+  const featured = benchmarkCohort.filter((skill) => skill.primaryModule === moduleId && Number.isInteger(skill.featuredRank));
   if (featured.length > 3) throw new Error(`${moduleId} has more than three featured Agent Skills`);
   const ranks = featured.map((skill) => skill.featuredRank).sort((a, b) => a - b);
   if (ranks.some((rank, index) => rank !== index + 1)) throw new Error(`${moduleId} featured ranks must be contiguous from 1`);
@@ -340,7 +439,7 @@ for (const moduleId of MODULE_IDS) {
 }
 
 const output = {
-  schemaVersion: 1,
+  schemaVersion: 2,
   evaluatedAt,
   source: {
     listUrl: source.listUrl,
@@ -349,9 +448,13 @@ const output = {
     repositoryCount: source.repositories.length,
     sourceSha256: sha256(sourceRaw),
     curationSha256: sha256(curationRaw),
+    roleCurationSha256: sha256(roleCurationRaw),
   },
-  policy: curation.policy,
+  policy: { ...curation.policy, roleWorkbench: roleCuration.policy },
   opcDimensions: curation.opcDimensions,
+  workbenchRoles: roleCuration.roles,
+  coverageNotes: roleCuration.coverageNotes,
+  capabilityChains: roleCuration.capabilityChains,
   projects,
   curatedSkills,
   coverage: {
@@ -367,7 +470,15 @@ const output = {
     rawSkillPaths: source.repositories.reduce((sum, repo) => sum + repo.files.skillCount, 0),
     repoUniqueSkillBlobs: source.repositories.reduce((sum, repo) => sum + repo.files.skillUniqueBlobCount, 0),
     curatedSkillCount: curatedSkills.length,
-    featuredSkillCount: curatedSkills.filter((skill) => Number.isInteger(skill.featuredRank)).length,
+    featuredSkillCount: benchmarkCohort.length,
+    benchmarkCohortCount: benchmarkCohort.length,
+    expandedCapabilityCount: curatedSkills.filter((skill) => skill.origin === "role-expansion-v1").length,
+    expandedNativeSkillPathCount: curatedSkills.filter((skill) => skill.origin === "role-expansion-v1" && Boolean(skill.path)).length,
+    expandedWorkflowCandidateCount: curatedSkills.filter((skill) => skill.origin === "role-expansion-v1" && !skill.path).length,
+    nativeSkillPathCount: curatedSkills.filter((skill) => Boolean(skill.path)).length,
+    workflowCandidateCount: curatedSkills.filter((skill) => !skill.path).length,
+    roleAssignmentCount: curatedSkills.reduce((sum, skill) => sum + skill.workbenchAssignments.length, 0),
+    roleCoverageByModule: moduleRoleCoverage,
     runtimeVerified: 0,
   },
 };
@@ -379,6 +490,8 @@ console.log(JSON.stringify({
   repositories: projects.length,
   workbenchProjects: output.coverage.workbenchProjects,
   curatedSkills: curatedSkills.length,
+  benchmarkCohort: benchmarkCohort.length,
+  roleAssignments: output.coverage.roleAssignmentCount,
   featuredSkills: output.coverage.featuredSkillCount,
   runtimeVerified: 0,
 }, null, 2));

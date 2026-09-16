@@ -102,6 +102,25 @@
 - 公网文件：3,116,151 bytes；SHA-256 `2d4ebdb06d04f4315df68d4fb1f001e22f5e5468ac0dbe28142a91052050780c`，与本地逐字节一致。
 - 公网页面包含 16 次 A/B 校准、评分器失败和 0 晋级披露；4 条候选详情、桌面与约 390 CSS px 窄屏、浏览器控制台均通过复核。
 
+## Phase 9 — 四角色 Agent 能力工作包
+
+- [x] 将“是否收录”与“是否已验证”分开：`source-confirmed → static-reviewed → controlled-smoke → task-benchmarked`。
+- [x] 从冻结的 81 仓库中新增 29 条原生 Skill 与 3 条 workflow / wrapper 候选；能力库从 40 扩到 72。
+- [x] 保持原始 `v1-40` benchmark cohort、顺序和 16 次校准结果不变；扩展候选不自动进入既有计划。
+- [x] 将 M00–M13 每个节点拆为主执行、Review、可视化、总结交接四个工作位，形成 116 条有序分配。
+- [x] 对专用能力不足的 M01 / M06 / M08 / M09 / M10 / M13 显式标记组合覆盖、通用补位或需封装。
+- [x] 完整目录增加“Agent 工作位”筛选，并确保节点与角色在同一 assignment 上联合匹配。
+- [x] 生成器与 artifact verifier 固定检查 72 条能力、67 条原生路径、5 条 workflow 候选、40 条 benchmark cohort 和 14 × 4 角色覆盖。
+- [x] 完成桌面、窄屏、深色模式、角色联动筛选、wrapper 详情和控制台 QA。
+- [ ] 提交、推送并验证 Pages workflow、deployment 与公网字节。
+
+### Phase 9 当前边界
+
+- 72 条能力仍是候选库，不是“72 条已验证 Skill”；`runtimeVerified = 0`。
+- 116 是节点角色分配数，不是独立能力数或安装数。
+- 3 条新增 wrapper（AntV Chart、DrawDB、GraphRAG Workbench）没有原生 Codex Skill，只能作为封装候选或参考。
+- 本轮使用 2026-09-16T08:03:00.433482Z 的更新 catalog；插件总数和 Skill 证据总数不变，但 `frozen-exact` 从 5,314 降到 5,312，`current-version-drift` 从 93 增到 95，插件证据缺口从 21 增到 25。
+
 ## 初版目录发布收据
 
 - 内容提交：`4783fdd3ce7d704418efe77aced5a00ad9b2c61f`。

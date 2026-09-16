@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; base-uri 'none'; form-action 'none'; img-src data:; font-src data:; media-src data:; style-src 'unsafe-inline'; script-src 'unsafe-inline'">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="先选全栈开发阶段，再看最值得先试的 3 个 Codex 插件。">
-  <title>Agent OPC Atlas · 插件与技能全栈地图</title>
+  <meta name="description" content="按全栈开发节点查找 Codex 插件，以及主执行、Review、可视化和总结交接 Agent 能力。">
+  <title>Agent OPC Atlas · 插件与 Agent 能力全栈地图</title>
   <style>
     :root {
       color-scheme: light dark;
@@ -386,7 +386,7 @@
       background: var(--bg);
       color: var(--ink);
     }
-    .controls.secondary { grid-template-columns: repeat(4, minmax(130px, 1fr)); border-top: 0; }
+    .controls.secondary { grid-template-columns: repeat(5, minmax(120px, 1fr)); border-top: 0; }
     .result-summary {
       display: flex;
       align-items: center;
@@ -882,6 +882,51 @@
     .candidate-footer { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 12px; color: var(--muted); font-size: 11px; }
     .candidate-footer button { padding: 0; border: 0; background: transparent; color: var(--blue); font-weight: 750; }
     .workspace-scope { margin-top: 8px; color: #8993A4; font-size: 9px; line-height: 1.45; text-align: left; }
+    .role-board { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .role-lane { min-width: 0; padding: 14px; border: 1px solid #E3E8F0; border-radius: 11px; background: #FBFCFE; }
+    .role-lane-head { display: flex; align-items: start; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+    .role-lane-head h4 { margin: 0; font-size: 14px; }
+    .role-lane-head p { margin: 4px 0 0; color: var(--muted); font-size: 10px; line-height: 1.4; }
+    .role-count { flex: 0 0 auto; padding: 3px 7px; border-radius: 999px; background: #EAF1FF; color: #174EBA; font-size: 10px; font-weight: 800; }
+    .role-candidate { padding: 11px 0; border-top: 1px solid #E8ECF2; }
+    .role-candidate:first-of-type { border-top: 0; padding-top: 0; }
+    .role-candidate-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .role-candidate button { min-width: 0; padding: 0; overflow: hidden; border: 0; background: transparent; color: var(--ink); font-size: 12px; font-weight: 780; text-align: left; text-overflow: ellipsis; white-space: nowrap; }
+    .role-candidate p { margin: 6px 0; color: #4B5565; font-size: 11px; line-height: 1.5; }
+    .role-meta { display: flex; flex-wrap: wrap; gap: 5px 9px; color: var(--muted); font-size: 9px; }
+    .role-meta span:first-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .role-coverage-note { margin: 10px 0 0; padding: 9px 10px; border-radius: 8px; background: #FFF6E6; color: #805400; font-size: 10px; line-height: 1.45; }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        color-scheme: dark;
+        --bg: #10141C;
+        --surface: #171C26;
+        --surface-2: #202734;
+        --ink: #F2F5FA;
+        --muted: #AAB4C4;
+        --line: #313A49;
+        --blue: #78A3FF;
+        --shadow: 0 14px 42px rgba(0, 0, 0, .32);
+      }
+      .topbar { border-color: var(--line); background: rgba(23, 28, 38, .96); }
+      .header-search input, .workbench-switch { background: #111722; }
+      .nav button[aria-selected="true"], .phase-button[aria-pressed="true"], .role-count { background: #1C315E; color: #AFC8FF; }
+      .workbench, .node-panel { background: var(--bg); }
+      .phase-rail, .stage-tabs, .workspace-body, .entity-card, footer { background: var(--surface); }
+      .phase-button:hover, .phase-index, .task-check, .role-lane, .candidate-evidence { background: var(--surface-2); }
+      .phase-button[aria-pressed="true"] .phase-index { background: var(--blue); color: #0C1220; }
+      .workbench-switch button[aria-pressed="true"] { background: #293245; color: #C9D8FF; box-shadow: none; }
+      .stage-tab[aria-pressed="true"], .deliverable strong { color: #AFC8FF; }
+      .work-section, .candidate-row, .candidate-empty, .role-candidate { border-color: var(--line); }
+      .deliverable { border-color: #344E7B; background: #17243A; }
+      .candidate-capability, .role-candidate p { color: #C3CBD8; }
+      .readiness { background: #293141; color: #C7D0DE; }
+      .readiness.installed { background: #153C2A; color: #83D6AA; }
+      .readiness.controlled { background: #493715; color: #F2CA76; }
+      .role-coverage-note { background: #3B2D14; color: #F2CD82; }
+      .catalog-shell, .audit-card, dialog { background: var(--surface); }
+    }
 
     .page-head { align-items: start; }
     .page-head h1 { font-size: clamp(32px, 4vw, 50px); }
@@ -914,6 +959,7 @@
       .workbench-switch { order: -1; flex: 0 0 auto; margin-left: 0; }
       .workspace-body { width: min(100% - 24px, 1080px); padding: 22px 18px; }
       .task-list, .candidate-evidence { grid-template-columns: 1fr; }
+      .role-board { grid-template-columns: 1fr; }
       .candidate-head { display: none; }
       .candidate-row { grid-template-columns: 1fr auto; }
       .candidate-capability { grid-column: 1 / -1; }
@@ -933,7 +979,7 @@
 <body>
   <a class="skip-link" href="#main">跳到主要内容</a>
   <header class="topbar">
-    <div class="brand"><span class="brand-mark">A+</span><span class="brand-copy"><strong>Agent OPC Atlas</strong><small>插件 × Agent Skill 全栈地图</small></span></div>
+    <div class="brand"><span class="brand-mark">A+</span><span class="brand-copy"><strong>Agent OPC Atlas</strong><small>插件 × Agent 能力全栈地图</small></span></div>
     <form class="header-search" id="header-search" role="search">
       <label class="skip-link" for="global-search">搜索插件或 Skill</label>
       <input id="global-search" type="search" autocomplete="off" placeholder="搜索插件、Skill 或开发场景…">
@@ -952,10 +998,10 @@
     <section class="view active" id="view-overview" aria-labelledby="overview-title">
       <div class="workbench">
         <aside class="phase-rail">
-          <div class="rail-intro"><h1 id="overview-title">全栈工作台地图</h1><p>做到哪一步，就选这一节点的插件或 Agent Skill。</p></div>
+          <div class="rail-intro"><h1 id="overview-title">全栈工作台地图</h1><p>做到哪一步，就选这一节点的插件或 Agent 能力。</p></div>
           <p class="phase-rail-label">开发阶段</p>
           <div class="node-list" id="node-list" aria-label="全栈开发阶段"></div>
-          <div class="rail-foot"><strong>4,184 + 40</strong>插件与精选 Agent Skill<div class="workspace-scope" id="overview-metrics" aria-label="研究范围"></div></div>
+          <div class="rail-foot"><strong>4,184 + 72</strong>插件与 Agent 能力<div class="workspace-scope" id="overview-metrics" aria-label="研究范围"></div></div>
         </aside>
         <article class="node-panel" id="node-panel"></article>
       </div>
@@ -964,16 +1010,17 @@
     <section class="view" id="view-catalog" aria-labelledby="catalog-title">
       <div class="page-head">
         <div><p class="eyebrow">完整目录</p><h1 id="catalog-title">需要更多，再来这里筛</h1></div>
-        <p>工作台每个节点最多给 3 个候选；这里保留 4,184 个插件、插件内 Skill、40 个 Agent Skill 与 81 个 GitHub 项目审计。</p>
+        <p>插件仍按节点给 Top 3；Agent 侧按主执行、Review、可视化、总结交接组成工作包。这里保留 4,184 个插件、72 个 Agent 能力与 81 个 GitHub 项目审计。</p>
       </div>
       <div class="catalog-shell">
         <div class="controls">
           <div class="control"><label for="search">搜索名称、ID、说明、能力</label><input id="search" type="search" autocomplete="off" placeholder="例如 GitHub、deploy、research…"></div>
-          <div class="control"><label for="kind-filter">查看</label><select id="kind-filter"><option value="plugin">Codex 插件</option><option value="skill">插件内 Skill</option><option value="agentic-skill">Agent Skill 精选</option><option value="agentic-project">GitHub 项目审计</option></select></div>
+          <div class="control"><label for="kind-filter">查看</label><select id="kind-filter"><option value="plugin">Codex 插件</option><option value="skill">插件内 Skill</option><option value="agentic-skill">Agent 能力</option><option value="agentic-project">GitHub 项目审计</option></select></div>
           <div class="control"><label for="module-filter">开发阶段</label><select id="module-filter"><option value="all">全部 14 个节点</option></select></div>
           <div class="control"><label for="state-filter">安装状态</label><select id="state-filter"><option value="all">全部状态</option><option value="installed">已安装</option><option value="uninstalled">未安装</option><option value="unavailable">不可用 / 默认关闭</option></select></div>
         </div>
         <div class="controls secondary">
+          <div class="control"><label for="role-filter">Agent 工作位</label><select id="role-filter"><option value="all">全部角色</option><option value="core">主执行</option><option value="review">Review</option><option value="visualize">可视化</option><option value="summarize">总结交接</option></select></div>
           <div class="control"><label for="shape-filter">提供方式</label><select id="shape-filter"><option value="all">全部方式</option><option value="Skill">含 Skill</option><option value="MCP">含 MCP</option><option value="App">含 App</option><option value="CLI">含 CLI</option><option value="可直接采用">可直接采用</option><option value="整包依赖">整包依赖</option><option value="需要封装">需要封装</option><option value="只作参考">只作参考</option></select></div>
           <div class="control"><label for="confidence-filter">匹配可信度</label><select id="confidence-filter"><option value="all">全部</option><option value="high">把握高</option><option value="medium">把握中</option><option value="review">需复核</option></select></div>
           <div class="control"><label for="effect-filter">会动到哪里</label><select id="effect-filter"><option value="all">全部</option><option value="read-only">只读取</option><option value="local-artifact">生成本地文件</option><option value="workspace">修改项目文件</option><option value="git">修改 Git</option><option value="external">操作外部服务</option><option value="secrets">接触密钥</option><option value="production">影响生产环境</option></select></div>
@@ -1027,8 +1074,23 @@
             <li>81 个仓库全部进入审计；存在 SKILL.md 不等于可直接安装。</li>
             <li>直接 Skill、整包依赖、需封装工具和只作参考分开处理。</li>
             <li>许可证、归档、空仓库、重复和低相关是硬门槛；Stars 只占研究优先级的 8%。</li>
-            <li>40 条候选的正式 benchmark 和生产验证仍为 0；4 条只进入执行器校准。</li>
+            <li>72 条能力中，67 条绑定原生 SKILL.md，5 条是工作流 / wrapper 候选；形式不同，不混写成同一种 Skill。</li>
+            <li>原始 40 条继续作为固定 benchmark 队列；正式 benchmark 和生产验证仍为 0，4 条只进入执行器校准。</li>
           </ul>
+        </article>
+        <article class="audit-card full">
+          <h2>四个工作位，不是一串卡片</h2>
+          <p>每个 M00–M13 节点都分别回答四件事：谁来做、谁来挑错、谁来画清楚、谁来把事实与下一步交出去。没有专用能力的地方会标“通用补位”“组合覆盖”或“需封装”。</p>
+          <div class="evidence-flow" aria-label="Agent 能力的四个工作位">
+            <div>主执行</div><div>Review</div><div>可视化</div><div>总结交接</div>
+          </div>
+        </article>
+        <article class="audit-card full">
+          <h2>放宽收录，不放宽结论</h2>
+          <div class="evidence-flow" aria-label="Agent 能力的四级证据">
+            <div>来源已冻结</div><div>静态已审阅</div><div>受控试跑</div><div>任务已对照</div>
+          </div>
+          <p>前两级可以进入候选库；只有后两级才能逐步接近“默认推荐”。本版没有新增 smoke 或正式 benchmark 结论。</p>
         </article>
         <article class="audit-card warning full">
           <h2>Benchmark 校准：执行器过了，评分器没过</h2>
@@ -1097,7 +1159,7 @@
     async function boot() {
     const APP_DATA = await loadAppData();
     const entityMap = new Map();
-    const state = { view: "overview", node: "M06", workbench: "plugin", showFramework: false, doneTasks: new Set(), kind: "plugin", module: "all", install: "all", shape: "all", confidence: "all", effect: "all", sort: "priority", query: "", page: 1, pageSize: 36 };
+    const state = { view: "overview", node: "M06", workbench: "plugin", showFramework: false, doneTasks: new Set(), kind: "plugin", module: "all", role: "all", install: "all", shape: "all", confidence: "all", effect: "all", sort: "priority", query: "", page: 1, pageSize: 36 };
     const byId = (id) => document.getElementById(id);
     const esc = (value) => String(value == null ? "" : value).replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[char]);
     const short = (value, limit) => {
@@ -1108,8 +1170,10 @@
     const safeUrl = (value) => /^https?:\/\//i.test(String(value || "")) ? value : "";
     const confidenceLabel = (value) => value === "high" ? "high" : value === "medium" ? "medium" : "需复核";
     const versionLabel = (value) => ({ "frozen-exact": "冻结版本精确", "local-bundle-exact": "本地 bundle 精确", "current-version-drift": "当前版本漂移" })[value] || value;
-    const kindLabel = (value) => ({ plugin: "Codex 插件", skill: "插件内 Skill", "agentic-skill": "Agent Skill 精选", "agentic-project": "GitHub 项目审计" })[value] || value;
+    const kindLabel = (value) => ({ plugin: "Codex 插件", skill: "插件内 Skill", "agentic-skill": "Agent 能力", "agentic-project": "GitHub 项目审计" })[value] || value;
     const isAgentic = (item) => item.kind === "agentic-skill" || item.kind === "agentic-project";
+    const admissionLabel = (value) => ({ "source-confirmed": "来源已冻结", "static-reviewed": "静态已审阅", "controlled-smoke": "受控试跑", "task-benchmarked": "任务已对照" })[value] || value;
+    const coverageLabel = (value) => ({ native: "原生适配", generalist: "通用补位", combined: "组合覆盖", "package-bound": "整包依赖", "adapter-required": "需改写适配", wrapper: "待封装" })[value] || value;
 
     const PHASES = [
       { id: "discover", label: "发现", description: "想清楚要解决什么", modules: ["M00", "M01", "M02", "M03"] },
@@ -1316,7 +1380,7 @@
     }
 
     APP_DATA.plugins.concat(APP_DATA.skills, APP_DATA.agenticSkills, APP_DATA.agenticProjects).forEach((item) => {
-      item._search = [item.name, item.id, item.parentName, item.developer, item.description, item.searchHints, item.solutionPrimary, item.primaryModule, item.fullName, item.repoFullName, item.path, item.selectedReason, item.coreThree && item.coreThree.does, item.coreThree && item.coreThree.conditions, ...(item.requirements || []), ...(item.limitations || [])].join(" ").toLowerCase();
+      item._search = [item.name, item.id, item.parentName, item.developer, item.description, item.searchHints, item.solutionPrimary, item.primaryModule, item.fullName, item.repoFullName, item.path, item.selectedReason, item.coreThree && item.coreThree.does, item.coreThree && item.coreThree.conditions, ...(item.roleTags || []), ...((item.workbenchAssignments || []).flatMap((assignment) => [assignment.moduleId, assignment.leadRole, assignment.coverageMode])), ...(item.requirements || []), ...(item.limitations || [])].join(" ").toLowerCase();
       entityMap.set(item.id, item);
     });
 
@@ -1334,12 +1398,12 @@
       const coverage = meta.skillCoverage;
       const agentic = meta.agenticCoverage;
       const benchmark = meta.agenticBenchmark;
-      byId("overview-metrics").textContent = coverage.evidenceRows.toLocaleString("en-US") + " 条插件内 Skill 证据；40 个外部候选中 4 个做了 16 次 A/B 校准，正式通过 0。";
+      byId("overview-metrics").textContent = coverage.evidenceRows.toLocaleString("en-US") + " 条插件内 Skill 证据；" + agentic.curatedSkillCount + " 个外部能力组成 " + agentic.roleAssignmentCount + " 个节点工作位，原 40 条 benchmark 队列不变。";
       byId("footer-date").textContent = new Date(meta.generatedAt).toLocaleString("zh-CN", { hour12: false });
       byId("source-dates").textContent = "插件状态冻结：" + meta.frozenAt + "；研究快照：" + meta.researchAt + "；Skill catalog：" + meta.catalogFetchedAt + "；Agentic-Tools 列表冻结：" + meta.agenticSource.capturedAt + "。";
       byId("audit-plugin-copy").textContent = meta.pluginCount.toLocaleString("en-US") + " 个 canonical IDs；" + meta.installedCount + " 个在冻结快照中已安装；" + meta.reviewCount.toLocaleString("en-US") + " 个节点匹配需要人工复核。";
       byId("audit-skill-copy").textContent = coverage.evidenceRows.toLocaleString("en-US") + " 条可显示 Skill 证据，其中 " + coverage.frozenExact.toLocaleString("en-US") + " 条绑定冻结 remote 版本，" + coverage.localBundleExact + " 条绑定本地精确 bundle，" + coverage.currentVersionDrift + " 条只来自较新的漂移版本。";
-      byId("audit-agentic-copy").textContent = agentic.repositoryCount + " 个仓库 → " + agentic.rawSkillPaths.toLocaleString("en-US") + " 条 SKILL.md 路径 → " + agentic.repoUniqueSkillBlobs.toLocaleString("en-US") + " 个仓库内唯一 blob → " + agentic.curatedSkillCount + " 个节点候选。路径数不是可安装 Skill 数。";
+      byId("audit-agentic-copy").textContent = agentic.repositoryCount + " 个仓库 → " + agentic.rawSkillPaths.toLocaleString("en-US") + " 条 SKILL.md 路径 → " + agentic.repoUniqueSkillBlobs.toLocaleString("en-US") + " 个仓库内唯一 blob → " + agentic.curatedSkillCount + " 个去重能力 → " + agentic.roleAssignmentCount + " 个节点工作位。路径数和工作位数都不是可安装 Skill 数。";
       byId("audit-benchmark-copy").textContent = benchmark.coverage.calibrationCandidateCount + " 个候选进入校准，共 " + benchmark.coverage.completedRuns + " 次运行；执行器结论是 " + benchmark.suite.executorQualification + "，评分器结论是 " + benchmark.suite.scorerQualification + "。下一步先修评分口径，再扩到 12 个首批候选。";
     }
 
@@ -1352,18 +1416,6 @@
 
     function candidateHtml(item) {
       const core = coreTexts(item);
-      if (isAgentic(item)) {
-        const controlled = item.selection === "controlled";
-        const stateLabel = item.benchmark ? "A/B 校准 · 不可排名" : item.capabilityForm === "wrap-candidate" ? "需封装 · 未实测" : item.capabilityForm === "package-bound-skill" ? "整包依赖 · 未实测" : "结构已核对 · 未实测";
-        const reason = item.selectedReason + " 节点适配 " + score(item.fitScore) + "，父项目质量 " + score(item.functionalScore) + "，公开声量代理 " + score(item.publicProxyScore) + "。";
-        const evidence = item.benchmark ? "已完成 4 次执行器校准，但评分器未过；诊断分不得用于排名或晋级。" : "固定到 " + (item.path ? "HEAD + Skill blob" : "HEAD + 项目文档") + "；未验证：" + core.unverified.join("、") + "。";
-        return '<div class="candidate-row">' +
-          '<div class="candidate-main"><button type="button" data-open-id="' + esc(item.id) + '">' + esc(item.name) + '</button><small>' + esc(item.repoFullName) + ' · #' + item.featuredRank + '</small></div>' +
-          '<div class="candidate-capability">' + esc(short(core.does, 105)) + '</div>' +
-          '<span class="readiness' + (controlled ? " controlled" : "") + '">' + esc(stateLabel) + '</span>' +
-          '<details><summary>为什么先看</summary><div class="candidate-evidence"><div><b>核心能力</b>' + esc(core.does) + '</div><div><b>使用条件</b>' + esc(core.conditions) + '</div><div><b>最低验证</b>' + esc(core.proof) + '</div></div><p class="fineprint">' + esc(reason + " " + evidence) + '</p></details>' +
-          '</div>';
-      }
       const stateLabel = item.inventoryState === "不可用" ? "当前不可用" : item.installed ? "已安装 · 未实测" : "未安装";
       const installedClass = item.installed ? " installed" : "";
       const evidence = "依据：插件目录说明 + 本站节点归类。未验证：" + core.unverified.join("、") + "。";
@@ -1376,6 +1428,27 @@
         '</div>';
     }
 
+    function roleCandidateHtml(item, assignment) {
+      const core = coreTexts(item);
+      const caution = item.admissionLevel !== "static-reviewed" || assignment.coverageMode !== "native";
+      return '<article class="role-candidate">' +
+        '<div class="role-candidate-top"><button type="button" data-open-id="' + esc(item.id) + '" data-open-module="' + assignment.moduleId + '" data-open-role="' + assignment.leadRole + '">' + esc(item.name) + '</button><span class="readiness' + (caution ? " controlled" : "") + '">' + esc(admissionLabel(item.admissionLevel)) + '</span></div>' +
+        '<p>' + esc(short(core.does, 130)) + '</p>' +
+        '<div class="role-meta"><span>' + esc(item.repoFullName) + '</span><span>#' + assignment.rank + '</span><span>' + esc(coverageLabel(assignment.coverageMode)) + '</span></div>' +
+        '</article>';
+    }
+
+    function roleLaneHtml(role, moduleId) {
+      const rows = APP_DATA.agenticSkills.flatMap((item) => item.workbenchAssignments
+        .filter((assignment) => assignment.moduleId === moduleId && assignment.leadRole === role.id)
+        .map((assignment) => ({ item, assignment })))
+        .sort((a, b) => a.assignment.rank - b.assignment.rank);
+      const note = APP_DATA.coverageNotes[moduleId + "." + role.id];
+      return '<section class="role-lane"><div class="role-lane-head"><div><h4>' + esc(role.label) + '</h4><p>' + esc(role.question) + '</p></div><span class="role-count">' + rows.length + ' 个</span></div>' +
+        rows.map((row) => roleCandidateHtml(row.item, row.assignment)).join("") +
+        (note ? '<p class="role-coverage-note">' + esc(note) + '</p>' : "") + '</section>';
+    }
+
     function renderNode() {
       renderNodeList();
       const module = APP_DATA.modules.find((item) => item.id === state.node) || APP_DATA.modules[8];
@@ -1385,26 +1458,29 @@
       const featuredNames = FEATURED_BY_MODULE[module.id] || [];
       const featured = featuredNames.map((name) => modulePlugins.find((item) => item.name === name)).filter(Boolean);
       const pluginTop = featured.concat(modulePlugins.filter((item) => !featuredNames.includes(item.name))).slice(0, 3);
-      const agenticTop = APP_DATA.agenticSkills.filter((item) => item.primaryModule === module.id).sort((a, b) => a.featuredRank - b.featuredRank);
-      const top = state.workbench === "agentic" ? agenticTop : pluginTop;
+      const top = pluginTop;
       const catalogKind = state.workbench === "agentic" ? "agentic-skill" : "plugin";
-      const candidateLabel = state.workbench === "agentic" ? "Agent Skill" : "工具";
+      const candidateLabel = state.workbench === "agentic" ? "Agent 能力" : "工具";
       const total = state.workbench === "agentic" ? counts.agenticSkills : counts.plugins;
       const code = state.showFramework ? '<span class="eyebrow">' + module.id + ' · ' + esc(module.title) + '</span>' : "";
       const tabs = phase.modules.map((moduleId) => '<button class="stage-tab" type="button" data-node="' + moduleId + '" aria-pressed="' + (module.id === moduleId) + '">' + (state.showFramework ? moduleId + ' · ' : '') + esc(PLAIN_TITLES[moduleId]) + '</button>').join("");
-      const workbenchSwitch = '<div class="workbench-switch" aria-label="工作台类型"><button type="button" data-workbench="plugin" aria-pressed="' + (state.workbench === "plugin") + '">Codex 插件</button><button type="button" data-workbench="agentic" aria-pressed="' + (state.workbench === "agentic") + '">Agent 技能</button></div>';
+      const workbenchSwitch = '<div class="workbench-switch" aria-label="工作台类型"><button type="button" data-workbench="plugin" aria-pressed="' + (state.workbench === "plugin") + '">Codex 插件</button><button type="button" data-workbench="agentic" aria-pressed="' + (state.workbench === "agentic") + '">Agent 能力</button></div>';
       const tasks = PLAIN_TASKS[module.id].map((task, index) => {
         const taskId = module.id + "-" + index;
         return '<label class="task-check"><input type="checkbox" data-task="' + taskId + '"' + (state.doneTasks.has(taskId) ? " checked" : "") + '><span>' + esc(task) + "</span></label>";
       }).join("");
       const gapNote = top.length < 3 ? '<div class="candidate-empty">本节点只保留 ' + top.length + ' 个过门槛候选，不为凑数补位。</div>' : "";
-      const footerCopy = state.workbench === "agentic" ? "40 条全量候选仍未通过正式 benchmark；4 条做过 A/B 校准，但评分器未过，0 条晋级。" : "结合站内排名、通用性和当前安装状态选出 3 个；原始排名仍在完整目录。";
+      const pluginCandidates = '<div class="candidate-head"><span>' + candidateLabel + '</span><span>主要能力</span><span>当前状态</span><span>依据</span></div>' + top.map(candidateHtml).join("") + gapNote;
+      const agenticCandidates = '<div class="role-board">' + APP_DATA.workbenchRoles.map((role) => roleLaneHtml(role, module.id)).join("") + '</div>';
+      const candidateBody = state.workbench === "agentic" ? agenticCandidates : pluginCandidates;
+      const sectionTitle = state.workbench === "agentic" ? "本节点能力工作包" : "先看这 " + top.length + " 个工具";
+      const footerCopy = state.workbench === "agentic" ? "候选入口已放宽到来源冻结与静态审阅；原 40 条 benchmark 队列不变，正式通过仍为 0。" : "结合站内排名、通用性和当前安装状态选出 3 个；原始排名仍在完整目录。";
       byId("node-panel").innerHTML =
         '<div class="stage-tabs" aria-label="' + esc(phase.label) + '阶段节点"><span class="stage-path">' + esc(phase.label) + ' /</span>' + tabs + workbenchSwitch + '<label class="framework-toggle"><input type="checkbox" data-framework-toggle' + (state.showFramework ? ' checked' : '') + '>显示框架编号</label></div>' +
         '<div class="workspace-body"><div class="node-heading"><div>' + code + '<h2>' + esc(PLAIN_TITLES[module.id]) + '</h2><p>' + esc(PLAIN_SUBTITLES[module.id]) + '</p></div><a class="quiet-link" href="' + esc(module.sourceUrl) + '" target="_blank" rel="noreferrer">查看框架原文</a></div>' +
         '<section class="work-section"><h3 class="section-title"><span class="section-number">01</span>这一步要完成什么</h3><div class="task-list">' + tasks + '</div></section>' +
         '<section class="work-section"><h3 class="section-title"><span class="section-number">02</span>完成后留下什么</h3><div class="deliverable"><strong>' + esc(state.showFramework ? module.artifact : "交付结果") + '</strong><span>' + esc(PLAIN_OUTPUTS[module.id]) + '</span></div></section>' +
-        '<section class="work-section"><h3 class="section-title"><span class="section-number">03</span>先看这 ' + top.length + ' 个 ' + candidateLabel + '</h3><div class="candidate-head"><span>' + candidateLabel + '</span><span>主要能力</span><span>当前状态</span><span>依据</span></div>' + top.map(candidateHtml).join("") + gapNote + '<div class="candidate-footer"><span>' + esc(footerCopy) + '</span><button type="button" data-node-catalog="' + module.id + '" data-catalog-kind="' + catalogKind + '">查看本节点全部 ' + total + ' 条 →</button></div></section></div>';
+        '<section class="work-section"><h3 class="section-title"><span class="section-number">03</span>' + esc(sectionTitle) + '</h3>' + candidateBody + '<div class="candidate-footer"><span>' + esc(footerCopy) + '</span><button type="button" data-node-catalog="' + module.id + '" data-catalog-kind="' + catalogKind + '">查看本节点全部 ' + total + ' 条 →</button></div></section></div>';
     }
 
     function populateModuleFilter() {
@@ -1417,7 +1493,15 @@
       const query = state.query.trim().toLowerCase();
       return rows.filter((item) => {
         if (query && !item._search.includes(query)) return false;
-        if (state.module !== "all" && item.primaryModule !== state.module) return false;
+        if (item.kind === "agentic-skill") {
+          const assignmentMatch = item.workbenchAssignments.some((assignment) =>
+            (state.module === "all" || assignment.moduleId === state.module) &&
+            (state.role === "all" || assignment.roles.includes(state.role)));
+          if (!assignmentMatch) return false;
+        } else {
+          if (state.module !== "all" && item.primaryModule !== state.module) return false;
+          if (state.role !== "all") return false;
+        }
         if (!externalKind && state.install === "installed" && !item.installed) return false;
         if (!externalKind && state.install === "uninstalled" && item.installed) return false;
         if (!externalKind && state.install === "unavailable" && !["不可用", "默认关闭"].includes(item.inventoryState)) return false;
@@ -1430,6 +1514,14 @@
         if (state.sort === "fit") return b.fitScore - a.fitScore || a.name.localeCompare(b.name);
         if (state.sort === "functional") return Number(b.functionalScore || -1) - Number(a.functionalScore || -1) || a.name.localeCompare(b.name);
         if (state.sort === "buzz") return Number(b.publicProxyScore == null ? -1 : b.publicProxyScore) - Number(a.publicProxyScore == null ? -1 : a.publicProxyScore) || a.name.localeCompare(b.name);
+        if (state.kind === "agentic-skill" && state.module !== "all") {
+          const roleOrder = APP_DATA.workbenchRoles.map((role) => role.id);
+          const assignmentKey = (item) => Math.min(...item.workbenchAssignments
+            .filter((assignment) => assignment.moduleId === state.module && (state.role === "all" || assignment.roles.includes(state.role)))
+            .map((assignment) => (state.role === "all" ? roleOrder.indexOf(assignment.leadRole) * 100 : 0) + assignment.rank));
+          const assignmentDelta = assignmentKey(a) - assignmentKey(b);
+          if (assignmentDelta) return assignmentDelta;
+        }
         return b.priorityScore - a.priorityScore || b.fitScore - a.fitScore || a.name.localeCompare(b.name);
       });
     }
@@ -1439,14 +1531,21 @@
       const versionBadge = item.kind === "skill" ? '<span class="badge ' + (item.versionState === "current-version-drift" ? "warn" : "") + '">' + esc(versionLabel(item.versionState)) + "</span>" : "";
       const core = coreTexts(item);
       const agentic = isAgentic(item);
+      const activeAssignment = item.kind === "agentic-skill" && state.module !== "all"
+        ? item.workbenchAssignments.find((assignment) => assignment.moduleId === state.module && (state.role === "all" || assignment.roles.includes(state.role)))
+        : null;
+      const moduleBadge = activeAssignment
+        ? activeAssignment.moduleId + " · " + (APP_DATA.workbenchRoles.find((role) => role.id === activeAssignment.leadRole)?.label || activeAssignment.leadRole)
+        : item.primaryModule;
       const middleLabel = agentic ? (item.kind === "agentic-project" ? "证据覆盖" : "父项目质量") : "功能覆盖";
       const identity = item.kind === "skill" ? item.parentName + " / " + item.skillName : item.kind === "agentic-skill" ? item.repoFullName + (item.path ? " / " + item.path : " / 待封装") : item.kind === "agentic-project" ? item.fullName : item.id;
+      const detailContext = activeAssignment ? ' data-open-module="' + activeAssignment.moduleId + '" data-open-role="' + activeAssignment.leadRole + '"' : "";
       return '<article class="entity-card">' +
-        '<div class="card-badges"><span class="badge primary">' + item.primaryModule + '</span><span class="badge">' + esc(item.shape || (item.kind === "plugin" ? "Plugin" : "Skill")) + '</span><span class="badge ' + (review ? "warn" : "") + '">' + (agentic ? esc(item.kind === "agentic-project" ? item.tier + " 档" : item.selection === "primary" ? "主选" : "受控") : confidenceLabel(item.matchConfidence)) + '</span><span class="badge ' + (["production","secrets","external"].includes(item.effectClass) ? "danger" : "") + '">' + esc(item.effectClass) + "</span>" + versionBadge + "</div>" +
+        '<div class="card-badges"><span class="badge primary">' + esc(moduleBadge) + '</span><span class="badge">' + esc(item.shape || (item.kind === "plugin" ? "Plugin" : "Skill")) + '</span><span class="badge ' + (review ? "warn" : "") + '">' + (agentic ? esc(item.kind === "agentic-project" ? item.tier + " 档" : admissionLabel(item.admissionLevel)) : confidenceLabel(item.matchConfidence)) + '</span><span class="badge ' + (["production","secrets","external"].includes(item.effectClass) ? "danger" : "") + '">' + esc(item.effectClass) + "</span>" + versionBadge + "</div>" +
         '<h2>' + esc(item.name) + '</h2><div class="entity-id">' + esc(identity) + "</div>" +
-        '<div class="card-scores"><div class="score"><strong>' + score(item.fitScore) + '</strong><span>' + (agentic ? (item.kind === "agentic-project" ? "项目质量" : "节点适配") : "阶段匹配度") + '</span></div><div class="score"><strong>' + score(item.functionalScore) + '</strong><span>' + middleLabel + '</span></div><div class="score"><strong>' + score(item.publicProxyScore) + '</strong><span>公开声量</span></div></div>' +
+        '<div class="card-scores"><div class="score"><strong>' + score(item.fitScore) + '</strong><span>' + (agentic ? (item.kind === "agentic-project" ? "项目质量" : activeAssignment ? "研究归类分" : "节点适配") : "阶段匹配度") + '</span></div><div class="score"><strong>' + score(item.functionalScore) + '</strong><span>' + middleLabel + '</span></div><div class="score"><strong>' + score(item.publicProxyScore) + '</strong><span>公开声量</span></div></div>' +
         '<dl class="core-three"><div><dt>能帮你做什么</dt><dd>' + esc(short(core.does, 150)) + '</dd></div><div><dt>使用前要准备什么</dt><dd>' + esc(short(core.conditions, 125)) + '</dd></div><div><dt>怎样确认真能用</dt><dd>' + esc(short(core.proof, 140)) + "</dd></div></dl>" +
-        '<button class="open-detail" type="button" data-open-id="' + esc(item.id) + '">查看详情和证据 →</button></article>';
+        '<button class="open-detail" type="button" data-open-id="' + esc(item.id) + '"' + detailContext + '>查看详情和证据 →</button></article>';
     }
 
     function renderCatalog() {
@@ -1454,6 +1553,8 @@
       const externalKind = state.kind === "agentic-skill" || state.kind === "agentic-project";
       byId("state-filter").disabled = externalKind;
       byId("state-filter").title = externalKind ? "GitHub 外部项目没有 Codex 安装状态" : "";
+      byId("role-filter").disabled = state.kind !== "agentic-skill";
+      byId("role-filter").title = state.kind !== "agentic-skill" ? "工作位只用于 Agent 能力" : "";
       const pages = Math.max(1, Math.ceil(rows.length / state.pageSize));
       state.page = Math.min(state.page, pages);
       const start = (state.page - 1) * state.pageSize;
@@ -1469,29 +1570,37 @@
       return '<div class="detail-block"><b>' + esc(title) + '</b><span>' + esc(value || "未说明") + "</span></div>";
     }
 
-    function openAgenticDetail(item, updateHash) {
-      const module = APP_DATA.modules.find((entry) => entry.id === item.primaryModule);
+    function openAgenticDetail(item, updateHash, context) {
+      const activeAssignment = item.kind === "agentic-skill" && context?.moduleId
+        ? item.workbenchAssignments.find((assignment) => assignment.moduleId === context.moduleId && (!context.roleId || assignment.leadRole === context.roleId))
+        : null;
+      const activeModuleId = activeAssignment?.moduleId || item.primaryModule;
+      const module = APP_DATA.modules.find((entry) => entry.id === activeModuleId);
       const core = coreTexts(item);
       const project = item.kind === "agentic-project";
-      const status = project ? item.decision + " · " + item.tier + " 档" : (item.selection === "primary" ? "节点主选" : "受控候选");
-      const evidence = item.benchmark ? "完成执行器校准；评分器未通过，不能排名或晋级" : item.verificationState === "structure-checked" ? "结构已核对，未安装、未调用" : "只核对项目文档，尚待封装";
+      const status = project ? item.decision + " · " + item.tier + " 档" : admissionLabel(item.admissionLevel) + " · 候选，不是默认能力";
+      const evidence = item.benchmark ? "完成执行器校准；评分器未通过，不能排名或晋级" : item.admissionLevel === "static-reviewed" ? "来源与静态说明已审阅；未安装、未调用" : "来源已冻结；尚未完成静态深审或封装";
       const identity = project ? item.fullName : item.repoFullName + (item.path ? " / " + item.path : " / 待封装工作流");
       const sourceUrls = (project ? item.sourceEvidence : [item.sourceUrl, item.repoUrl]).filter(safeUrl);
       const sourceButtons = [...new Set(sourceUrls)].map((url, index) => '<a class="button" href="' + esc(url) + '" target="_blank" rel="noreferrer">' + (index ? "更多证据" : "打开冻结来源") + '</a>').join("");
       const parent = !project ? '<button class="button" type="button" data-open-id="' + esc(item.parentId) + '">查看父项目审计</button>' : "";
       const benchmarkDetails = item.benchmark ? detailBlock("A/B 校准", "baseline " + item.benchmark.baselineMedian + " / Skill " + item.benchmark.skillMedian + " / Δ " + (item.benchmark.deterministicDelta >= 0 ? "+" : "") + item.benchmark.deterministicDelta + "；仅诊断，不可排名") + detailBlock("校准告警", (item.benchmark.diagnosticFlags || []).join("；") || "评分器本身仍未通过") : "";
-      byId("detail-eyebrow").textContent = (project ? "GITHUB 项目审计" : "AGENT SKILL") + " · " + item.primaryModule + " · #" + (item.moduleRank || item.featuredRank || "—");
+      const activeRole = activeAssignment ? APP_DATA.workbenchRoles.find((role) => role.id === activeAssignment.leadRole) : null;
+      byId("detail-eyebrow").textContent = (project ? "GITHUB 项目审计" : "AGENT 能力") + " · " + activeModuleId + (activeRole ? " · " + activeRole.label : "") + " · #" + (activeAssignment?.rank || item.moduleRank || item.featuredRank || "—");
       byId("detail-title").textContent = item.name;
       byId("dialog-body").innerHTML =
-        '<div class="card-badges"><span class="badge primary">' + item.primaryModule + " · " + esc(module.title) + '</span><span class="badge">' + esc(item.shape) + '</span><span class="badge ' + (status.includes("受控") || status.includes("B") || status.includes("C") || status.includes("D") ? "warn" : "") + '">' + esc(status) + '</span><span class="badge ' + (["production","secrets","external"].includes(item.effectClass) ? "danger" : "") + '">' + esc(item.effectClass) + "</span></div>" +
-        '<div class="card-scores"><div class="score"><strong>' + score(item.fitScore) + '</strong><span>' + (project ? "项目质量" : "节点适配") + '</span></div><div class="score"><strong>' + score(item.functionalScore) + '</strong><span>' + (project ? "证据覆盖" : "父项目质量") + '</span></div><div class="score"><strong>' + score(item.publicProxyScore) + '</strong><span>公开声量</span></div></div>' +
+        '<div class="card-badges"><span class="badge primary">' + activeModuleId + " · " + esc(module.title) + '</span><span class="badge">' + esc(item.shape) + '</span><span class="badge ' + (status.includes("受控") || status.includes("B") || status.includes("C") || status.includes("D") ? "warn" : "") + '">' + esc(status) + '</span><span class="badge ' + (["production","secrets","external"].includes(item.effectClass) ? "danger" : "") + '">' + esc(item.effectClass) + "</span></div>" +
+        '<div class="card-scores"><div class="score"><strong>' + score(item.fitScore) + '</strong><span>' + (project ? "项目质量" : activeAssignment ? "研究归类分" : "节点适配") + '</span></div><div class="score"><strong>' + score(item.functionalScore) + '</strong><span>' + (project ? "证据覆盖" : "父项目质量") + '</span></div><div class="score"><strong>' + score(item.publicProxyScore) + '</strong><span>公开声量</span></div></div>' +
         '<div class="dialog-three"><section><h3>1 · 核心能力</h3><p>' + esc(core.does) + '</p></section><section><h3>2 · 使用条件</h3><p>' + esc(core.conditions) + '</p></section><section><h3>3 · 最低验证</h3><p>' + esc(core.proof) + "</p></section></div>" +
         '<div class="detail-grid">' + detailBlock("对象", identity) +
         detailBlock("固定版本", (item.headSha || "").slice(0, 12) + (item.blobSha ? " · blob " + item.blobSha.slice(0, 12) : "")) +
-        detailBlock("主 / 次节点", item.primaryModule + (item.secondaryModules.length ? " / " + item.secondaryModules.join(", ") : " / 无")) +
+        detailBlock("研究主 / 次节点", item.primaryModule + (item.secondaryModules.length ? " / " + item.secondaryModules.join(", ") : " / 无")) +
+        (activeAssignment ? detailBlock("当前工作位", activeAssignment.moduleId + " · " + activeRole.label + " · #" + activeAssignment.rank + " · " + coverageLabel(activeAssignment.coverageMode)) : "") +
+        (!project ? detailBlock("工作位分配", item.workbenchAssignments.map((assignment) => assignment.moduleId + " · " + (APP_DATA.workbenchRoles.find((role) => role.id === assignment.leadRole)?.label || assignment.leadRole) + " · " + coverageLabel(assignment.coverageMode)).join("；")) : "") +
         detailBlock("能力形态", item.shape + " · " + item.capabilityForm) +
         detailBlock("许可证", (item.license?.label || "未确认") + (item.license?.scope ? " · " + item.license.scope : "")) +
-        detailBlock("证据状态", evidence) + benchmarkDetails +
+        detailBlock("证据状态", evidence) +
+        (!project ? detailBlock("结论上限", "candidate-only；未完成受控试跑或正式任务对照，不可标默认推荐") : "") + benchmarkDetails +
         detailBlock("选择理由", item.selectedReason) +
         detailBlock("运行要求", (item.requirements || []).join("；") || "按项目依赖另查") +
         detailBlock("限制", (item.limitations || []).join("；") || "未列出") +
@@ -1502,14 +1611,17 @@
         '<p class="fineprint">' + (item.benchmark ? "这条记录只证明固定 Skill 在受控只读任务中被实际读取并产出结果。评分器尚未合格，不能据此判断优于 baseline；真实账号、生产与长期稳定性也都未验证。" : "这是一条静态研究结论。结构存在、许可证清楚和仓库活跃都不能证明 Skill 已接入 Codex，更不能证明它优于基线或可安全用于生产。") + '</p>';
       const dialog = byId("detail-dialog");
       if (!dialog.open) dialog.showModal();
-      if (updateHash !== false) history.replaceState(null, "", "#item=" + encodeURIComponent(item.id));
+      if (updateHash !== false) {
+        const assignmentHash = activeAssignment ? "&module=" + encodeURIComponent(activeAssignment.moduleId) + "&role=" + encodeURIComponent(activeAssignment.leadRole) : "";
+        history.replaceState(null, "", "#item=" + encodeURIComponent(item.id) + assignmentHash);
+      }
     }
 
-    function openDetail(id, updateHash) {
+    function openDetail(id, updateHash, context) {
       const item = entityMap.get(id);
       if (!item) return;
       if (isAgentic(item)) {
-        openAgenticDetail(item, updateHash);
+        openAgenticDetail(item, updateHash, context);
         return;
       }
       const module = APP_DATA.modules.find((entry) => entry.id === item.primaryModule);
@@ -1579,14 +1691,16 @@
       if (catalogButton) {
         state.module = catalogButton.dataset.nodeCatalog;
         state.kind = catalogButton.dataset.catalogKind || "plugin";
+        state.role = "all";
         state.page = 1;
         byId("module-filter").value = state.module;
         byId("kind-filter").value = state.kind;
+        byId("role-filter").value = "all";
         activateView("catalog");
         return;
       }
       const itemButton = event.target.closest("[data-open-id]");
-      if (itemButton) openDetail(itemButton.dataset.openId);
+      if (itemButton) openDetail(itemButton.dataset.openId, true, { moduleId: itemButton.dataset.openModule, roleId: itemButton.dataset.openRole });
     });
     byId("node-panel").addEventListener("change", (event) => {
       const framework = event.target.closest("[data-framework-toggle]");
@@ -1602,7 +1716,7 @@
     });
     byId("result-grid").addEventListener("click", (event) => {
       const button = event.target.closest("[data-open-id]");
-      if (button) openDetail(button.dataset.openId);
+      if (button) openDetail(button.dataset.openId, true, { moduleId: button.dataset.openModule, roleId: button.dataset.openRole });
     });
     byId("dialog-body").addEventListener("click", (event) => {
       const button = event.target.closest("[data-open-id]");
@@ -1625,15 +1739,17 @@
     byId("search").addEventListener("input", (event) => { state.query = event.target.value; byId("global-search").value = state.query; state.page = 1; renderCatalog(); });
     const controlMap = [
       ["kind-filter", "kind"], ["module-filter", "module"], ["state-filter", "install"],
-      ["shape-filter", "shape"], ["confidence-filter", "confidence"], ["effect-filter", "effect"], ["sort-filter", "sort"],
+      ["role-filter", "role"], ["shape-filter", "shape"], ["confidence-filter", "confidence"], ["effect-filter", "effect"], ["sort-filter", "sort"],
     ];
     controlMap.forEach((entry) => byId(entry[0]).addEventListener("change", (event) => {
       state[entry[1]] = event.target.value;
       if (entry[1] === "kind") {
         state.install = "all";
+        state.role = "all";
         state.shape = "all";
         state.confidence = "all";
         byId("state-filter").value = "all";
+        byId("role-filter").value = "all";
         byId("shape-filter").value = "all";
         byId("confidence-filter").value = "all";
       }
@@ -1647,7 +1763,8 @@
     renderMetrics();
     renderNode();
     renderCatalog();
-    if (location.hash.startsWith("#item=")) openDetail(decodeURIComponent(location.hash.slice(6)), false);
+    const detailParams = new URLSearchParams(location.hash.slice(1));
+    if (detailParams.has("item")) openDetail(detailParams.get("item"), false, { moduleId: detailParams.get("module"), roleId: detailParams.get("role") });
     }
 
     boot().catch((error) => {
