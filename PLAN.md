@@ -162,7 +162,15 @@
 - [x] 将首选卡、工作台卡片、插件详情和 Agent 能力详情统一为“它能帮你做什么／用之前要准备什么／怎么确认它真的能用”。
 - [x] 同步 README 与方法说明，避免文档和页面出现两套标题。
 - [x] 重新生成单文件，运行 artifact verifier、ELI5 checker、diff 检查，并在浏览器核对展开卡片和两类详情弹窗。
-- [ ] 完成 Pages 发布和公网字节复核。
+- [x] 完成 Pages 发布和公网字节复核。
+
+### Phase 11 发布收据
+
+- 内容提交：`eb0d2e5fd5a44b2fd67c7fc8f43ce25fac7f65ce`。
+- Pages workflow：`35142152817`，结论 `success`。
+- Pages deployment：`6489013958`，状态 `success`。
+- 公网文件：3,175,152 bytes；SHA-256 `dc02b6fdd2bccccb069e9b06a7a1ed8cf9b6e26512295e2fcbaf10daf65c31bd`，与本地逐字节一致。
+- 公网页面已核对三处统一标签；首选卡、插件详情和 Agent 能力详情均显示同一套中文话术。
 
 ## 初版目录发布收据
 
