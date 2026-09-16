@@ -94,7 +94,15 @@
 - web search 已禁用，事件中未发现网络命令；本轮没有独立证明 OS 级 egress 阻断，因此不使用“安全沙箱已验证”措辞。
 - 原始运行目录不提交、不发布；公开结果只保留 provenance、断言、聚合和失败边界。
 
-## 发布收据
+### Phase 8A 发布收据
+
+- 内容提交：`808bca315d7f2bf6cd0c74dae6bd6c0b54d4a745`。
+- Pages workflow：`35071246938`，结论 `success`。
+- Pages deployment：`6476373616`，状态 `success`。
+- 公网文件：3,116,151 bytes；SHA-256 `2d4ebdb06d04f4315df68d4fb1f001e22f5e5468ac0dbe28142a91052050780c`，与本地逐字节一致。
+- 公网页面包含 16 次 A/B 校准、评分器失败和 0 晋级披露；4 条候选详情、桌面与约 390 CSS px 窄屏、浏览器控制台均通过复核。
+
+## 初版目录发布收据
 
 - 内容提交：`4783fdd3ce7d704418efe77aced5a00ad9b2c61f`。
 - Pages workflow：`35045542362`，结论 `success`。
