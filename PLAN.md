@@ -112,7 +112,7 @@
 - [x] 完整目录增加“Agent 工作位”筛选，并确保节点与角色在同一 assignment 上联合匹配。
 - [x] 生成器与 artifact verifier 固定检查 72 条能力、67 条原生路径、5 条 workflow 候选、40 条 benchmark cohort 和 14 × 4 角色覆盖。
 - [x] 完成桌面、窄屏、深色模式、角色联动筛选、wrapper 详情和控制台 QA。
-- [ ] 提交、推送并验证 Pages workflow、deployment 与公网字节。
+- [x] 提交、推送并验证 Pages workflow、deployment 与公网字节。
 
 ### Phase 9 当前边界
 
@@ -120,6 +120,14 @@
 - 116 是节点角色分配数，不是独立能力数或安装数。
 - 3 条新增 wrapper（AntV Chart、DrawDB、GraphRAG Workbench）没有原生 Codex Skill，只能作为封装候选或参考。
 - 本轮使用 2026-09-16T08:03:00.433482Z 的更新 catalog；插件总数和 Skill 证据总数不变，但 `frozen-exact` 从 5,314 降到 5,312，`current-version-drift` 从 93 增到 95，插件证据缺口从 21 增到 25。
+
+### Phase 9 发布收据
+
+- 内容提交：`794e10b0a62a225ca6edc28247d7d74c68247d20`。
+- Pages workflow：`35076293090`，结论 `success`。
+- Pages deployment：`6477267424`，状态 `success`。
+- 公网文件：3,149,364 bytes；SHA-256 `ac1b675226e056991ca118fc320becadd6b2494f4bb93abe75b31dfc2fa91923`，与本地逐字节一致。
+- 公网页面已解压并显示 72 条能力、116 个工作位和固定 40 条 benchmark 队列；M13 可视化详情、assignment 深链、响应式布局与浏览器控制台均通过复核。
 
 ## 初版目录发布收据
 
