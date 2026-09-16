@@ -31,7 +31,15 @@
 
 ## Phase 5 — 发布
 
-- [ ] 仅提交明确文件到 `main`。
-- [ ] push 到 `zjgulai/codex_research`。
-- [ ] 验证 Pages workflow 与 deployment 成功。
-- [ ] 验证公网 URL 内容、关键标记与本地 SHA-256 一致。
+- [x] 仅提交明确文件到 `main`。
+- [x] push 到 `zjgulai/codex_research`。
+- [x] 验证 Pages workflow 与 deployment 成功。
+- [x] 验证公网 URL 内容、关键标记与本地 SHA-256 一致。
+
+## 发布收据
+
+- 内容提交：`4783fdd3ce7d704418efe77aced5a00ad9b2c61f`。
+- Pages workflow：`35045542362`，结论 `success`。
+- Pages deployment：`6472078287`，状态 `success`。
+- 公网文件：2,997,191 bytes；SHA-256 `e7f8e9a2afcaee98bbc79ef0eb52cbebb9ff0496c9d5498746d05eda93ccdc40`，与本地一致。
+- 公网首屏完成解压并显示 4,184 个插件、5,418 条 Skill 证据、14 个节点和 0 个 `Ready Now`；浏览器控制台无 warning/error。搜索、筛选、分页和详情已对同一字节文件在本地浏览器完成回归。
