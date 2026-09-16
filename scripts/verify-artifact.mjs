@@ -23,14 +23,35 @@ if (start === -1 || end === -1) {
   if (data.meta.pluginCount !== 4184 || data.plugins.length !== 4184) errors.push("Plugin count is not 4,184");
   if (data.modules.length !== 14) errors.push("Module count is not 14");
   if (data.skills.length !== data.meta.skillCoverage.evidenceRows) errors.push("Skill evidence count mismatch");
+  if (data.agenticProjects.length !== 81 || data.meta.agenticCoverage.repositoryCount !== 81) errors.push("Agentic project count is not 81");
+  if (data.agenticSkills.length !== 40 || data.meta.agenticCoverage.curatedSkillCount !== 40) errors.push("Curated Agent Skill count is not 40");
+  if (data.meta.agenticCoverage.runtimeVerified !== 0) errors.push("Static release claims runtime-verified Agent Skills");
   const pluginIds = new Set(data.plugins.map((item) => item.id));
+  const agenticProjectIds = new Set(data.agenticProjects.map((item) => item.id));
   if (pluginIds.size !== data.plugins.length) errors.push("Duplicate plugin IDs");
   if (new Set(data.skills.map((item) => item.id)).size !== data.skills.length) errors.push("Duplicate Skill evidence IDs");
+  if (agenticProjectIds.size !== data.agenticProjects.length) errors.push("Duplicate Agentic project IDs");
+  if (new Set(data.agenticSkills.map((item) => item.id)).size !== data.agenticSkills.length) errors.push("Duplicate curated Agent Skill IDs");
   const moduleIds = new Set(data.modules.map((item) => item.id));
   for (const item of data.plugins.concat(data.skills)) {
     if (!moduleIds.has(item.primaryModule)) errors.push("Unknown primary module: " + item.id);
     if (!item.description) errors.push("Missing source description: " + item.id);
     if (item.kind === "skill" && !pluginIds.has(item.parentId)) errors.push("Missing Skill parent: " + item.id);
+  }
+  for (const item of data.agenticProjects) {
+    if (!moduleIds.has(item.primaryModule)) errors.push("Unknown Agentic project module: " + item.id);
+    if (!item.coreThree?.does || !item.coreThree?.conditions || !item.coreThree?.proof) errors.push("Missing Agentic project core-three: " + item.id);
+    if (item.decision === "workbench" && item.vetoes.length) errors.push("Vetoed Agentic project entered workbench: " + item.id);
+  }
+  for (const item of data.agenticSkills) {
+    if (!moduleIds.has(item.primaryModule)) errors.push("Unknown Agent Skill module: " + item.id);
+    if (!agenticProjectIds.has(item.parentId)) errors.push("Missing Agent Skill parent: " + item.id);
+    if (!item.coreThree?.does || !item.coreThree?.conditions || !item.coreThree?.proof) errors.push("Missing Agent Skill core-three: " + item.id);
+    if (item.path && (!item.blobSha || !item.sourceUrl)) errors.push("Agent Skill path lacks frozen blob evidence: " + item.id);
+  }
+  for (const moduleId of moduleIds) {
+    const ranks = data.agenticSkills.filter((item) => item.primaryModule === moduleId).map((item) => item.featuredRank).sort((a, b) => a - b);
+    if (ranks.length > 3 || ranks.some((rank, index) => rank !== index + 1)) errors.push("Invalid Agent Skill ranks for " + moduleId);
   }
   if (manifest.embeddedData?.encoding !== "gzip-base64") errors.push("Manifest embedded data encoding mismatch");
   if (manifest.embeddedData?.jsonBytes !== Buffer.byteLength(serialized)) errors.push("Manifest embedded JSON size mismatch");
@@ -72,5 +93,7 @@ console.log(JSON.stringify({
   sha256: artifactHash,
   plugins: manifest.pluginCount,
   skills: manifest.skillCoverage.evidenceRows,
+  agenticProjects: manifest.agenticProjectCount,
+  agenticSkills: manifest.agenticSkillCount,
   modules: manifest.moduleCount,
 }, null, 2));

@@ -1,113 +1,166 @@
 {
-  "schemaVersion": 1,
-  "generatedAt": "2026-09-16T03:28:14.060Z",
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-16T05:52:49.953Z",
   "artifact": "public/index.html",
-  "artifactBytes": 3023235,
-  "artifactSha256": "3b78a17efcabae413eafc971c3d737a31c1a6498b3bf51d5944a8a27a109a34f",
+  "artifactBytes": 3109539,
+  "artifactSha256": "f3c86f12baf2e37e45ca967c20b49e3f5680628fe62cf01ad79d126dd09af86e",
   "pluginCount": 4184,
   "moduleCount": 14,
+  "agenticProjectCount": 81,
+  "agenticSkillCount": 40,
   "embeddedData": {
     "encoding": "gzip-base64",
-    "jsonBytes": 14489666,
-    "gzipBytes": 2205916,
-    "encodedBytes": 2941224,
-    "sha256": "526575825fd4947e5d79fa5bdbddfa76ca31e0ef0aea2d10fee9718a7cc36ebe"
+    "jsonBytes": 14864121,
+    "gzipBytes": 2261094,
+    "encodedBytes": 3014792,
+    "sha256": "bb5e65685e5026d6783ad181f7c1ef196ff8333815b6eb19091554d52b6080c1"
   },
   "skillCoverage": {
     "frozenSkillCountClaims": 5405,
     "evidenceRows": 5420,
-    "frozenExact": 5326,
+    "frozenExact": 5314,
     "localBundleExact": 13,
-    "currentVersionDrift": 81,
-    "pluginExact": 4154,
+    "currentVersionDrift": 93,
+    "pluginExact": 4149,
     "pluginLocalExact": 10,
-    "pluginDrift": 14,
+    "pluginDrift": 19,
     "pluginHistoricalMissing": 4,
-    "pluginsWithGap": 16
+    "pluginsWithGap": 21
+  },
+  "agenticCoverage": {
+    "repositoryCount": 81,
+    "workbenchProjects": 20,
+    "watchlistProjects": 42,
+    "excludedProjects": 19,
+    "directSkillProjects": 31,
+    "packageBoundProjects": 13,
+    "wrapCandidates": 20,
+    "referenceOnly": 17,
+    "quarantined": 0,
+    "rawSkillPaths": 8779,
+    "repoUniqueSkillBlobs": 4326,
+    "curatedSkillCount": 40,
+    "featuredSkillCount": 40,
+    "runtimeVerified": 0
+  },
+  "agenticSource": {
+    "listUrl": "https://github.com/stars/zjgulai/lists/agentic-tools",
+    "capturedAt": "2026-09-16T05:19:10.149Z",
+    "evaluatedAt": "2026-09-16T05:38:19.759Z",
+    "membershipSha256": "912d4f33a5e1cdf38e1312bd6687d6cf6f8d4331552dc732b7ba96eed57e5bc9",
+    "repositoryCount": 81
   },
   "moduleCounts": [
     {
       "id": "M00",
       "plugins": 768,
       "skills": 219,
+      "agenticProjects": 11,
+      "agenticSkills": 3,
       "review": 726
     },
     {
       "id": "M01",
       "plugins": 44,
       "skills": 229,
+      "agenticProjects": 4,
+      "agenticSkills": 2,
       "review": 36
     },
     {
       "id": "M02",
       "plugins": 1272,
-      "skills": 988,
+      "skills": 991,
+      "agenticProjects": 7,
+      "agenticSkills": 3,
       "review": 1081
     },
     {
       "id": "M03",
       "plugins": 269,
       "skills": 185,
+      "agenticProjects": 2,
+      "agenticSkills": 3,
       "review": 212
     },
     {
       "id": "M04",
       "plugins": 62,
       "skills": 207,
+      "agenticProjects": 1,
+      "agenticSkills": 3,
       "review": 37
     },
     {
       "id": "M05",
       "plugins": 77,
-      "skills": 363,
+      "skills": 362,
+      "agenticProjects": 2,
+      "agenticSkills": 3,
       "review": 63
     },
     {
       "id": "M06",
       "plugins": 230,
       "skills": 423,
+      "agenticProjects": 8,
+      "agenticSkills": 3,
       "review": 157
     },
     {
       "id": "M07",
       "plugins": 20,
-      "skills": 112,
+      "skills": 111,
+      "agenticProjects": 10,
+      "agenticSkills": 3,
       "review": 9
     },
     {
       "id": "M08",
       "plugins": 220,
-      "skills": 732,
+      "skills": 731,
+      "agenticProjects": 6,
+      "agenticSkills": 3,
       "review": 151
     },
     {
       "id": "M09",
       "plugins": 484,
       "skills": 1004,
+      "agenticProjects": 5,
+      "agenticSkills": 3,
       "review": 371
     },
     {
       "id": "M10",
       "plugins": 115,
       "skills": 324,
+      "agenticProjects": 2,
+      "agenticSkills": 2,
       "review": 59
     },
     {
       "id": "M11",
       "plugins": 41,
-      "skills": 122,
+      "skills": 123,
+      "agenticProjects": 5,
+      "agenticSkills": 3,
       "review": 33
     },
     {
       "id": "M12",
       "plugins": 522,
-      "skills": 428,
+      "skills": 427,
+      "agenticProjects": 6,
+      "agenticSkills": 3,
       "review": 357
     },
     {
       "id": "M13",
       "plugins": 60,
       "skills": 84,
+      "agenticProjects": 12,
+      "agenticSkills": 3,
       "review": 30
     }
   ],
@@ -117,7 +170,9 @@
   },
   "sourceHashes": {
     "snapshot": "6493698e13c32a6cd37569740c1447e4317dda623c215cdbe7ca16d443c6823b",
-    "catalog": "e60bfa676b684ae28a9fe9cd6b2a6e4e4855fce26d38f6f9257b1f280f308ac6"
+    "catalog": "fdae6c4e546c62205b141ce87df1009a946ad6bebd69f5cbb1483d754767e1dd",
+    "agenticSource": "0ad9a5508ba63223366392829140bc2c471b549e2c91aa20b089e197768a3c27",
+    "agenticEvaluations": "bb372cbd019eb8ec45cbf7f6a5e8c8e618b5472922cc6ab0bf572109532aaa90"
   },
   "checks": {
     "canonicalPluginIdsUnique": true,
@@ -127,6 +182,9 @@
     "cspBeforeStyleAndScript": true,
     "noExternalRuntimeResources": true,
     "noLocalAbsolutePaths": true,
-    "readyNowClaims": 0
+    "readyNowClaims": 0,
+    "agenticParentsResolved": true,
+    "agenticFeaturedRanksContiguous": true,
+    "agenticRuntimeVerifiedClaims": 0
   }
 }

@@ -1,6 +1,6 @@
 # 执行计划与 TODO
 
-完成标准：4,184 个插件身份不丢失；每个可取得证据的 Skill 可追溯到父插件和版本；每条记录有唯一主节点与“做什么／怎么用／怎么验”；网站单文件、无外部运行依赖；通过 ELI5、数据、桌面和手机验证；GitHub Pages 公网可访问且与本地文件一致。
+完成标准：4,184 个插件身份不丢失；插件内 Skill 可追溯到父插件和版本；Agentic-Tools 的 81 个仓库全部有项目级审计，精选能力可追溯到固定 HEAD 与 Skill blob 或明确封装对象；每条记录有唯一主节点与“做什么／怎么用／怎么验”；网站单文件、无外部运行依赖；通过 ELI5、数据、桌面和手机验证；GitHub Pages 公网可访问且与本地文件一致。
 
 ## Phase 1 — 冻结真相源
 
@@ -53,6 +53,26 @@
 - Pages deployment：`6473256119`，状态 `success`。
 - 公网文件：3,023,235 bytes；SHA-256 `3b78a17efcabae413eafc971c3d737a31c1a6498b3bf51d5944a8a27a109a34f`，与本地一致。
 - 公网页面完成解压并显示“全栈工作台地图”，默认候选为 Product Design、Figma 与 Browser；搜索、详情和响应式布局已在同一字节文件上复核。
+
+## Phase 7 — 插件 × Agent Skill 双工作台
+
+- [x] 从 `agentic-tools` Star List 冻结 81 个唯一仓库，并记录稳定 membership SHA-256。
+- [x] 对全部仓库采集 HEAD、README、tree、许可证、release、workflow、测试和 Skill 证据；空仓库与异常不静默删除。
+- [x] 建立硬门槛、六维质量分、弱声量代理和 `direct / package-bound / wrap / reference / quarantined` 形态。
+- [x] 完成 81 个项目级结论和 40 条节点精选；每个节点最多 3 条，M01 与 M10 不为凑数补位。
+- [x] 将外部项目和 Skill 作为独立数据类型接入生成器、manifest 与 artifact verifier。
+- [x] 在工作台加入“Codex 插件 / Agent 技能”切换，并在完整目录加入四类对象筛选与专用详情。
+- [x] 更新方法、生成说明、项目长期规则与执行记录。
+- [x] 通过 ELI5 checker、secret / 路径 / diff 检查和独立数据复核。
+- [x] 完成桌面与 390px 手机视口的双工作台、目录、详情和控制台 QA。
+- [ ] 提交、推送并验证 Pages workflow、deployment 与公网字节。
+
+### 双工作台发布收据
+
+- 内容提交：待发布。
+- Pages workflow：待发布。
+- Pages deployment：待发布。
+- 公网文件：待发布。
 
 ## 发布收据
 

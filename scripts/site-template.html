@@ -5,7 +5,7 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; base-uri 'none'; form-action 'none'; img-src data:; font-src data:; media-src data:; style-src 'unsafe-inline'; script-src 'unsafe-inline'">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="先选全栈开发阶段，再看最值得先试的 3 个 Codex 插件。">
-  <title>Plugin Atlas · 全栈开发插件地图</title>
+  <title>Agent OPC Atlas · 插件与技能全栈地图</title>
   <style>
     :root {
       color-scheme: light dark;
@@ -781,8 +781,28 @@
 
     .node-panel { min-height: 0; padding: 0; border: 0; border-radius: 0; background: #F6F8FB; box-shadow: none; }
     .stage-tabs { display: flex; align-items: center; min-height: 58px; padding: 0 28px; gap: 3px; border-bottom: 1px solid var(--line); background: #FFFFFF; }
-    .stage-path { margin-right: 6px; color: var(--muted); font-size: 12px; font-weight: 700; }
+    .stage-path { flex: 0 0 auto; margin-right: 6px; color: var(--muted); font-size: 12px; font-weight: 700; white-space: nowrap; }
     .stage-tabs .framework-toggle { margin-left: auto; }
+    .workbench-switch {
+      display: inline-flex;
+      margin-left: auto;
+      padding: 3px;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      background: #F5F7FA;
+    }
+    .workbench-switch button {
+      padding: 6px 10px;
+      border: 0;
+      border-radius: 6px;
+      background: transparent;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 760;
+      white-space: nowrap;
+    }
+    .workbench-switch button[aria-pressed="true"] { background: #FFFFFF; color: #174EBA; box-shadow: 0 1px 4px rgba(31, 48, 78, .12); }
+    .stage-tabs .workbench-switch + .framework-toggle { margin-left: 8px; }
     .stage-tab {
       position: relative;
       min-height: 58px;
@@ -849,6 +869,8 @@
     .candidate-capability { color: #4B5565; font-size: 12px; line-height: 1.45; }
     .readiness { justify-self: start; padding: 4px 8px; border-radius: 999px; background: #EEF2F7; color: #5F6B7D; font-size: 11px; font-weight: 700; }
     .readiness.installed { background: #E9F7EF; color: #19733C; }
+    .readiness.controlled { background: #FFF4DB; color: #925E00; }
+    .candidate-empty { padding: 14px 12px; border-top: 1px solid #E8ECF2; color: var(--muted); font-size: 12px; }
     .candidate-row details { position: relative; }
     .candidate-row summary { color: var(--blue); cursor: pointer; font-size: 11px; font-weight: 750; list-style: none; }
     .candidate-row summary::-webkit-details-marker { display: none; }
@@ -880,14 +902,16 @@
       .header-search { order: 3; flex-basis: 100%; max-width: none; }
       .nav { margin-left: auto; }
       .view { width: min(100% - 24px, 1340px); padding-top: 24px; }
-      .workbench { grid-template-columns: 1fr; }
+      .workbench { grid-template-columns: minmax(0, 1fr); }
+      .phase-rail, .node-panel { width: 100%; min-width: 0; }
       .phase-rail { border-right: 0; border-bottom: 1px solid var(--line); }
       .rail-intro { margin-bottom: 14px; }
-      .node-list { display: flex; overflow-x: auto; }
+      .node-list { display: flex; width: 100%; max-width: 100%; min-width: 0; overflow-x: auto; }
       .phase-button { min-width: 168px; }
       .rail-foot { display: none; }
-      .stage-tabs { padding: 0 14px; overflow-x: auto; }
+      .stage-tabs { width: 100%; max-width: 100%; min-width: 0; padding: 0 14px; overflow-x: auto; }
       .stage-tab { min-width: max-content; }
+      .workbench-switch { order: -1; flex: 0 0 auto; margin-left: 0; }
       .workspace-body { width: min(100% - 24px, 1080px); padding: 22px 18px; }
       .task-list, .candidate-evidence { grid-template-columns: 1fr; }
       .candidate-head { display: none; }
@@ -909,7 +933,7 @@
 <body>
   <a class="skip-link" href="#main">跳到主要内容</a>
   <header class="topbar">
-    <div class="brand"><span class="brand-mark">A+</span><span class="brand-copy"><strong>Plugin Atlas</strong><small>全栈开发插件地图</small></span></div>
+    <div class="brand"><span class="brand-mark">A+</span><span class="brand-copy"><strong>Agent OPC Atlas</strong><small>插件 × Agent Skill 全栈地图</small></span></div>
     <form class="header-search" id="header-search" role="search">
       <label class="skip-link" for="global-search">搜索插件或 Skill</label>
       <input id="global-search" type="search" autocomplete="off" placeholder="搜索插件、Skill 或开发场景…">
@@ -928,10 +952,10 @@
     <section class="view active" id="view-overview" aria-labelledby="overview-title">
       <div class="workbench">
         <aside class="phase-rail">
-          <div class="rail-intro"><h1 id="overview-title">全栈工作台地图</h1><p>做到哪一步，就看哪几个插件。</p></div>
+          <div class="rail-intro"><h1 id="overview-title">全栈工作台地图</h1><p>做到哪一步，就选这一节点的插件或 Agent Skill。</p></div>
           <p class="phase-rail-label">开发阶段</p>
           <div class="node-list" id="node-list" aria-label="全栈开发阶段"></div>
-          <div class="rail-foot"><strong>4,184</strong>个插件已归入 14 个节点<div class="workspace-scope" id="overview-metrics" aria-label="研究范围"></div></div>
+          <div class="rail-foot"><strong>4,184 + 40</strong>插件与精选 Agent Skill<div class="workspace-scope" id="overview-metrics" aria-label="研究范围"></div></div>
         </aside>
         <article class="node-panel" id="node-panel"></article>
       </div>
@@ -940,17 +964,17 @@
     <section class="view" id="view-catalog" aria-labelledby="catalog-title">
       <div class="page-head">
         <div><p class="eyebrow">完整目录</p><h1 id="catalog-title">需要更多，再来这里筛</h1></div>
-        <p>工作台只给 3 个优先候选；这里保留全部插件、Skill、分数与证据，方便做第二轮比较。</p>
+        <p>工作台每个节点最多给 3 个候选；这里保留 4,184 个插件、插件内 Skill、40 个 Agent Skill 与 81 个 GitHub 项目审计。</p>
       </div>
       <div class="catalog-shell">
         <div class="controls">
           <div class="control"><label for="search">搜索名称、ID、说明、能力</label><input id="search" type="search" autocomplete="off" placeholder="例如 GitHub、deploy、research…"></div>
-          <div class="control"><label for="kind-filter">查看</label><select id="kind-filter"><option value="plugin">Plugin</option><option value="skill">Skill</option></select></div>
+          <div class="control"><label for="kind-filter">查看</label><select id="kind-filter"><option value="plugin">Codex 插件</option><option value="skill">插件内 Skill</option><option value="agentic-skill">Agent Skill 精选</option><option value="agentic-project">GitHub 项目审计</option></select></div>
           <div class="control"><label for="module-filter">开发阶段</label><select id="module-filter"><option value="all">全部 14 个节点</option></select></div>
           <div class="control"><label for="state-filter">安装状态</label><select id="state-filter"><option value="all">全部状态</option><option value="installed">已安装</option><option value="uninstalled">未安装</option><option value="unavailable">不可用 / 默认关闭</option></select></div>
         </div>
         <div class="controls secondary">
-          <div class="control"><label for="shape-filter">提供方式</label><select id="shape-filter"><option value="all">全部方式</option><option value="Skill">含 Skill</option><option value="MCP">含 MCP</option><option value="App">含 App</option><option value="CLI">含 CLI</option></select></div>
+          <div class="control"><label for="shape-filter">提供方式</label><select id="shape-filter"><option value="all">全部方式</option><option value="Skill">含 Skill</option><option value="MCP">含 MCP</option><option value="App">含 App</option><option value="CLI">含 CLI</option><option value="可直接采用">可直接采用</option><option value="整包依赖">整包依赖</option><option value="需要封装">需要封装</option><option value="只作参考">只作参考</option></select></div>
           <div class="control"><label for="confidence-filter">匹配可信度</label><select id="confidence-filter"><option value="all">全部</option><option value="high">把握高</option><option value="medium">把握中</option><option value="review">需复核</option></select></div>
           <div class="control"><label for="effect-filter">会动到哪里</label><select id="effect-filter"><option value="all">全部</option><option value="read-only">只读取</option><option value="local-artifact">生成本地文件</option><option value="workspace">修改项目文件</option><option value="git">修改 Git</option><option value="external">操作外部服务</option><option value="secrets">接触密钥</option><option value="production">影响生产环境</option></select></div>
           <div class="control"><label for="sort-filter">排序</label><select id="sort-filter"><option value="priority">优先查看</option><option value="fit">阶段匹配度</option><option value="functional">功能覆盖</option><option value="buzz">公开信号</option><option value="name">名称 A–Z</option></select></div>
@@ -996,6 +1020,16 @@
             <li>缺历史载荷时保留 unknown，不补写。</li>
           </ul>
         </article>
+        <article class="audit-card full">
+          <h2>Agentic-Tools 审计漏斗</h2>
+          <p id="audit-agentic-copy"></p>
+          <ul class="audit-list">
+            <li>81 个仓库全部进入审计；存在 SKILL.md 不等于可直接安装。</li>
+            <li>直接 Skill、整包依赖、需封装工具和只作参考分开处理。</li>
+            <li>许可证、归档、空仓库、重复和低相关是硬门槛；Stars 只占研究优先级的 8%。</li>
+            <li>本轮只做到静态证据核对，第三方代码安装、调用、benchmark 和生产验证均为 0。</li>
+          </ul>
+        </article>
         <article class="audit-card warning full">
           <h2>同名冲突：两套 G0–G6</h2>
           <p>权威生命周期文档用 G0–G6 表示人类 Gate；旧关系图曾用同一编号表示 Read → Production 的动作影响。本站只保留前者，后者拆成 effectClass，绝不混入评分。</p>
@@ -1023,6 +1057,7 @@
           <div class="source-links">
             <a id="source-vibecoding" href="https://github.com/zjgulai/vibecoding_config/commit/d0a611e7d86939ba873af2bd5e686e64b07f85ea" target="_blank" rel="noreferrer">vibecoding_config · d0a611e</a>
             <a id="source-shuorenhua" href="https://github.com/MrGeDiao/shuorenhua/commit/5a9eafefe03807404135f4d2ee4f42fe61d58759" target="_blank" rel="noreferrer">shuorenhua · 5a9eafe</a>
+            <a id="source-agentic-tools" href="https://github.com/stars/zjgulai/lists/agentic-tools" target="_blank" rel="noreferrer">Agentic-Tools · 81 repos</a>
             <a href="https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages" target="_blank" rel="noreferrer">GitHub Pages workflow</a>
           </div>
           <p class="fineprint" id="source-dates"></p>
@@ -1053,7 +1088,7 @@
     async function boot() {
     const APP_DATA = await loadAppData();
     const entityMap = new Map();
-    const state = { view: "overview", node: "M06", showFramework: false, doneTasks: new Set(), kind: "plugin", module: "all", install: "all", shape: "all", confidence: "all", effect: "all", sort: "priority", query: "", page: 1, pageSize: 36 };
+    const state = { view: "overview", node: "M06", workbench: "plugin", showFramework: false, doneTasks: new Set(), kind: "plugin", module: "all", install: "all", shape: "all", confidence: "all", effect: "all", sort: "priority", query: "", page: 1, pageSize: 36 };
     const byId = (id) => document.getElementById(id);
     const esc = (value) => String(value == null ? "" : value).replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[char]);
     const short = (value, limit) => {
@@ -1064,6 +1099,8 @@
     const safeUrl = (value) => /^https?:\/\//i.test(String(value || "")) ? value : "";
     const confidenceLabel = (value) => value === "high" ? "high" : value === "medium" ? "medium" : "需复核";
     const versionLabel = (value) => ({ "frozen-exact": "冻结版本精确", "local-bundle-exact": "本地 bundle 精确", "current-version-drift": "当前版本漂移" })[value] || value;
+    const kindLabel = (value) => ({ plugin: "Codex 插件", skill: "插件内 Skill", "agentic-skill": "Agent Skill 精选", "agentic-project": "GitHub 项目审计" })[value] || value;
+    const isAgentic = (item) => item.kind === "agentic-skill" || item.kind === "agentic-project";
 
     const PHASES = [
       { id: "discover", label: "发现", description: "想清楚要解决什么", modules: ["M00", "M01", "M02", "M03"] },
@@ -1242,6 +1279,15 @@
     const AUTH_LABELS = { ON_INSTALL: "安装时授权", ON_USE: "首次使用时授权", OAUTH: "OAuth 授权", API_KEY: "API Key", NONE: "无需目录认证" };
 
     function coreTexts(item) {
+      if (isAgentic(item)) {
+        const core = item.coreThree || {};
+        return {
+          does: core.does || "静态资料没有给出清楚能力。",
+          conditions: core.conditions || "需要先核对依赖、权限和适用范围。",
+          proof: core.proof || "先在隔离环境用固定任务做最小验证。",
+          unverified: ["第三方代码安装", "真实任务调用", "对照 benchmark", "生产稳定性"],
+        };
+      }
       const module = APP_DATA.modules.find((entry) => entry.id === item.primaryModule);
       const isSkill = item.kind === "skill";
       const description = String(item.description || "").replace(/\s+/g, " ").trim();
@@ -1260,8 +1306,8 @@
       return { does, conditions: conditions.join("；") + "。", proof, unverified };
     }
 
-    APP_DATA.plugins.concat(APP_DATA.skills).forEach((item) => {
-      item._search = [item.name, item.id, item.parentName, item.developer, item.description, item.searchHints, item.solutionPrimary, item.primaryModule].join(" ").toLowerCase();
+    APP_DATA.plugins.concat(APP_DATA.skills, APP_DATA.agenticSkills, APP_DATA.agenticProjects).forEach((item) => {
+      item._search = [item.name, item.id, item.parentName, item.developer, item.description, item.searchHints, item.solutionPrimary, item.primaryModule, item.fullName, item.repoFullName, item.path, item.selectedReason, item.coreThree && item.coreThree.does, item.coreThree && item.coreThree.conditions, ...(item.requirements || []), ...(item.limitations || [])].join(" ").toLowerCase();
       entityMap.set(item.id, item);
     });
 
@@ -1277,11 +1323,13 @@
     function renderMetrics() {
       const meta = APP_DATA.meta;
       const coverage = meta.skillCoverage;
-      byId("overview-metrics").textContent = coverage.evidenceRows.toLocaleString("en-US") + " 条 Skill 证据。排名来自静态资料，真实调用尚未验证。";
+      const agentic = meta.agenticCoverage;
+      byId("overview-metrics").textContent = coverage.evidenceRows.toLocaleString("en-US") + " 条插件内 Skill 证据；81 个外部项目审出 40 个候选。均未做 runtime 实测。";
       byId("footer-date").textContent = new Date(meta.generatedAt).toLocaleString("zh-CN", { hour12: false });
-      byId("source-dates").textContent = "插件状态冻结：" + meta.frozenAt + "；研究快照：" + meta.researchAt + "；Skill catalog：" + meta.catalogFetchedAt + "。";
+      byId("source-dates").textContent = "插件状态冻结：" + meta.frozenAt + "；研究快照：" + meta.researchAt + "；Skill catalog：" + meta.catalogFetchedAt + "；Agentic-Tools 列表冻结：" + meta.agenticSource.capturedAt + "。";
       byId("audit-plugin-copy").textContent = meta.pluginCount.toLocaleString("en-US") + " 个 canonical IDs；" + meta.installedCount + " 个在冻结快照中已安装；" + meta.reviewCount.toLocaleString("en-US") + " 个节点匹配需要人工复核。";
       byId("audit-skill-copy").textContent = coverage.evidenceRows.toLocaleString("en-US") + " 条可显示 Skill 证据，其中 " + coverage.frozenExact.toLocaleString("en-US") + " 条绑定冻结 remote 版本，" + coverage.localBundleExact + " 条绑定本地精确 bundle，" + coverage.currentVersionDrift + " 条只来自较新的漂移版本。";
+      byId("audit-agentic-copy").textContent = agentic.repositoryCount + " 个仓库 → " + agentic.rawSkillPaths.toLocaleString("en-US") + " 条 SKILL.md 路径 → " + agentic.repoUniqueSkillBlobs.toLocaleString("en-US") + " 个仓库内唯一 blob → " + agentic.curatedSkillCount + " 个节点候选。路径数不是可安装 Skill 数。";
     }
 
     function renderNodeList() {
@@ -1293,6 +1341,18 @@
 
     function candidateHtml(item) {
       const core = coreTexts(item);
+      if (isAgentic(item)) {
+        const controlled = item.selection === "controlled";
+        const stateLabel = item.capabilityForm === "wrap-candidate" ? "需封装 · 未实测" : item.capabilityForm === "package-bound-skill" ? "整包依赖 · 未实测" : "结构已核对 · 未实测";
+        const reason = item.selectedReason + " 节点适配 " + score(item.fitScore) + "，父项目质量 " + score(item.functionalScore) + "，公开声量代理 " + score(item.publicProxyScore) + "。";
+        const evidence = "固定到 " + (item.path ? "HEAD + Skill blob" : "HEAD + 项目文档") + "；未验证：" + core.unverified.join("、") + "。";
+        return '<div class="candidate-row">' +
+          '<div class="candidate-main"><button type="button" data-open-id="' + esc(item.id) + '">' + esc(item.name) + '</button><small>' + esc(item.repoFullName) + ' · #' + item.featuredRank + '</small></div>' +
+          '<div class="candidate-capability">' + esc(short(core.does, 105)) + '</div>' +
+          '<span class="readiness' + (controlled ? " controlled" : "") + '">' + esc(stateLabel) + '</span>' +
+          '<details><summary>为什么先看</summary><div class="candidate-evidence"><div><b>核心能力</b>' + esc(core.does) + '</div><div><b>使用条件</b>' + esc(core.conditions) + '</div><div><b>最低验证</b>' + esc(core.proof) + '</div></div><p class="fineprint">' + esc(reason + " " + evidence) + '</p></details>' +
+          '</div>';
+      }
       const stateLabel = item.inventoryState === "不可用" ? "当前不可用" : item.installed ? "已安装 · 未实测" : "未安装";
       const installedClass = item.installed ? " installed" : "";
       const evidence = "依据：插件目录说明 + 本站节点归类。未验证：" + core.unverified.join("、") + "。";
@@ -1313,19 +1373,27 @@
       const modulePlugins = APP_DATA.plugins.filter((item) => item.primaryModule === module.id).sort((a, b) => a.moduleRank - b.moduleRank);
       const featuredNames = FEATURED_BY_MODULE[module.id] || [];
       const featured = featuredNames.map((name) => modulePlugins.find((item) => item.name === name)).filter(Boolean);
-      const top = featured.concat(modulePlugins.filter((item) => !featuredNames.includes(item.name))).slice(0, 3);
+      const pluginTop = featured.concat(modulePlugins.filter((item) => !featuredNames.includes(item.name))).slice(0, 3);
+      const agenticTop = APP_DATA.agenticSkills.filter((item) => item.primaryModule === module.id).sort((a, b) => a.featuredRank - b.featuredRank);
+      const top = state.workbench === "agentic" ? agenticTop : pluginTop;
+      const catalogKind = state.workbench === "agentic" ? "agentic-skill" : "plugin";
+      const candidateLabel = state.workbench === "agentic" ? "Agent Skill" : "工具";
+      const total = state.workbench === "agentic" ? counts.agenticSkills : counts.plugins;
       const code = state.showFramework ? '<span class="eyebrow">' + module.id + ' · ' + esc(module.title) + '</span>' : "";
       const tabs = phase.modules.map((moduleId) => '<button class="stage-tab" type="button" data-node="' + moduleId + '" aria-pressed="' + (module.id === moduleId) + '">' + (state.showFramework ? moduleId + ' · ' : '') + esc(PLAIN_TITLES[moduleId]) + '</button>').join("");
+      const workbenchSwitch = '<div class="workbench-switch" aria-label="工作台类型"><button type="button" data-workbench="plugin" aria-pressed="' + (state.workbench === "plugin") + '">Codex 插件</button><button type="button" data-workbench="agentic" aria-pressed="' + (state.workbench === "agentic") + '">Agent 技能</button></div>';
       const tasks = PLAIN_TASKS[module.id].map((task, index) => {
         const taskId = module.id + "-" + index;
         return '<label class="task-check"><input type="checkbox" data-task="' + taskId + '"' + (state.doneTasks.has(taskId) ? " checked" : "") + '><span>' + esc(task) + "</span></label>";
       }).join("");
+      const gapNote = top.length < 3 ? '<div class="candidate-empty">本节点只保留 ' + top.length + ' 个过门槛候选，不为凑数补位。</div>' : "";
+      const footerCopy = state.workbench === "agentic" ? "这是静态审计后的节点候选；直接 Skill、整包依赖和需封装能力已分开，尚未安装或跑 benchmark。" : "结合站内排名、通用性和当前安装状态选出 3 个；原始排名仍在完整目录。";
       byId("node-panel").innerHTML =
-        '<div class="stage-tabs" aria-label="' + esc(phase.label) + '阶段节点"><span class="stage-path">' + esc(phase.label) + ' /</span>' + tabs + '<label class="framework-toggle"><input type="checkbox" data-framework-toggle' + (state.showFramework ? ' checked' : '') + '>显示框架编号</label></div>' +
+        '<div class="stage-tabs" aria-label="' + esc(phase.label) + '阶段节点"><span class="stage-path">' + esc(phase.label) + ' /</span>' + tabs + workbenchSwitch + '<label class="framework-toggle"><input type="checkbox" data-framework-toggle' + (state.showFramework ? ' checked' : '') + '>显示框架编号</label></div>' +
         '<div class="workspace-body"><div class="node-heading"><div>' + code + '<h2>' + esc(PLAIN_TITLES[module.id]) + '</h2><p>' + esc(PLAIN_SUBTITLES[module.id]) + '</p></div><a class="quiet-link" href="' + esc(module.sourceUrl) + '" target="_blank" rel="noreferrer">查看框架原文</a></div>' +
         '<section class="work-section"><h3 class="section-title"><span class="section-number">01</span>这一步要完成什么</h3><div class="task-list">' + tasks + '</div></section>' +
         '<section class="work-section"><h3 class="section-title"><span class="section-number">02</span>完成后留下什么</h3><div class="deliverable"><strong>' + esc(state.showFramework ? module.artifact : "交付结果") + '</strong><span>' + esc(PLAIN_OUTPUTS[module.id]) + '</span></div></section>' +
-        '<section class="work-section"><h3 class="section-title"><span class="section-number">03</span>先看这 3 个工具</h3><div class="candidate-head"><span>工具</span><span>主要能力</span><span>当前状态</span><span>依据</span></div>' + top.map(candidateHtml).join("") + '<div class="candidate-footer"><span>结合站内排名、通用性和当前安装状态选出 3 个；原始排名仍在完整目录。</span><button type="button" data-node-catalog="' + module.id + '">查看本节点全部 ' + counts.plugins + ' 个插件 →</button></div></section></div>';
+        '<section class="work-section"><h3 class="section-title"><span class="section-number">03</span>先看这 ' + top.length + ' 个 ' + candidateLabel + '</h3><div class="candidate-head"><span>' + candidateLabel + '</span><span>主要能力</span><span>当前状态</span><span>依据</span></div>' + top.map(candidateHtml).join("") + gapNote + '<div class="candidate-footer"><span>' + esc(footerCopy) + '</span><button type="button" data-node-catalog="' + module.id + '" data-catalog-kind="' + catalogKind + '">查看本节点全部 ' + total + ' 条 →</button></div></section></div>';
     }
 
     function populateModuleFilter() {
@@ -1333,14 +1401,15 @@
     }
 
     function filteredEntities() {
-      const rows = state.kind === "plugin" ? APP_DATA.plugins : APP_DATA.skills;
+      const rows = state.kind === "plugin" ? APP_DATA.plugins : state.kind === "skill" ? APP_DATA.skills : state.kind === "agentic-skill" ? APP_DATA.agenticSkills : APP_DATA.agenticProjects;
+      const externalKind = state.kind === "agentic-skill" || state.kind === "agentic-project";
       const query = state.query.trim().toLowerCase();
       return rows.filter((item) => {
         if (query && !item._search.includes(query)) return false;
         if (state.module !== "all" && item.primaryModule !== state.module) return false;
-        if (state.install === "installed" && !item.installed) return false;
-        if (state.install === "uninstalled" && item.installed) return false;
-        if (state.install === "unavailable" && !["不可用", "默认关闭"].includes(item.inventoryState)) return false;
+        if (!externalKind && state.install === "installed" && !item.installed) return false;
+        if (!externalKind && state.install === "uninstalled" && item.installed) return false;
+        if (!externalKind && state.install === "unavailable" && !["不可用", "默认关闭"].includes(item.inventoryState)) return false;
         if (state.shape !== "all" && !item.shape.includes(state.shape)) return false;
         if (state.confidence !== "all" && item.matchConfidence !== state.confidence) return false;
         if (state.effect !== "all" && item.effectClass !== state.effect) return false;
@@ -1358,22 +1427,28 @@
       const review = item.matchConfidence === "review";
       const versionBadge = item.kind === "skill" ? '<span class="badge ' + (item.versionState === "current-version-drift" ? "warn" : "") + '">' + esc(versionLabel(item.versionState)) + "</span>" : "";
       const core = coreTexts(item);
+      const agentic = isAgentic(item);
+      const middleLabel = agentic ? (item.kind === "agentic-project" ? "证据覆盖" : "父项目质量") : "功能覆盖";
+      const identity = item.kind === "skill" ? item.parentName + " / " + item.skillName : item.kind === "agentic-skill" ? item.repoFullName + (item.path ? " / " + item.path : " / 待封装") : item.kind === "agentic-project" ? item.fullName : item.id;
       return '<article class="entity-card">' +
-        '<div class="card-badges"><span class="badge primary">' + item.primaryModule + '</span><span class="badge">' + esc(item.kind === "plugin" ? item.shape : "Skill") + '</span><span class="badge ' + (review ? "warn" : "") + '">' + confidenceLabel(item.matchConfidence) + '</span><span class="badge ' + (["production","secrets","external"].includes(item.effectClass) ? "danger" : "") + '">' + esc(item.effectClass) + "</span>" + versionBadge + "</div>" +
-        '<h2>' + esc(item.name) + '</h2><div class="entity-id">' + esc(item.kind === "skill" ? item.parentName + " / " + item.skillName : item.id) + "</div>" +
-        '<div class="card-scores"><div class="score"><strong>' + score(item.fitScore) + '</strong><span>阶段匹配度</span></div><div class="score"><strong>' + score(item.functionalScore) + '</strong><span>功能覆盖</span></div><div class="score"><strong>' + score(item.publicProxyScore) + '</strong><span>公开信号</span></div></div>' +
+        '<div class="card-badges"><span class="badge primary">' + item.primaryModule + '</span><span class="badge">' + esc(item.shape || (item.kind === "plugin" ? "Plugin" : "Skill")) + '</span><span class="badge ' + (review ? "warn" : "") + '">' + (agentic ? esc(item.kind === "agentic-project" ? item.tier + " 档" : item.selection === "primary" ? "主选" : "受控") : confidenceLabel(item.matchConfidence)) + '</span><span class="badge ' + (["production","secrets","external"].includes(item.effectClass) ? "danger" : "") + '">' + esc(item.effectClass) + "</span>" + versionBadge + "</div>" +
+        '<h2>' + esc(item.name) + '</h2><div class="entity-id">' + esc(identity) + "</div>" +
+        '<div class="card-scores"><div class="score"><strong>' + score(item.fitScore) + '</strong><span>' + (agentic ? (item.kind === "agentic-project" ? "项目质量" : "节点适配") : "阶段匹配度") + '</span></div><div class="score"><strong>' + score(item.functionalScore) + '</strong><span>' + middleLabel + '</span></div><div class="score"><strong>' + score(item.publicProxyScore) + '</strong><span>公开声量</span></div></div>' +
         '<dl class="core-three"><div><dt>能帮你做什么</dt><dd>' + esc(short(core.does, 150)) + '</dd></div><div><dt>使用前要准备什么</dt><dd>' + esc(short(core.conditions, 125)) + '</dd></div><div><dt>怎样确认真能用</dt><dd>' + esc(short(core.proof, 140)) + "</dd></div></dl>" +
         '<button class="open-detail" type="button" data-open-id="' + esc(item.id) + '">查看详情和证据 →</button></article>';
     }
 
     function renderCatalog() {
       const rows = filteredEntities();
+      const externalKind = state.kind === "agentic-skill" || state.kind === "agentic-project";
+      byId("state-filter").disabled = externalKind;
+      byId("state-filter").title = externalKind ? "GitHub 外部项目没有 Codex 安装状态" : "";
       const pages = Math.max(1, Math.ceil(rows.length / state.pageSize));
       state.page = Math.min(state.page, pages);
       const start = (state.page - 1) * state.pageSize;
       const current = rows.slice(start, start + state.pageSize);
       byId("result-grid").innerHTML = current.length ? current.map(cardHtml).join("") : '<div class="empty"><b>没有匹配结果</b><br>放宽一个筛选条件再试。</div>';
-      byId("result-summary").textContent = rows.length.toLocaleString("en-US") + " 条结果 · " + (state.kind === "plugin" ? "Plugin" : "Skill");
+      byId("result-summary").textContent = rows.length.toLocaleString("en-US") + " 条结果 · " + kindLabel(state.kind);
       byId("page-label").textContent = "第 " + state.page + " / " + pages + " 页";
       byId("prev-page").disabled = state.page <= 1;
       byId("next-page").disabled = state.page >= pages;
@@ -1383,9 +1458,48 @@
       return '<div class="detail-block"><b>' + esc(title) + '</b><span>' + esc(value || "未说明") + "</span></div>";
     }
 
+    function openAgenticDetail(item, updateHash) {
+      const module = APP_DATA.modules.find((entry) => entry.id === item.primaryModule);
+      const core = coreTexts(item);
+      const project = item.kind === "agentic-project";
+      const status = project ? item.decision + " · " + item.tier + " 档" : (item.selection === "primary" ? "节点主选" : "受控候选");
+      const evidence = item.verificationState === "structure-checked" ? "结构已核对，未安装、未调用" : "只核对项目文档，尚待封装";
+      const identity = project ? item.fullName : item.repoFullName + (item.path ? " / " + item.path : " / 待封装工作流");
+      const sourceUrls = (project ? item.sourceEvidence : [item.sourceUrl, item.repoUrl]).filter(safeUrl);
+      const sourceButtons = [...new Set(sourceUrls)].map((url, index) => '<a class="button" href="' + esc(url) + '" target="_blank" rel="noreferrer">' + (index ? "更多证据" : "打开冻结来源") + '</a>').join("");
+      const parent = !project ? '<button class="button" type="button" data-open-id="' + esc(item.parentId) + '">查看父项目审计</button>' : "";
+      byId("detail-eyebrow").textContent = (project ? "GITHUB 项目审计" : "AGENT SKILL") + " · " + item.primaryModule + " · #" + (item.moduleRank || item.featuredRank || "—");
+      byId("detail-title").textContent = item.name;
+      byId("dialog-body").innerHTML =
+        '<div class="card-badges"><span class="badge primary">' + item.primaryModule + " · " + esc(module.title) + '</span><span class="badge">' + esc(item.shape) + '</span><span class="badge ' + (status.includes("受控") || status.includes("B") || status.includes("C") || status.includes("D") ? "warn" : "") + '">' + esc(status) + '</span><span class="badge ' + (["production","secrets","external"].includes(item.effectClass) ? "danger" : "") + '">' + esc(item.effectClass) + "</span></div>" +
+        '<div class="card-scores"><div class="score"><strong>' + score(item.fitScore) + '</strong><span>' + (project ? "项目质量" : "节点适配") + '</span></div><div class="score"><strong>' + score(item.functionalScore) + '</strong><span>' + (project ? "证据覆盖" : "父项目质量") + '</span></div><div class="score"><strong>' + score(item.publicProxyScore) + '</strong><span>公开声量</span></div></div>' +
+        '<div class="dialog-three"><section><h3>1 · 核心能力</h3><p>' + esc(core.does) + '</p></section><section><h3>2 · 使用条件</h3><p>' + esc(core.conditions) + '</p></section><section><h3>3 · 最低验证</h3><p>' + esc(core.proof) + "</p></section></div>" +
+        '<div class="detail-grid">' + detailBlock("对象", identity) +
+        detailBlock("固定版本", (item.headSha || "").slice(0, 12) + (item.blobSha ? " · blob " + item.blobSha.slice(0, 12) : "")) +
+        detailBlock("主 / 次节点", item.primaryModule + (item.secondaryModules.length ? " / " + item.secondaryModules.join(", ") : " / 无")) +
+        detailBlock("能力形态", item.shape + " · " + item.capabilityForm) +
+        detailBlock("许可证", (item.license?.label || "未确认") + (item.license?.scope ? " · " + item.license.scope : "")) +
+        detailBlock("证据状态", evidence) +
+        detailBlock("选择理由", item.selectedReason) +
+        detailBlock("运行要求", (item.requirements || []).join("；") || "按项目依赖另查") +
+        detailBlock("限制", (item.limitations || []).join("；") || "未列出") +
+        detailBlock("公开信号边界", "Stars / forks / release 仅是关注度代理，不是安装量、用户数或生产采用") +
+        detailBlock("未验证", core.unverified.join("；")) +
+        detailBlock("来源", sourceUrls.join("；")) + "</div>" +
+        '<div class="cta-row">' + parent + sourceButtons + '<a class="button" href="' + esc(module.sourceUrl) + '" target="_blank" rel="noreferrer">查看节点原文</a></div>' +
+        '<p class="fineprint">这是一条静态研究结论。结构存在、许可证清楚和仓库活跃都不能证明 Skill 已接入 Codex，更不能证明它优于基线或可安全用于生产。</p>';
+      const dialog = byId("detail-dialog");
+      if (!dialog.open) dialog.showModal();
+      if (updateHash !== false) history.replaceState(null, "", "#item=" + encodeURIComponent(item.id));
+    }
+
     function openDetail(id, updateHash) {
       const item = entityMap.get(id);
       if (!item) return;
+      if (isAgentic(item)) {
+        openAgenticDetail(item, updateHash);
+        return;
+      }
       const module = APP_DATA.modules.find((entry) => entry.id === item.primaryModule);
       byId("detail-eyebrow").textContent = (item.kind === "plugin" ? "PLUGIN" : "SKILL") + " · " + item.primaryModule + " · #" + (item.moduleRank || "—");
       byId("detail-title").textContent = item.name;
@@ -1437,6 +1551,12 @@
       renderNode();
     });
     byId("node-panel").addEventListener("click", (event) => {
+      const workbenchButton = event.target.closest("[data-workbench]");
+      if (workbenchButton) {
+        state.workbench = workbenchButton.dataset.workbench;
+        renderNode();
+        return;
+      }
       const stageButton = event.target.closest("[data-node]");
       if (stageButton) {
         state.node = stageButton.dataset.node;
@@ -1446,8 +1566,10 @@
       const catalogButton = event.target.closest("[data-node-catalog]");
       if (catalogButton) {
         state.module = catalogButton.dataset.nodeCatalog;
+        state.kind = catalogButton.dataset.catalogKind || "plugin";
         state.page = 1;
         byId("module-filter").value = state.module;
+        byId("kind-filter").value = state.kind;
         activateView("catalog");
         return;
       }
@@ -1493,7 +1615,19 @@
       ["kind-filter", "kind"], ["module-filter", "module"], ["state-filter", "install"],
       ["shape-filter", "shape"], ["confidence-filter", "confidence"], ["effect-filter", "effect"], ["sort-filter", "sort"],
     ];
-    controlMap.forEach((entry) => byId(entry[0]).addEventListener("change", (event) => { state[entry[1]] = event.target.value; state.page = 1; renderCatalog(); }));
+    controlMap.forEach((entry) => byId(entry[0]).addEventListener("change", (event) => {
+      state[entry[1]] = event.target.value;
+      if (entry[1] === "kind") {
+        state.install = "all";
+        state.shape = "all";
+        state.confidence = "all";
+        byId("state-filter").value = "all";
+        byId("shape-filter").value = "all";
+        byId("confidence-filter").value = "all";
+      }
+      state.page = 1;
+      renderCatalog();
+    }));
     byId("prev-page").addEventListener("click", () => { state.page -= 1; renderCatalog(); byId("catalog-title").scrollIntoView(); });
     byId("next-page").addEventListener("click", () => { state.page += 1; renderCatalog(); byId("catalog-title").scrollIntoView(); });
 
