@@ -190,6 +190,14 @@
 - 交互：任何筛选、详情和关系入口都继续沿用现有数据事实；样式改动不授予安装、认证、外部写入或生产权限。
 - 验证：以 `verify-artifact`、ELI5 checker、浏览器 DOM / 截图和控制台为证据；未新增任何 runtime-verified 或 task-benchmarked 声明。
 
+### Phase 12 发布收据
+
+- 内容提交：`d6720a9382840ca96b712009850f4ed6e8d6c3f1`。
+- Pages workflow：`35146816788`，结论 `success`。
+- Pages deployment：`6489807979`，状态 `success`。
+- 公网文件：3,185,750 bytes；SHA-256 `13d39658e06a11ebe33f203bf1d0f9dc908b9eface7e2e9fcc84d4a1817e589e`，与本地逐字节一致。
+- 公网页面已核对暖粉色令牌、`4,184 + 96`、M13 可视化联合筛选、三件事详情、14 张关系卡；桌面 / 约 390 CSS px 窄屏控制台无 warning/error。
+
 ## 初版目录发布收据
 
 - 内容提交：`4783fdd3ce7d704418efe77aced5a00ad9b2c61f`。
